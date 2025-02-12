@@ -12,11 +12,11 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ definition }) => {
     if (chartRef.current) {
       try {
         mermaid.initialize({ startOnLoad: false });
-        mermaid.render("mermaid-diagram", definition, (svgCode) => {
-          if (chartRef.current) {
-            chartRef.current.innerHTML = svgCode;
-          }
-        });
+        mermaid
+          .render("mermaid-diagram", definition, chartRef.current)
+          .catch((error: Error) => {
+            console.error("Error rendering Mermaid diagram:", error);
+          });
       } catch (error) {
         console.error("Error rendering Mermaid diagram:", error);
       }
