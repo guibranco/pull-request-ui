@@ -29,6 +29,7 @@ interface Repository {
   id: number;
   name: string;
   owner: string;
+  full_name: string;
 }
 
 interface PullRequest {
