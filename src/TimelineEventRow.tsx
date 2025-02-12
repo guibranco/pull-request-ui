@@ -1,3 +1,26 @@
+/**
+ * A functional component that renders a row in a timeline event table.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {TimelineEventRowProps} props.event - The event object containing details to display.
+ *
+ * @returns {JSX.Element} A table row element containing information about the event.
+ *
+ * @example
+ * const event = {
+ *   type: 'push',
+ *   action: 'created',
+ *   date: '2021-01-01T12:00:00Z',
+ *   payload: {
+ *     title: 'New Feature',
+ *     check_suite: { id: 123 }
+ *   }
+ * };
+ *
+ * <TimelineEventRow event={event} />
+ *
+ * @throws {TypeError} If the event object does not conform to the expected structure.
+ */
 export const TimelineEventRow: React.FC<TimelineEventRowProps> = ({ event }) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
