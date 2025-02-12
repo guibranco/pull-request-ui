@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/pull-request-ui/",
   test: {
     globals: true,
     coverage: {
