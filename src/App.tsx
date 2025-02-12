@@ -5,9 +5,9 @@ import fetchWithAuth from "./hooks/fetchWithAuth";
 
 const App = () => {
   const [repositories, setRepositories] = useState<Repository[]>([]);
-  const [selectedRepo, setSelectedRepo] = useState<Repository|null>(null);
-  const [pullRequests, setPullRequests] = useState([]);
-  const [selectedPR, setSelectedPR] = useState(null);
+  const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
+  const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
+  const [selectedPR, setSelectedPR] = useState<number | null>(null);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -16,8 +16,8 @@ const App = () => {
       .then((data) => setRepositories(data));
   }, []);
 
-  const fetchRepoDetails = (repo: Repository) => {
-    fetchWithAuth(`/repositories/${repo.owner}/${repo.name}/pulls`)
+  const fetchRepoDetails = (repo: Repository | null) => {
+    fetchWithAuth(`/repositories/${repo?.owner}/${repo?.name}/pulls`)
       .then((res) => res.json())
       .then((data) => {
         setSelectedRepo(repo);
@@ -31,7 +31,7 @@ const App = () => {
       .then((res) => res.json())
       .then((data) => {
         setEvents(data.events);
-        setTimeout(function() { fetchEventsForPR(prNumber); }, 5000);
+        setTimeout(function () { fetchEventsForPR(prNumber); }, 5000);
       });
   };
 
@@ -51,7 +51,9 @@ const App = () => {
             const repo = repositories.find(
               (r) => r.full_name === e.target.value
             );
-            fetchRepoDetails(repo);
+            if (typeof repo !== "undefined") {
+              fetchRepoDetails(repo);
+            }
           }}
         >
           <option value="">-- Select --</option>
@@ -73,7 +75,7 @@ const App = () => {
             id="pull-request"
             className="w-full p-2 border rounded-md"
             onChange={(e) => {
-              const prNumber = e.target.value;
+              const prNumber = parseInt(e.target.value);
               setSelectedPR(prNumber);
               fetchEventsForPR(prNumber);
             }}

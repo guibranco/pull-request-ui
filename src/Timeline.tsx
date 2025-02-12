@@ -1,3 +1,5 @@
+import { TimelineEventRow } from "./TimelineEventRow";
+
 export const Timeline: React.FC<TimelineProps> = ({ events }) => {
   return (
     <div className="relative bg-gray-50 p-6 rounded-lg shadow-md">
@@ -16,22 +18,11 @@ export const Timeline: React.FC<TimelineProps> = ({ events }) => {
         </thead>
         <tbody>
           {events.map((event, index) => (
-            <tr key={index} className="odd:bg-white even:bg-gray-50">
-              <td className="border border-gray-300 px-4 py-2">{event.type}</td>
-              <td className="border border-gray-300 px-4 py-2">{event.action}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {new Date(event.date).toLocaleString()}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <pre className="overflow-x-auto text-sm bg-gray-100 p-2 rounded">{event.payload[event.type]?.title ?? event.payload[event.type]?.name ?? ''}</pre>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {event.payload.check_suite?.id ?? event.payload[event.type]?.check_suite?.id ?? ''}
-              </td>
-            </tr>
+            <TimelineEventRow key={index} event={event} />
           ))}
         </tbody>
       </table>
     </div>
   );
 };
+

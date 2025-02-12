@@ -13,7 +13,7 @@ interface TimelineEvent {
   description: string;
   date: string;
   icon: React.ReactNode;
-  payload: EventPayload[];
+  payload: EventPayload;
 }
 
 interface EventPayload {
@@ -23,6 +23,10 @@ interface EventPayload {
 
 interface TimelineProps {
   events: TimelineEvent[];
+}
+
+interface TimelineEventRowProps {
+  event: TimelineEvent;
 }
 
 interface Repository {
