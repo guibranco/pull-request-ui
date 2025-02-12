@@ -4,7 +4,7 @@ import { Timeline } from "./Timeline";
 import fetchWithAuth from "./hooks/fetchWithAuth";
 
 const App = () => {
-  const [repositories, setRepositories] = useState([]);
+  const [repositories, setRepositories] = useState<Repository[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<Repository|null>(null);
   const [pullRequests, setPullRequests] = useState([]);
   const [selectedPR, setSelectedPR] = useState(null);
@@ -27,7 +27,7 @@ const App = () => {
   };
 
   const fetchEventsForPR = (prNumber: number) => {
-    fetchWithAuth(`/repositories/${selectedRepo.owner}/${selectedRepo.name}/${prNumber}`)
+    fetchWithAuth(`/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
       .then((res) => res.json())
       .then((data) => {
         setEvents(data.events);
