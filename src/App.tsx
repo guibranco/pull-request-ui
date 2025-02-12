@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Timeline } from "./Timeline";
 import fetchWithAuth from "./hooks/fetchWithAuth";
 
 const App = () => {
   const [repositories, setRepositories] = useState([]);
-  const [selectedRepo, setSelectedRepo] = useState(null);
+  const [selectedRepo, setSelectedRepo] = useState<Repository|null>(null);
   const [pullRequests, setPullRequests] = useState([]);
   const [selectedPR, setSelectedPR] = useState(null);
   const [events, setEvents] = useState([]);
@@ -16,7 +16,7 @@ const App = () => {
       .then((data) => setRepositories(data));
   }, []);
 
-  const fetchRepoDetails = (repo) => {
+  const fetchRepoDetails = (repo: Repository) => {
     fetchWithAuth(`/repositories/${repo.owner}/${repo.name}/pulls`)
       .then((res) => res.json())
       .then((data) => {
@@ -26,7 +26,7 @@ const App = () => {
       });
   };
 
-  const fetchEventsForPR = (prNumber) => {
+  const fetchEventsForPR = (prNumber: number) => {
     fetchWithAuth(`/repositories/${selectedRepo.owner}/${selectedRepo.name}/${prNumber}`)
       .then((res) => res.json())
       .then((data) => {

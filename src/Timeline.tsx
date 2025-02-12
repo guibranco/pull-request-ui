@@ -1,17 +1,6 @@
 import { types } from "node:util";
 import React, { useEffect, useState } from "react";
 
-interface TimelineEvent {
-  types: string;
-  action: string;
-  date: string;
-  payload: object;
-}
-
-interface TimelineProps {
-  events: TimelineEvent[];
-}
-
 export const Timeline: React.FC<TimelineProps> = ({ events }) => {
   return (
     <div className="relative bg-gray-50 p-6 rounded-lg shadow-md">
