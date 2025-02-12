@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Timeline } from "../src/Timeline";
+import Timeline from "../../src/components/Timeline";
 import React from "react";
 import { describe, expect, test } from "vitest";
 import "@testing-library/jest-dom";
@@ -7,6 +7,7 @@ describe("Timeline Component", () => {
   test("renders timeline events correctly", () => {
     const events = [
       {
+        id: 1,
         type: "test",
         action: "created",
         title: "Test Event",

@@ -7,6 +7,7 @@
 }
 
 interface TimelineEvent {
+  id: number;
   type: string;
   action: string;
   title: string;

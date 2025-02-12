@@ -17,8 +17,6 @@ const Diagram = ({ events }: { events: TimelineEvent[] }) => {
     setDefinition(diagramDef);
   }, [events]);
 
-  console.log(definition);
-
   return (
     <div className="diagram-container">
       <MermaidDiagram definition={definition} />

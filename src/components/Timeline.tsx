@@ -1,6 +1,6 @@
 import { TimelineEventRow } from "./TimelineEventRow";
 
-export const Timeline: React.FC<TimelineProps> = ({ events }) => {
+const Timeline: React.FC<TimelineProps> = ({ events }) => {
   return (
     <div className="relative bg-gray-50 p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
@@ -17,8 +17,8 @@ export const Timeline: React.FC<TimelineProps> = ({ events }) => {
           </tr>
         </thead>
         <tbody>
-          {events.map((event, index) => (
-            <TimelineEventRow key={index} event={event} />
+          {events.map(event => (
+            <TimelineEventRow key={event.id} event={event} />
           ))}
         </tbody>
       </table>
@@ -26,3 +26,4 @@ export const Timeline: React.FC<TimelineProps> = ({ events }) => {
   );
 };
 
+export default Timeline;

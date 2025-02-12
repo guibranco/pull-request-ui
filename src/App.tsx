@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Timeline } from "./Timeline";
 import fetchWithAuth from "./hooks/fetchWithAuth";
+import ApiKeyModal from "./components/ApiKeyModal";
+import Timeline from "./components/Timeline";
+import Diagram from "./components/Diagram";
 
 const App = () => {
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
@@ -11,13 +14,16 @@ const App = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetchWithAuth("/repositories/")
+    if (apiKey === null){
+      return;
+    }
+    fetchWithAuth(apiKey, "/repositories/")
       .then((res) => res.json())
       .then((data) => setRepositories(data));
-  }, []);
+  }, [apiKey]);
 
   const fetchRepoDetails = (repo: Repository | null) => {
-    fetchWithAuth(`/repositories/${repo?.owner}/${repo?.name}/pulls`)
+    fetchWithAuth(apiKey,`/repositories/${repo?.owner}/${repo?.name}/pulls`)
       .then((res) => res.json())
       .then((data) => {
         setSelectedRepo(repo);
@@ -27,7 +33,7 @@ const App = () => {
   };
 
   const fetchEventsForPR = (prNumber: number) => {
-    fetchWithAuth(`/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
+    fetchWithAuth(apiKey,`/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
       .then((res) => res.json())
       .then((data) => {
         setEvents(data.events);
@@ -38,6 +44,8 @@ const App = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">GitHub Webhooks Viewer</h1>
+
+      <ApiKeyModal onApiKeySet={setApiKey} />
 
       {/* Repository Selector */}
       <div className="mb-4">
@@ -100,6 +108,7 @@ const App = () => {
 
             {/* Timeline Component */}
             <Timeline events={events} />
+            <Diagram events={events} />
 
           </CardContent>
         </Card>
