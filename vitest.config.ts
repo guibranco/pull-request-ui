@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
+    coverage: {
+        provider: 'v8',
+    },
     environment: 'jsdom',
     setupFiles: './tests/setup.ts',
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'], // Ensure tests are found
