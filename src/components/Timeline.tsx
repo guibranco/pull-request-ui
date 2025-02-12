@@ -17,8 +17,8 @@ const Timeline: React.FC<TimelineProps> = ({ events }) => {
           </tr>
         </thead>
         <tbody>
-          {events.map((event, index) => (
-            <TimelineEventRow key={index} event={event} />
+          {events.map(event => (
+            <TimelineEventRow key={event.id} event={event} />
           ))}
         </tbody>
       </table>
