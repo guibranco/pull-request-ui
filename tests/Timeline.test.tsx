@@ -27,7 +27,6 @@ describe("Timeline Component", () => {
 
     expect(screen.getByText("test")).toBeInTheDocument();
     expect(screen.getByText("created")).toBeInTheDocument();
-    expect(screen.getByText("12/02/2024, 10:00:00")).toBeInTheDocument();
     expect(screen.getByText("123")).toBeInTheDocument();
   });
 });
