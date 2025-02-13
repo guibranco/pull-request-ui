@@ -5,6 +5,19 @@ import ApiKeyModal from "./components/ApiKeyModal";
 import Timeline from "./components/Timeline";
 import Diagram from "./components/Diagram";
 
+/**
+ * The main application component that renders the GitHub Webhooks Viewer.
+ * It manages the state for API key, repositories, selected repository,
+ * pull requests, selected pull request, and events.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @example
+ * // Usage in a React application
+ * <App />
+ *
+ * @throws {Error} Throws an error if the API key is invalid or if there is a network issue.
+ */
 const App = () => {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [repositories, setRepositories] = useState<Repository[]>([]);
@@ -22,6 +35,24 @@ const App = () => {
       .then((data) => setRepositories(data));
   }, [apiKey]);
 
+  /**
+   * Fetches the details of pull requests and events for a specified repository.
+   *
+   * This function retrieves data from the API using the repository's owner and name.
+   * It updates the state with the selected repository, pull requests, and events
+   * once the data is successfully fetched.
+   *
+   * @param {Repository | null} repo - The repository object containing the owner and name,
+   *                                    or null if no repository is selected.
+   *
+   * @returns {void} This function does not return a value.
+   *
+   * @throws {Error} Throws an error if the fetch operation fails or if the response is not valid.
+   *
+   * @example
+   * const repo = { owner: 'octocat', name: 'Hello-World' };
+   * fetchRepoDetails(repo);
+   */
   const fetchRepoDetails = (repo: Repository | null) => {
     fetchWithAuth(apiKey, `/repositories/${repo?.owner}/${repo?.name}/pulls`)
       .then((res) => res.json())
@@ -32,6 +63,21 @@ const App = () => {
       });
   };
 
+  /**
+   * Fetches events for a given pull request (PR) number from the repository.
+   * This function utilizes an authenticated fetch call to retrieve event data
+   * and updates the state with the fetched events. It also sets up a recurring
+   * fetch every 5 seconds to keep the events updated.
+   *
+   * @param {number} prNumber - The number of the pull request for which events are to be fetched.
+   * @returns {void} - This function does not return a value.
+   *
+   * @throws {Error} - Throws an error if the fetch operation fails or if the response is not valid JSON.
+   *
+   * @example
+   * // Fetch events for PR number 42
+   * fetchEventsForPR(42);
+   */
   const fetchEventsForPR = (prNumber: number) => {
     fetchWithAuth(apiKey, `/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
       .then((res) => res.json())
