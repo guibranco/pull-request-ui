@@ -14,7 +14,7 @@ const App = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    if (apiKey === null){
+    if (apiKey === null) {
       return;
     }
     fetchWithAuth(apiKey, "/repositories/")
@@ -23,7 +23,7 @@ const App = () => {
   }, [apiKey]);
 
   const fetchRepoDetails = (repo: Repository | null) => {
-    fetchWithAuth(apiKey,`/repositories/${repo?.owner}/${repo?.name}/pulls`)
+    fetchWithAuth(apiKey, `/repositories/${repo?.owner}/${repo?.name}/pulls`)
       .then((res) => res.json())
       .then((data) => {
         setSelectedRepo(repo);
@@ -33,7 +33,7 @@ const App = () => {
   };
 
   const fetchEventsForPR = (prNumber: number) => {
-    fetchWithAuth(apiKey,`/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
+    fetchWithAuth(apiKey, `/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
       .then((res) => res.json())
       .then((data) => {
         setEvents(data.events);

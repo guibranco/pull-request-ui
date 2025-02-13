@@ -1,33 +1,22 @@
- interface GitHubEvent {
-  id: string;
-  type: string;
-  action: string;
-  date: string;
-  payload: Record<string, unknown>;
+interface TimelineEventProps {
+  events: TimelineEvent[];
+}
+
+interface TimelineEventRowProps {
+  event: TimelineEvent;
 }
 
 interface TimelineEvent {
-  id: number;
+  delivery_id: string;
   type: string;
   action: string;
-  title: string;
-  description: string;
   date: string;
-  icon: React.ReactNode;
   payload: EventPayload;
 }
 
 interface EventPayload {
   name: string;
   check_suite: CheckSuite|null;
-}
-
-interface TimelineProps {
-  events: TimelineEvent[];
-}
-
-interface TimelineEventRowProps {
-  event: TimelineEvent;
 }
 
 interface Repository {
