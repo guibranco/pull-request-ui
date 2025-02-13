@@ -5,6 +5,28 @@ interface MermaidDiagramProps {
   definition: string;
 }
 
+/**
+ * A React functional component that renders a Mermaid diagram based on a provided definition.
+ *
+ * @component
+ * @param {MermaidDiagramProps} props - The properties for the component.
+ * @param {string} props.definition - The Mermaid diagram definition in string format.
+ *
+ * @returns {JSX.Element} A div element containing the rendered Mermaid diagram.
+ *
+ * @throws {Error} Throws an error if the Mermaid rendering fails, which is logged to the console.
+ *
+ * @example
+ * const diagramDefinition = `
+ *   graph TD;
+ *   A-->B;
+ *   A-->C;
+ *   B-->D;
+ *   C-->D;
+ * `;
+ *
+ * <MermaidDiagram definition={diagramDefinition} />
+ */
 const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ definition }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
