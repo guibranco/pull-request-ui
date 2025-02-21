@@ -1,5 +1,5 @@
 const TimelineEventRow: React.FC<TimelineEventRowProps & { onViewPayload: () => void }> = ({ event, onViewPayload }) => {
-  const data = event.payload[event.type as keyof EventPayload] as unknown;
+  const data = event.payload[event.type as keyof EventPayload] as GenericEvent;
 
   return (
       <tr className="odd:bg-white even:bg-gray-50">

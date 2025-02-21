@@ -47,3 +47,8 @@ interface WorkflowJob {
   id: number;
   status: string;
 }
+
+interface GenericEvent {
+  title: string|null;
+  name: string|nulll
+}
