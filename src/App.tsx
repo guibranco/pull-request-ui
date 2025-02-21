@@ -119,7 +119,7 @@ const App = () => {
             ))}
           </select>
         </div>
-      })
+      )}
 
       {/* Pull Request Selector */}
       {selectedRepo && pullRequests.length > 0 && (
