@@ -94,30 +94,32 @@ const App = () => {
       <ApiKeyModal onApiKeySet={setApiKey} />
 
       {/* Repository Selector */}
-      <div className="mb-4">
-        <label htmlFor="repository" className="block text-sm font-medium mb-2">
-          Select Repository:
-        </label>
-        <select
-          id="repository"
-          className="w-full p-2 border rounded-md"
-          onChange={(e) => {
-            const repo = repositories.find(
-              (r) => r.full_name === e.target.value
-            );
-            if (typeof repo !== "undefined") {
-              fetchRepoDetails(repo);
-            }
-          }}
-        >
-          <option value="">-- Select --</option>
-          {repositories.map((repo) => (
-            <option key={repo.id} value={repo.full_name}>
-              {repo.full_name}
-            </option>
-          ))}
-        </select>
-      </div>
+      {apiKey && (
+        <div className="mb-4">
+          <label htmlFor="repository" className="block text-sm font-medium mb-2">
+            Select Repository:
+          </label>
+          <select
+            id="repository"
+            className="w-full p-2 border rounded-md"
+            onChange={(e) => {
+              const repo = repositories.find(
+                (r) => r.full_name === e.target.value
+              );
+              if (typeof repo !== "undefined") {
+                fetchRepoDetails(repo);
+              }
+            }}
+          >
+            <option value="">-- Select --</option>
+            {repositories.map((repo) => (
+              <option key={repo.id} value={repo.full_name}>
+                {repo.full_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      })
 
       {/* Pull Request Selector */}
       {selectedRepo && pullRequests.length > 0 && (
