@@ -17,6 +17,8 @@ interface TimelineEvent {
 interface EventPayload {
   name: string;
   check_suite: CheckSuite|null;
+  workflow_run: WorkflowRun|null;
+  workflow_job: WorkflowJob|null;
 }
 
 interface Repository {
@@ -35,4 +37,13 @@ interface PullRequest {
 
 interface CheckSuite {
   id: number;
+}
+
+interface WorkflowRun {
+  id: number;
+}
+
+interface WorkflowJob {
+  id: number;
+  status: string;
 }

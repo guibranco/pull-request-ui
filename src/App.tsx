@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import fetchWithAuth from "./hooks/fetchWithAuth";
 import ApiKeyModal from "./components/ApiKeyModal";
 import Timeline from "./components/Timeline";
-import Diagram from "./components/Diagram";
 
 /**
  * The main application component that renders the GitHub Webhooks Viewer.
@@ -81,15 +79,12 @@ const App = () => {
   const fetchEventsForPR = (prNumber: number) => {
     fetchWithAuth(apiKey, `/repositories/${selectedRepo?.owner}/${selectedRepo?.name}/${prNumber}`)
       .then((res) => res.json())
-      .then((data) => {
-        setEvents(data.events);
-        setTimeout(function () { fetchEventsForPR(prNumber); }, 5000);
-      });
+      .then((data) => setEvents(data.events));
   };
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">GitHub Webhooks Viewer</h1>
+      <h1 className="text-2xl font-bold mb-4">Events Viewer</h1>
 
       <ApiKeyModal onApiKeySet={setApiKey} />
 
@@ -148,18 +143,14 @@ const App = () => {
 
       {/* Events Timeline and Diagram */}
       {selectedRepo && selectedPR && events && (
-        <Card className="mb-4">
-          <CardContent>
-            <h2 className="text-xl font-semibold mb-4">
-              Events for {selectedRepo.full_name} (PR #{selectedPR})
-            </h2>
+        <>
+          <h2 className="text-xl font-semibold mb-4">
+            Events for {selectedRepo.full_name} (PR #{selectedPR})
+          </h2>
 
-            {/* Timeline Component */}
-            <Timeline events={events} />
-            <Diagram events={events} />
-
-          </CardContent>
-        </Card>
+          {/* Timeline Component */}
+          <Timeline events={events} />
+        </>
       )}
 
       {apiKey && !selectedRepo && (
