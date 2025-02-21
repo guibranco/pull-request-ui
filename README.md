@@ -7,7 +7,7 @@ A sleek and interactive UI to visualize GitHub webhook events for pull requests!
 ✅ Fetch and display **GitHub webhook events** in a structured table 📊  
 ✅ Store API key, repository, and PR selection **locally** to persist data 💾  
 ✅ Beautiful UI with TailwindCSS for an intuitive experience 🎨  
-✅ Modular React components for better maintainability 🛠️  
+✅ Modular React components for better maintainability 🛠️
 
 ## 📸 Preview
 
@@ -42,30 +42,28 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
 
 ```
 📂 src
- ├── 📄 App.css  
- ├── 📄 App.tsx  
- ├── 📄 index.css  
- ├── 📄 main.tsx  
- ├── 📄 tree.txt  
- ├── 📄 types.d.ts  
- ├── 📄 vite-env.d.ts  
- │  
- ├── 📂 components       # Reusable UI components  
- │   ├── 📄 ApiKeyModal.tsx  
- │   ├── 📄 Diagram.tsx  
- │   ├── 📄 MermaidDiagram.tsx  
- │   ├── 📄 Timeline.tsx  
- │   ├── 📄 TimelineEventRow.tsx  
- │   │  
- │   ├── 📂 ui           # UI-specific components  
- │       ├── 📄 button.tsx  
- │       ├── 📄 card.tsx  
- │  
- ├── 📂 hooks            # Custom React hooks  
- │   ├── 📄 fetchWithAuth.tsx  
- │  
- ├── 📂 lib              # Utility functions  
-     ├── 📄 utils.ts 
+ ├── 📄 App.css
+ ├── 📄 App.tsx
+ ├── 📄 index.css
+ ├── 📄 main.tsx
+ ├── 📄 tree.txt
+ ├── 📄 types.d.ts
+ ├── 📄 vite-env.d.ts
+ │
+ ├── 📂 components       # Reusable UI components
+ │   ├── 📄 ApiKeyModal.tsx
+ │   ├── 📄 Diagram.tsx
+ │   ├── 📄 MermaidDiagram.tsx
+ │   ├── 📄 PayloadPanel.tsx
+ │   ├── 📄 Timeline.tsx
+ │   ├── 📄 TimelineEventRow.tsx
+ │
+ ├── 📂 hooks            # Custom React hooks
+ │   ├── 📄 fetchWithAuth.tsx
+ │
+ ├── 📂 lib              # Utility functions
+     ├── 📄 statusUtils.tsx
+     ├── 📄 utils.ts
 ```
 
 ## 📡 API Usage
@@ -85,4 +83,3 @@ Feel free to fork, create a PR, or open issues! Your contributions are welcome. 
 ## 📜 License
 
 This project is licensed under the MIT License. 📄
-
