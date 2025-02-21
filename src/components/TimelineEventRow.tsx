@@ -1,5 +1,6 @@
 const TimelineEventRow: React.FC<TimelineEventRowProps & { onViewPayload: () => void }> = ({ event, onViewPayload }) => {
-  const data = event.payload[event.type as keyof EventPayload] as GenericEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = event.payload[event.type as keyof EventPayload] as any;
 
   return (
       <tr className="odd:bg-white even:bg-gray-50">
