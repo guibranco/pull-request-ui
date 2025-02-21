@@ -162,7 +162,7 @@ const App = () => {
         </Card>
       )}
 
-      {!selectedRepo && (
+      {apiKey && !selectedRepo && (
         <p className="text-gray-600">Please select a repository to view pull requests and events.</p>
       )}
     </div>
