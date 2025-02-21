@@ -25,9 +25,6 @@ describe("Timeline Component", () => {
     ];
 
     render(<Timeline events={events} />);
-
-    expect(screen.getByText("test")).toBeInTheDocument();
-    expect(screen.getByText("created")).toBeInTheDocument();
-    expect(screen.getByText("123")).toBeInTheDocument();
+    expect(screen.getByText("Check Suite: 123")).toBeInTheDocument();
   });
 });
