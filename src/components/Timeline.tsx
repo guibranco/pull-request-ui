@@ -3,6 +3,22 @@ import Diagram from "./Diagram";
 import TimelineEventRow from "./TimelineEventRow";
 import PayloadPanel from "./PayloadPanel";
 
+/**
+ * A React functional component that displays a timeline of events grouped by Check Suite, Workflow Run, and Workflow Job.
+ *
+ * @param {Object} props - The properties for the component.
+ * @param {TimelineEvent[]} props.events - An array of timeline events to be displayed.
+ *
+ * @returns {JSX.Element} The rendered timeline component.
+ *
+ * @example
+ * const events = [
+ *   { payload: { check_suite: { id: 'suite1' }, workflow_run: { id: 'run1' }, workflow_job: { id: 'job1' } } },
+ *   // more events...
+ * ];
+ *
+ * <Timeline events={events} />
+ */
 const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
     const [selectedPayload, setSelectedPayload] = useState<object | null>(null);
