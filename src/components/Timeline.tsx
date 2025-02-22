@@ -87,6 +87,7 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Details</th>
+                                                                            <th className="border border-gray-300 px-4 py-2 text-left">Check Suite</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Payload</th>
                                                                         </tr>
                                                                     </thead>
