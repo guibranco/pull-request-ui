@@ -30,7 +30,7 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
 
     // Group events by Check Suite → Workflow Run → Workflow Job
     const groupedEvents = events.reduce((acc, event) => {
-        const checkSuiteId = event.payload.check_suite?.id ?? "no-check-suite";
+        const checkSuiteId = event.payload.check_suite?.id ?? event.payload[event.type].check_suite.id ?? "no-check-suite";
         const workflowRunId = event.payload.workflow_run?.id ?? "no-workflow-run";
         const workflowJobId = event.payload.workflow_job?.id ?? "no-workflow-job";
 
@@ -103,7 +103,6 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Details</th>
-                                                                            <th className="border border-gray-300 px-4 py-2 text-left">Check Suite</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Payload</th>
                                                                         </tr>
                                                                     </thead>
