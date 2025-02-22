@@ -23,13 +23,12 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
     const [selectedPayload, setSelectedPayload] = useState<object | null>(null);
 
-    // Function to toggle visibility of a group
     const toggleGroup = (groupId: string) => {
         setExpandedGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
     };
 
-    // Group events by Check Suite → Workflow Run → Workflow Job
     const groupedEvents = events.reduce((acc, event) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const checkSuiteId = event.payload.check_suite?.id ?? event.payload[event.type].check_suite.id ?? "no-check-suite";
         const workflowRunId = event.payload.workflow_run?.id ?? "no-workflow-run";
         const workflowJobId = event.payload.workflow_job?.id ?? "no-workflow-job";
@@ -117,7 +116,6 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                                                                     </tbody>
                                                                 </table>
 
-                                                                {/* Display Diagram for the job group */}
                                                                 <Diagram events={jobEvents} />
                                                             </div>
                                                         )}
@@ -133,7 +131,6 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                 ))}
             </div>
 
-            {/* Payload Panel */}
             <PayloadPanel payload={selectedPayload} onClose={() => setSelectedPayload(null)} />
         </div>
     );
