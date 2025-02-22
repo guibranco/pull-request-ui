@@ -23,6 +23,21 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
     const [selectedPayload, setSelectedPayload] = useState<object | null>(null);
 
+    /**
+     * Toggles the expanded state of a group identified by the given group ID.
+     *
+     * This function updates the state of expanded groups by inverting the current
+     * expanded state for the specified group ID. It is typically used in scenarios
+     * where a user can expand or collapse sections of a UI, such as dropdowns or
+     * accordions.
+     *
+     * @param {string} groupId - The unique identifier for the group to be toggled.
+     * @throws {Error} Will throw an error if the groupId is not a valid string.
+     *
+     * @example
+     * // Assuming 'group1' is a valid group ID
+     * toggleGroup('group1');
+     */
     const toggleGroup = (groupId: string) => {
         setExpandedGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
     };
