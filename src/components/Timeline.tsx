@@ -23,14 +23,14 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
     const [selectedPayload, setSelectedPayload] = useState<object | null>(null);
 
-    // Function to toggle visibility of a group
     const toggleGroup = (groupId: string) => {
         setExpandedGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
     };
 
-    // Group events by Check Suite → Workflow Run → Workflow Job
     const groupedEvents = events.reduce((acc, event) => {
-        const checkSuiteId = event.payload.check_suite?.id ?? "no-check-suite";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const eventPayload = event.payload[event.type as keyof EventPayload] as any;
+        const checkSuiteId = event.payload.check_suite?.id ?? eventPayload.check_suite?.id ?? "no-check-suite";
         const workflowRunId = event.payload.workflow_run?.id ?? "no-workflow-run";
         const workflowJobId = event.payload.workflow_job?.id ?? "no-workflow-job";
 
@@ -103,7 +103,6 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Details</th>
-                                                                            <th className="border border-gray-300 px-4 py-2 text-left">Check Suite</th>
                                                                             <th className="border border-gray-300 px-4 py-2 text-left">Payload</th>
                                                                         </tr>
                                                                     </thead>
@@ -118,7 +117,6 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                                                                     </tbody>
                                                                 </table>
 
-                                                                {/* Display Diagram for the job group */}
                                                                 <Diagram events={jobEvents} />
                                                             </div>
                                                         )}
@@ -134,7 +132,6 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
                 ))}
             </div>
 
-            {/* Payload Panel */}
             <PayloadPanel payload={selectedPayload} onClose={() => setSelectedPayload(null)} />
         </div>
     );
