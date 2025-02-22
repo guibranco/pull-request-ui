@@ -41,9 +41,11 @@ interface CheckSuite {
 
 interface WorkflowRun {
   id: number;
+  check_suite: CheckSuite;
 }
 
 interface WorkflowJob {
   id: number;
   status: string;
+  heck_suite: CheckSuite;
 }
