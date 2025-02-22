@@ -29,7 +29,7 @@ const Timeline: React.FC<TimelineEventProps> = ({ events }) => {
 
     const groupedEvents = events.reduce((acc, event) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const checkSuiteId = event.payload.check_suite?.id ?? event.payload[event.type as keyof EventPayload].check_suite?.id ?? "no-check-suite";
+        const checkSuiteId = event.payload.check_suite?.id ?? event.payload[event.type as keyof EventPayload]?.check_suite?.id ?? "no-check-suite";
         const workflowRunId = event.payload.workflow_run?.id ?? "no-workflow-run";
         const workflowJobId = event.payload.workflow_job?.id ?? "no-workflow-job";
 
