@@ -32,7 +32,7 @@ export class ApiService {
   }
 
   async getEvents(owner: string, repo: string, pr: string) {
-    return this.fetch<EventsResponse>(`/repositories/${owner}/${repo}/${pr}`);
+    return this.fetch<EventsResponse>(`/repositories/${owner}/${repo}/pulls/${pr}`);
   }
 }
 
