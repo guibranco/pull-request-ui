@@ -97,6 +97,35 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
     });
   };
 
+  // Create a reusable component for message displays
+  const MessageDisplay = ({ 
+    title, 
+    message, 
+    isError = false,
+    onBack 
+  }: {
+    title?: string;
+    message: string;
+    isError?: boolean;
+    onBack: () => void;
+  }) => (
+    <div className="max-w-2xl mx-auto">
+      <div className="bg-gray-800 p-6 rounded-lg shadow">
+        {title && <h3 className="text-xl text-gray-100 mb-4">{title}</h3>}
+        <div className={`text-center mb-4 ${isError ? 'text-red-400' : 'text-gray-300'}`}>
+          <p>{message}</p>
+        </div>
+        <button
+          onClick={onBack}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+        >
+          Go Back
+        </button>
+      </div>
+    </div>
+  );
+  
+  // Handle loading state
   if (loading && events.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -104,42 +133,15 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
       </div>
     );
   }
-
-  if (error && events.length === 0) {
+  
+  // Handle error or no events
+  if ((error && events.length === 0) || events.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="text-red-400 text-center mb-4">
-            <p>{error}</p>
-          </div>
-          <button
-            onClick={onBack}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const hasEvents = events.length > 0;
-
-  if (!hasEvents) {
-    return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="text-gray-300 text-center mb-4">
-            <p>No events found for this pull request</p>
-          </div>
-          <button
-            onClick={onBack}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
+      <MessageDisplay
+        message={error || "No events found for this pull request"}
+        isError={!!error}
+        onBack={onBack}
+      />
     );
   }
 
