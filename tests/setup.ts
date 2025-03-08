@@ -30,4 +30,6 @@ afterEach(() => {
   vi.clearAllMocks();
   localStorageMock.getItem.mockReset();
   localStorageMock.setItem.mockReset();
+  localStorageMock.removeItem.mockReset();
+  localStorageMock.clear.mockReset();
 });
