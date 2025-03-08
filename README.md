@@ -42,28 +42,36 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
 
 ```
 📂 src
- ├── 📄 App.css
  ├── 📄 App.tsx
  ├── 📄 index.css
  ├── 📄 main.tsx
  ├── 📄 tree.txt
- ├── 📄 types.d.ts
+ ├── 📄 types.ts
  ├── 📄 vite-env.d.ts
  │
- ├── 📂 components       # Reusable UI components
- │   ├── 📄 ApiKeyModal.tsx
- │   ├── 📄 Diagram.tsx
- │   ├── 📄 MermaidDiagram.tsx
- │   ├── 📄 PayloadPanel.tsx
- │   ├── 📄 Timeline.tsx
- │   ├── 📄 TimelineEventRow.tsx
+ ├── 📂 components
+ │   ├── 📂 layout
+ │   │   ├── 📄 Footer.tsx
+ │   │   ├── 📄 Header.tsx
+ │   │
+ │   ├── 📂 select-data
+ │   │   ├── 📄 PullRequestSelect.tsx
+ │   │   ├── 📄 RepositorySelect.tsx
+ │   │
+ │   ├── 📂 timeline
+ │   │   ├── 📄 EventList.tsx
+ │   │   ├── 📄 MermaidDiagram.tsx
+ │   │   ├── 📄 PayloadModal.tsx
+ │   │   ├── 📄 RefreshButton.tsx
  │
- ├── 📂 hooks            # Custom React hooks
- │   ├── 📄 fetchWithAuth.tsx
+ ├── 📂 services
+ │   ├── 📄 api.ts
  │
- ├── 📂 lib              # Utility functions
-     ├── 📄 statusUtils.tsx
-     ├── 📄 utils.ts
+ ├── 📂 steps
+ │   ├── 📄 ApiKeyStep.tsx
+ │   ├── 📄 SelectDataStep.tsx
+ │   ├── 📄 TimelineViewStep.tsx
+
 ```
 
 ## 📡 API Usage
