@@ -14,6 +14,7 @@ export function PayloadModal({ payload, onClose }: PayloadModalProps) {
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-200"
+            aria-label="Close modal"
           >
             ✕
           </button>
