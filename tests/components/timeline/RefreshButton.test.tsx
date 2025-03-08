@@ -1,11 +1,10 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { RefreshButton } from '../../../src/components/timeline/RefreshButton';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('RefreshButton', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -47,8 +46,12 @@ describe('RefreshButton', () => {
     render(<RefreshButton onRefresh={onRefresh} isLoading={false} />);
     
     await act(async () => {
-      // Advance time to trigger the refresh
-      vi.advanceTimersByTime(15000);
+      // Advance time by 15 seconds (initial countdown value)
+      for (let i = 0; i < 15; i++) {
+        vi.advanceTimersByTime(1000);
+        // Allow any pending promises to resolve
+        await Promise.resolve();
+      }
     });
     
     expect(onRefresh).toHaveBeenCalledTimes(1);
@@ -68,7 +71,7 @@ describe('RefreshButton', () => {
     fireEvent.click(refreshButton);
     
     await act(async () => {
-      await vi.runAllTimersAsync();
+      await Promise.resolve();
     });
     
     expect(onRefresh).toHaveBeenCalledTimes(1);

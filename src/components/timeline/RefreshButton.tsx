@@ -32,15 +32,18 @@ export function RefreshButton({ onRefresh, isLoading }: RefreshButtonProps) {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
 
-    if (!isPaused && !isLoading) {
-      timeoutId = setTimeout(async () => {
-        if (countdown <= 1) {
+    const tick = async () => {
+      if (!isPaused && !isLoading) {
+        if (countdown <= 0) {
           await handleRefreshNow();
-          setCountdown(INITIAL_COUNTDOWN);
         } else {
           setCountdown(prev => prev - 1);
         }
-      }, 1000);
+      }
+    };
+
+    if (!isPaused && !isLoading) {
+      timeoutId = setTimeout(tick, 1000);
     }
 
     return () => {
