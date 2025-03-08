@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/pull-request-ui/',
   plugins: [react()],
-  base: "/pull-request-ui/",
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

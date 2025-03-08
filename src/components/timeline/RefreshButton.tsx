@@ -33,9 +33,10 @@ export function RefreshButton({ onRefresh, isLoading }: RefreshButtonProps) {
     let timeoutId: NodeJS.Timeout | null = null;
 
     if (!isPaused && !isLoading) {
-      timeoutId = setTimeout(() => {
+      timeoutId = setTimeout(async () => {
         if (countdown <= 1) {
-          handleRefreshNow();
+          await handleRefreshNow();
+          setCountdown(INITIAL_COUNTDOWN);
         } else {
           setCountdown(prev => prev - 1);
         }
