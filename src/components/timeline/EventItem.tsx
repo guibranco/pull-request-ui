@@ -37,8 +37,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     return '';
   };
 
-  const appData = event.payload[event.type]?.app;
-
+  const appData = event.payload[event.type]?.app || null;
   return (
     <div className="border-l-2 border-gray-700 pl-6 py-4 ml-6">
       <div className="flex items-center justify-between mb-3">
