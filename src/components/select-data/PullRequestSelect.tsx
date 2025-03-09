@@ -9,6 +9,19 @@ interface PullRequestSelectProps {
   disabled: boolean;
 }
 
+/**
+ * A functional component that renders a dropdown selection for pull requests.
+ *
+ * @param {Object} props - The properties for the component.
+ * @param {Array} props.pullRequests - An array of pull request objects to display in the dropdown.
+ * @param {string} props.selectedPR - The currently selected pull request number.
+ * @param {function} props.onChange - Callback function that is called when the selected pull request changes.
+ * @param {boolean} props.disabled - A flag indicating whether the dropdown should be disabled.
+ *
+ * @returns {JSX.Element} The rendered dropdown component.
+ *
+ * @throws {Error} Throws an error if the onChange function is not provided.
+ */
 export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled }: PullRequestSelectProps) {
   return (
     <div className="mb-6">
