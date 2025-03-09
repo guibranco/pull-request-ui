@@ -11,7 +11,6 @@ interface EventListProps {
   events: Event[];
   expandedItems: Set<string>;
   onToggleExpand: (id: string) => void;
-  onViewPayload: (payload: any) => void;
   isExpanded: boolean;
   onToggle: () => void;
 }
