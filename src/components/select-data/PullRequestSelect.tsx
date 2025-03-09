@@ -1,3 +1,5 @@
+import React from 'react';
+import { GitPullRequest } from 'lucide-react';
 import { PullRequest } from '../../types';
 
 interface PullRequestSelectProps {
@@ -9,28 +11,41 @@ interface PullRequestSelectProps {
 
 export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled }: PullRequestSelectProps) {
   return (
-    <div className="mb-4">
+    <div className="mb-6">
       <label
         htmlFor="pullRequest"
-        className="block text-sm font-medium text-gray-300 mb-1"
+        className="block text-sm font-medium text-gray-300 mb-2"
       >
         Pull Request
       </label>
-      <select
-        id="pullRequest"
-        value={selectedPR}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100"
-        required
-        disabled={disabled}
-      >
-        <option value="">Select a pull request</option>
-        {pullRequests.map((pr) => (
-          <option key={pr.number} value={pr.number.toString()}>
-            #{pr.number} - {pr.title}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          id="pullRequest"
+          value={selectedPR}
+          onChange={(e) => onChange(e.target.value)}
+          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm appearance-none
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100
+            disabled:opacity-50 disabled:cursor-not-allowed
+            pr-12 ${selectedPR ? 'text-gray-100' : 'text-gray-400'}`}
+          required
+          disabled={disabled}
+        >
+          <option value="" className="text-gray-400">Select a pull request</option>
+          {pullRequests.map((pr) => (
+            <option key={pr.number} value={pr.number.toString()} className="text-gray-100 bg-gray-700">
+              #{pr.number} - {pr.title}
+            </option>
+          ))}
+        </select>
+        <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
+          <GitPullRequest className="w-5 h-5" />
+        </div>
+        <div className="absolute inset-y-0 right-8 flex items-center pointer-events-none text-gray-400">
+          <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+            <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" strokeWidth="1.5" stroke="currentColor" fill="none"/>
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }

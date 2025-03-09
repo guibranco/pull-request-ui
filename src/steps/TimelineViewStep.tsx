@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Loader2, GitPullRequest, GitFork } from 'lucide-react';
 import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
@@ -15,7 +16,7 @@ interface TimelineViewStepProps {
   onBack: () => void;
 }
 
-export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepProps) {
+export function TimelineViewStep({ apiKey, repo, pr, onBack }: Readonly<TimelineViewStepProps>) {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,6 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
     const saved = localStorage.getItem('expandedEventTypes');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedPayload, setSelectedPayload] = useState<any>(null);
   const [isSequenceExpanded, setIsSequenceExpanded] = useState(() => {
     const saved = localStorage.getItem('isSequenceExpanded');

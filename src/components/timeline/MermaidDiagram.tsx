@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import mermaid from 'mermaid';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Event } from '../../types';
@@ -9,7 +9,7 @@ interface MermaidDiagramProps {
   onToggle: () => void;
 }
 
-export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<MermaidDiagramProps>) {
+export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramProps) {
   const mermaidRef = useRef<HTMLDivElement>(null);
 
   const sanitizeParticipant = (name: string): string => {
@@ -27,7 +27,7 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
     });
   };
 
-  const generateSequenceDiagram = () => {
+  const generateSequenceDiagram = useCallback(() => {
     if (!events.length) {
       return `sequenceDiagram
     participant GH as GitHub
@@ -103,7 +103,7 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
     });
 
     return diagram;
-  };
+  }, [events]); // Include events in the dependencies
 
   useEffect(() => {
     if (mermaidRef.current && events.length > 0 && isExpanded) {
@@ -167,7 +167,7 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
         }
       }
     }
-  }, [events, isExpanded]);
+  }, [events, isExpanded, generateSequenceDiagram]); // Include generateSequenceDiagram in dependencies
 
   return (
     <div className="bg-gray-800 rounded-lg shadow-lg w-full overflow-hidden">

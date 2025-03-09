@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Repository {
   id: string;
   owner: string;
@@ -11,6 +12,13 @@ export interface PullRequest {
   title: string;
 }
 
+export interface AppData {
+  id: number;
+  name: string;
+  description?: string;
+  html_url?: string;
+}
+
 export interface Event {
   delivery_id: string;
   type: string;
@@ -21,7 +29,7 @@ export interface Event {
       login: string;
       avatar_url: string;
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    app?: AppData;
     [key: string]: any;
   };
 }
