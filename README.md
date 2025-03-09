@@ -45,7 +45,6 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
  ├── 📄 App.tsx
  ├── 📄 index.css
  ├── 📄 main.tsx
- ├── 📄 tree.txt
  ├── 📄 types.ts
  ├── 📄 vite-env.d.ts
  │
@@ -58,20 +57,23 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
  │   │   ├── 📄 PullRequestSelect.tsx
  │   │   ├── 📄 RepositorySelect.tsx
  │   │
- │   ├── 📂 timeline
- │   │   ├── 📄 EventList.tsx
- │   │   ├── 📄 MermaidDiagram.tsx
- │   │   ├── 📄 PayloadModal.tsx
- │   │   ├── 📄 RefreshButton.tsx
+ │   └── 📂 timeline
+ │       ├── 📄 BulletDiagram.tsx
+ │       ├── 📄 EventItem.tsx
+ │       ├── 📄 EventList.tsx
+ │       ├── 📄 EventTimeline.tsx
+ │       ├── 📄 MermaidDiagram.tsx
+ │       ├── 📄 MessageDisplay.tsx
+ │       ├── 📄 PayloadModal.tsx
+ │       ├── 📄 RefreshButton.tsx
  │
  ├── 📂 services
  │   ├── 📄 api.ts
  │
- ├── 📂 steps
- │   ├── 📄 ApiKeyStep.tsx
- │   ├── 📄 SelectDataStep.tsx
- │   ├── 📄 TimelineViewStep.tsx
-
+ └── 📂 steps
+     ├── 📄 ApiKeyStep.tsx
+     ├── 📄 SelectDataStep.tsx
+     ├── 📄 TimelineViewStep.tsx
 ```
 
 ## 📡 API Usage
