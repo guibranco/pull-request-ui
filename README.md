@@ -13,7 +13,7 @@ A sleek and interactive UI to visualize GitHub webhook events for pull requests!
 
 ## 📸 Preview
 
-![Demo](demo.gif)
+![Demo of the GitHub webhook visualizer](demo.gif)
 
 ## 🚀 Getting Started
 
