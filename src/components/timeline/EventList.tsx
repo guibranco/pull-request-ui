@@ -33,8 +33,8 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
   }, {} as Record<string, Event[]>);
 
   // Sort events within each type by date
-  Object.values(eventsByType).forEach(typeEvents => {
-    orderBy(typeEvents, ['date'], ['asc']);
+  Object.keys(eventsByType).forEach(type => {
+    eventsByType[type] = orderBy(eventsByType[type], ['date'], ['asc']);
   });
 
   // Get sorted type entries
