@@ -94,7 +94,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     }
   };
 
-  const appData = event.payload[event.type]?.app;
+  const appData = event.payload[event.type]?.app || null;
   const conclusion = getEventConclusion(event);
 
   return (
