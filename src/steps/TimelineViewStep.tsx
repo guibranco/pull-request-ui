@@ -35,7 +35,7 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
   });
 
   const fetchPullRequestInfo = useCallback(async () => {
-    if (!repo || !pr) return;
+    if (!repo || !pr) {
     
     const api = new ApiService(apiKey);
     try {
