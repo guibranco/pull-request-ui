@@ -1,5 +1,21 @@
 import { Github } from 'lucide-react';
 
+/**
+ * Renders the footer component of the application.
+ *
+ * This component includes links to the developer's profile and the project's GitHub repository.
+ * It is styled with responsive design principles to ensure proper display across different screen sizes.
+ *
+ * @returns {JSX.Element} The rendered footer element containing links and developer information.
+ *
+ * @example
+ * // Usage in a React component
+ * return (
+ *   <div>
+ *     <Footer />
+ *   </div>
+ * );
+ */
 export function Footer() {
   return (
     <footer className="border-t border-gray-200 dark:border-gray-700 mt-auto py-6">
