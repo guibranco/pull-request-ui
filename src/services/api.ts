@@ -29,8 +29,13 @@ export class ApiService {
       throw new Error('Invalid response format: response must be an object');
     }
 
-    if (this.isRepositoryArray(data)) {
-      return data as T;
+    if (Array.isArray(data)) {
+      if (this.isRepositoryArray(data)) {
+        return data as T;
+      }
+      if (this.isRecentPullRequestsArray(data)) {
+        return data as T;
+      }
     }
 
     if (this.isPullRequestsResponse(data)) {
@@ -60,6 +65,19 @@ export class ApiService {
     );
   }
 
+  private isRecentPullRequestsArray(data: unknown): boolean {
+    return Array.isArray(data) && data.every(item =>
+      item && typeof item === 'object' &&
+      'date' in item && typeof item.date === 'string' &&
+      'owner' in item && typeof item.owner === 'string' &&
+      'name' in item && typeof item.name === 'string' &&
+      'number' in item && typeof item.number === 'number' &&
+      'title' in item && typeof item.title === 'string' &&
+      'sender' in item && typeof item.sender === 'string' &&
+      'sender_avatar' in item && typeof item.sender_avatar === 'string'
+    );
+  }
+
   private isPullRequestsResponse(data: unknown): boolean {
     return data && typeof data === 'object' &&
       'owner' in data && typeof data.owner === 'string' &&
@@ -86,7 +104,11 @@ export class ApiService {
   async getEvents(owner: string, repo: string, pr: string) {
     return this.fetch<EventsResponse>(`/repositories/${owner}/${repo}/pulls/${pr}`);
   }
+
+  async getRecentPullRequests() {
+    return this.fetch<RecentPullRequest[]>('/recent');
+  }
 }
 
 // Re-export types for convenience
-export type { Repository, PullRequest, Event, EventsResponse, PullRequestsResponse } from '../types';
+export type { Repository, PullRequest, Event, EventsResponse, PullRequestsResponse, RecentPullRequest } from '../types';
