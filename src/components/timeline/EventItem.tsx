@@ -37,7 +37,65 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     return '';
   };
 
+  const getEventConclusion = (event: Event): { text: string; color: string } | null => {
+    const conclusion = 
+      event.payload.check_run?.conclusion ||
+      event.payload.check_suite?.conclusion ||
+      event.payload.status?.state ||
+      event.payload.review?.state ||
+      event.payload.workflow_run?.conclusion ||
+      event.payload.workflow_job?.conclusion;
+
+    if (!conclusion) {
+      const status = 
+        event.payload.workflow_run?.status ||
+        event.payload.workflow_job?.status;
+      
+      if (status) {
+        switch (status.toLowerCase()) {
+          case 'completed':
+            return { text: 'Completed', color: 'bg-green-400 text-green-900' };
+          case 'in_progress':
+            return { text: 'In Progress', color: 'bg-yellow-400 text-yellow-900' };
+          case 'queued':
+            return { text: 'Queued', color: 'bg-blue-400 text-blue-900' };
+          case 'waiting':
+            return { text: 'Waiting', color: 'bg-purple-400 text-purple-900' };
+          default:
+            return { text: status, color: 'bg-blue-400 text-blue-900' };
+        }
+      }
+      return null;
+    }
+
+    switch (conclusion.toLowerCase()) {
+      case 'success':
+      case 'completed':
+      case 'approved':
+        return { text: conclusion, color: 'bg-green-400 text-green-900' };
+      case 'failure':
+      case 'failed':
+      case 'changes_requested':
+        return { text: conclusion, color: 'bg-red-400 text-red-900' };
+      case 'cancelled':
+      case 'timed_out':
+      case 'dismissed':
+        return { text: conclusion, color: 'bg-gray-400 text-gray-900' };
+      case 'neutral':
+      case 'pending':
+      case 'queued':
+      case 'in_progress':
+        return { text: conclusion, color: 'bg-yellow-400 text-yellow-900' };
+      case 'skipped':
+      case 'stale':
+        return { text: conclusion, color: 'bg-purple-400 text-purple-900' };
+      default:
+        return { text: conclusion, color: 'bg-blue-400 text-blue-900' };
+    }
+  };
+
   const appData = event.payload[event.type]?.app;
+  const conclusion = getEventConclusion(event);
 
   return (
     <div className="border-l-2 border-gray-700 pl-6 py-4 ml-6">
@@ -54,9 +112,16 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
             </span>
           </div>
         </div>
-        <span className="text-base font-medium text-blue-400">
-          {event.action}
-        </span>
+        <div className="flex items-center space-x-3">
+          {conclusion && (
+            <span className={`px-2 py-1 rounded text-sm font-medium ${conclusion.color}`}>
+              {conclusion.text}
+            </span>
+          )}
+          <span className="text-base font-medium text-blue-400">
+            {event.action}
+          </span>
+        </div>
       </div>
       
       <div className="flex items-center space-x-4 mt-2 mb-3">

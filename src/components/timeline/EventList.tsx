@@ -5,11 +5,13 @@ import { Event } from '../../types';
 import { EventTimeline } from './EventTimeline';
 import { EventItem } from './EventItem';
 import { PayloadModal } from './PayloadModal';
+import { orderBy } from 'lodash-es';
 
 interface EventListProps {
   events: Event[];
   expandedItems: Set<string>;
   onToggleExpand: (id: string) => void;
+  onViewPayload: (payload: any) => void;
   isExpanded: boolean;
   onToggle: () => void;
 }
@@ -21,7 +23,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
     comparePayload?: any;
   } | null>(null);
 
-  // Group events by type
+  // Group events by type and sort the types alphabetically
   const eventsByType = events.reduce((acc, event) => {
     if (!acc[event.type]) {
       acc[event.type] = [];
@@ -29,6 +31,18 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
     acc[event.type].push(event);
     return acc;
   }, {} as Record<string, Event[]>);
+
+  // Sort events within each type by date
+  Object.values(eventsByType).forEach(typeEvents => {
+    orderBy(typeEvents, ['date'], ['asc']);
+  });
+
+  // Get sorted type entries
+  const sortedTypeEntries = orderBy(
+    Object.entries(eventsByType),
+    [([type]) => type.toLowerCase()],
+    ['asc']
+  );
 
   const totalEvents = events.length;
 
@@ -106,7 +120,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
 
       {isExpanded && (
         <div className="p-6 pt-0 space-y-6">
-          {Object.entries(eventsByType).map(([type, typeEvents]) => (
+          {sortedTypeEntries.map(([type, typeEvents]) => (
             <div key={type} className="border border-gray-700 rounded-lg p-6">
               <button
                 className="flex items-center w-full text-left"
