@@ -9,6 +9,19 @@ interface RepositorySelectProps {
   disabled: boolean;
 }
 
+/**
+ * A functional component that renders a dropdown select for choosing a repository.
+ *
+ * @param {Object} props - The properties for the component.
+ * @param {Array} props.repositories - An array of repository objects to be displayed in the select dropdown.
+ * @param {string} props.selectedRepo - The currently selected repository's full name.
+ * @param {function} props.onChange - A callback function that is called when the selected repository changes.
+ * @param {boolean} props.disabled - A flag indicating whether the select dropdown should be disabled.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @throws {Error} Throws an error if the repositories prop is not an array.
+ */
 export function RepositorySelect({ repositories, selectedRepo, onChange, disabled }: RepositorySelectProps) {
   return (
     <div className="mb-6">
