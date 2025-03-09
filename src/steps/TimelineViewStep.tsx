@@ -4,6 +4,7 @@ import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
 import { PayloadModal } from '../components/timeline/PayloadModal';
 import { RefreshButton } from '../components/timeline/RefreshButton';
+import { MessageDisplay } from '../components/timeline/MessageDisplay';
 import { ApiService } from '../services/api';
 import type { Event, PullRequest } from '../types';
 
@@ -35,7 +36,7 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
   });
 
   const fetchPullRequestInfo = useCallback(async () => {
-    if (!repo || !pr) {
+    if (!repo || !pr) return;
     
     const api = new ApiService(apiKey);
     try {
@@ -126,19 +127,12 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
 
   if (error && events.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="text-red-400 text-center mb-4">
-            <p>{error}</p>
-          </div>
-          <button
-            onClick={onBack}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
+      <MessageDisplay
+        type="error"
+        message={error}
+        onAction={onBack}
+        actionLabel="Go Back"
+      />
     );
   }
 
@@ -146,19 +140,12 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
 
   if (!hasEvents) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="text-gray-300 text-center mb-4">
-            <p>No events found for this pull request</p>
-          </div>
-          <button
-            onClick={onBack}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
+      <MessageDisplay
+        type="info"
+        message="No events found for this pull request"
+        onAction={onBack}
+        actionLabel="Go Back"
+      />
     );
   }
 
