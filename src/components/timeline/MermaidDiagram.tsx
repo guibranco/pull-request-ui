@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import mermaid from 'mermaid';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Event } from '../../types';
@@ -9,7 +9,7 @@ interface MermaidDiagramProps {
   onToggle: () => void;
 }
 
-export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramProps) {
+export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<MermaidDiagramProps>) {
   const mermaidRef = useRef<HTMLDivElement>(null);
 
   const sanitizeParticipant = (name: string): string => {

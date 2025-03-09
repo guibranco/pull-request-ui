@@ -16,6 +16,13 @@ export function Header({ currentStep }: HeaderProps) {
     <div className="bg-gray-800 shadow">
       <div className="container mx-auto px-6 lg:px-8 max-w-[90rem]">
         <div className="py-4">
+          <div className="flex items-center justify-center mb-6">
+            <GitPullRequest className="w-8 h-8 text-blue-400 mr-3" />
+            <h1 className="text-2xl font-bold text-gray-100">
+              Pull Request Flow Viewer
+            </h1>
+          </div>
+          
           <div className="flex items-center justify-center space-x-4">
             {steps.map((step, index) => (
               <React.Fragment key={step.id}>
