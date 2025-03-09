@@ -1,5 +1,5 @@
 export interface Repository {
-  id: number;
+  id: string;
   owner: string;
   name: string;
   full_name: string;
@@ -16,7 +16,14 @@ export interface Event {
   type: string;
   action: string;
   date: string;
-  payload: any;
+  payload: {
+    sender?: {
+      login: string;
+      avatar_url: string;
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any;
+  };
 }
 
 export interface EventsResponse {
@@ -24,4 +31,10 @@ export interface EventsResponse {
   repo: string;
   pull_request: number;
   events: Event[];
+}
+
+export interface PullRequestsResponse {
+  owner: string;
+  repo: string;
+  pull_requests: PullRequest[];
 }

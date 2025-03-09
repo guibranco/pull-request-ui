@@ -1,5 +1,4 @@
-import React from 'react';
-import { Github, Info } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 export function Footer() {
   return (

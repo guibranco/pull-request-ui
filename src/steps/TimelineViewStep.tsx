@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { ArrowLeft, Loader2, GitPullRequest, GitFork } from 'lucide-react';
 import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
 import { PayloadModal } from '../components/timeline/PayloadModal';
 import { RefreshButton } from '../components/timeline/RefreshButton';
+import { MessageDisplay } from '../components/timeline/MessageDisplay';
 import { ApiService } from '../services/api';
-import type { Event } from '../types';
+import type { Event, PullRequest } from '../types';
 
 interface TimelineViewStepProps {
   apiKey: string;
@@ -18,10 +19,12 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [pullRequestInfo, setPullRequestInfo] = useState<PullRequest | null>(null);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
     const saved = localStorage.getItem('expandedEventTypes');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedPayload, setSelectedPayload] = useState<any>(null);
   const [isSequenceExpanded, setIsSequenceExpanded] = useState(() => {
     const saved = localStorage.getItem('isSequenceExpanded');
@@ -31,6 +34,22 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
     const saved = localStorage.getItem('isTimelineExpanded');
     return saved ? JSON.parse(saved) : true;
   });
+
+  const fetchPullRequestInfo = useCallback(async () => {
+    if (!repo || !pr) return;
+    
+    const api = new ApiService(apiKey);
+    try {
+      const [owner, repository] = repo.split('/');
+      const data = await api.getPullRequests(owner, repository);
+      const prInfo = data.pull_requests.find(p => p.number.toString() === pr);
+      if (prInfo) {
+        setPullRequestInfo(prInfo);
+      }
+    } catch (err) {
+      console.error('Error fetching PR info:', err);
+    }
+  }, [apiKey, repo, pr]);
 
   const fetchEvents = useCallback(async () => {
     if (!repo || !pr) return;
@@ -62,7 +81,8 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
 
   useEffect(() => {
     fetchEvents();
-  }, [fetchEvents]);
+    fetchPullRequestInfo();
+  }, [fetchEvents, fetchPullRequestInfo]);
 
   const handleRefresh = useCallback(async () => {
     await fetchEvents();
@@ -97,35 +117,6 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
     });
   };
 
-  // Create a reusable component for message displays
-  const MessageDisplay = ({ 
-    title, 
-    message, 
-    isError = false,
-    onBack 
-  }: {
-    title?: string;
-    message: string;
-    isError?: boolean;
-    onBack: () => void;
-  }) => (
-    <div className="max-w-2xl mx-auto">
-      <div className="bg-gray-800 p-6 rounded-lg shadow">
-        {title && <h3 className="text-xl text-gray-100 mb-4">{title}</h3>}
-        <div className={`text-center mb-4 ${isError ? 'text-red-400' : 'text-gray-300'}`}>
-          <p>{message}</p>
-        </div>
-        <button
-          onClick={onBack}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-        >
-          Go Back
-        </button>
-      </div>
-    </div>
-  );
-  
-  // Handle loading state
   if (loading && events.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -133,17 +124,32 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
       </div>
     );
   }
-  
-  // Handle error or no events
-  if ((error && events.length === 0) || events.length === 0) {
+
+  if (error && events.length === 0) {
     return (
       <MessageDisplay
-        message={error || "No events found for this pull request"}
-        isError={!!error}
-        onBack={onBack}
+        type="error"
+        message={error}
+        onAction={onBack}
+        actionLabel="Go Back"
       />
     );
   }
+
+  const hasEvents = events.length > 0;
+
+  if (!hasEvents) {
+    return (
+      <MessageDisplay
+        type="info"
+        message="No events found for this pull request"
+        onAction={onBack}
+        actionLabel="Go Back"
+      />
+    );
+  }
+
+  const [owner, repository] = repo.split('/');
 
   return (
     <div className="space-y-6">
@@ -160,6 +166,30 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
           onRefresh={handleRefresh}
           isLoading={loading}
         />
+      </div>
+
+      <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2 text-gray-300">
+              <GitFork className="w-5 h-5" />
+              <span className="text-lg">
+                <span className="text-blue-400">{owner}</span>
+                <span className="mx-1">/</span>
+                <span className="text-blue-400">{repository}</span>
+              </span>
+            </div>
+            
+            {pullRequestInfo && (
+              <div className="flex items-center space-x-2">
+                <GitPullRequest className="w-5 h-5 text-green-400" />
+                <span className="text-xl font-medium text-gray-100">
+                  #{pr} {pullRequestInfo.title}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <MermaidDiagram 

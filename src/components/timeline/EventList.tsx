@@ -1,22 +1,19 @@
-import React from 'react';
-import { ChevronDown, ChevronRight, Code, Calendar } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Event } from '../../types';
+import { EventTimeline } from './EventTimeline';
+import { EventItem } from './EventItem';
 
 interface EventListProps {
   events: Event[];
   expandedItems: Set<string>;
   onToggleExpand: (id: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onViewPayload: (payload: any) => void;
   isExpanded: boolean;
   onToggle: () => void;
 }
 
 export function EventList({ events, expandedItems, onToggleExpand, onViewPayload, isExpanded, onToggle }: EventListProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
-  };
-
   // Group events by type
   const eventsByType = events.reduce((acc, event) => {
     if (!acc[event.type]) {
@@ -70,32 +67,14 @@ export function EventList({ events, expandedItems, onToggleExpand, onViewPayload
 
               {expandedItems.has(type) && (
                 <div className="mt-6 space-y-6">
+                  <EventTimeline events={typeEvents} onViewPayload={onViewPayload} />
+                  
                   {typeEvents.map((event) => (
-                    <div
+                    <EventItem
                       key={event.delivery_id}
-                      className="border-l-2 border-gray-700 pl-6 py-4 ml-6"
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <Calendar className="w-5 h-5 text-gray-400" />
-                          <span className="text-base text-gray-300">
-                            {formatDate(event.date)}
-                          </span>
-                        </div>
-                        <span className="text-base font-medium text-blue-400">
-                          {event.action}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-end mt-3">
-                        <button
-                          onClick={() => onViewPayload(event.payload)}
-                          className="text-base text-blue-400 hover:text-blue-300 flex items-center transition-colors"
-                        >
-                          <Code className="w-5 h-5 mr-2" />
-                          View Payload
-                        </button>
-                      </div>
-                    </div>
+                      event={event}
+                      onViewPayload={onViewPayload}
+                    />
                   ))}
                 </div>
               )}
