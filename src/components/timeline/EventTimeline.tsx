@@ -10,6 +10,18 @@ interface EventTimelineProps {
   onViewPayload: (payload: any) => void;
 }
 
+/**
+ * Renders an event timeline component that displays a sequence of events.
+ * The component allows users to toggle the visibility of the event details.
+ *
+ * @param {Readonly<EventTimelineProps>} props - The properties for the EventTimeline component.
+ * @param {Event[]} props.events - An array of events to be displayed in the timeline.
+ * @param {function} props.onViewPayload - A callback function to handle viewing the payload of an event.
+ *
+ * @returns {JSX.Element | null} Returns a JSX element representing the event timeline, or null if there are no relevant events.
+ *
+ * @throws {Error} Throws an error if the events cannot be processed correctly.
+ */
 export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineProps>) {
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem('isBulletDiagramExpanded');
@@ -59,6 +71,17 @@ export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineP
     return null;
   }
 
+  /**
+   * Toggles the expanded state of a diagram and stores the new state in local storage.
+   *
+   * This function updates the `isExpanded` state by negating its previous value.
+   * It also saves the new state to local storage under the key 'isBulletDiagramExpanded'.
+   *
+   * @function handleToggle
+   * @returns {void} This function does not return a value.
+   *
+   * @throws {Error} Throws an error if there is an issue accessing local storage.
+   */
   const handleToggle = () => {
     setIsExpanded(prev => {
       const newValue = !prev;
