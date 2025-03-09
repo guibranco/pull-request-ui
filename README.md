@@ -7,11 +7,13 @@ A sleek and interactive UI to visualize GitHub webhook events for pull requests!
 ✅ Fetch and display **GitHub webhook events** in a structured table 📊  
 ✅ Store API key, repository, and PR selection **locally** to persist data 💾  
 ✅ Beautiful UI with TailwindCSS for an intuitive experience 🎨  
-✅ Modular React components for better maintainability 🛠️
+✅ Modular React components for better maintainability 🛠️  
+✅ View JSON payloads with syntax highlighting ✨  
+✅ Compare payload changes between webhook events 🔄  
 
 ## 📸 Preview
 
-(Include a screenshot or GIF of the app in action!)
+![Demo of the GitHub webhook visualizer](demo.gif)
 
 ## 🚀 Getting Started
 
@@ -54,26 +56,34 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
  │   │   ├── 📄 Header.tsx
  │   │
  │   ├── 📂 select-data
+ │   │   ├── 📄 ErrorMessage.tsx
  │   │   ├── 📄 PullRequestSelect.tsx
+ │   │   ├── 📄 RecentPullRequests.tsx
  │   │   ├── 📄 RepositorySelect.tsx
+ │   │   ├── 📄 SelectForm.tsx
  │   │
  │   └── 📂 timeline
  │       ├── 📄 BulletDiagram.tsx
  │       ├── 📄 EventItem.tsx
  │       ├── 📄 EventList.tsx
  │       ├── 📄 EventTimeline.tsx
+ │       ├── 📄 JSONView.tsx
  │       ├── 📄 MermaidDiagram.tsx
  │       ├── 📄 MessageDisplay.tsx
+ │       ├── 📄 PayloadCompareModal.tsx
  │       ├── 📄 PayloadModal.tsx
  │       ├── 📄 RefreshButton.tsx
  │
  ├── 📂 services
  │   ├── 📄 api.ts
  │
- └── 📂 steps
-     ├── 📄 ApiKeyStep.tsx
-     ├── 📄 SelectDataStep.tsx
-     ├── 📄 TimelineViewStep.tsx
+ ├── 📂 steps
+ │   ├── 📄 ApiKeyStep.tsx
+ │   ├── 📄 SelectDataStep.tsx
+ │   ├── 📄 TimelineViewStep.tsx
+ │
+ └── 📂 utils
+     ├── 📄 avatar.ts
 ```
 
 ## 📡 API Usage
@@ -81,10 +91,18 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
 This UI fetches GitHub PR events from:
 
 ```bash
-GET {API_URL}/repos/{owner}/{repo}/pulls/{pr_number}/events
+GET {API_URL}/recent
+GET {API_URL}/repositories/
+GET {API_URL}/repositories/{owner}/{repository}/pulls/
+GET {API_URL}/repositories/{owner}/{repository}/pulls/{pr_number}/
 ```
 
-Ensure your API endpoint supports CORS if you're running locally. 🌐
+### API Endpoints Used:
+
+- **GET /recent** - Lists all pull requests opened in the last 24 hours.
+- **GET /repositories** - Returns a list of repositories with open pull requests.
+- **GET /repositories/{owner}/{repository}/pulls** - Fetches all open pull requests for the given owner/org and repository.
+- **GET /repositories/{owner}/{repository}/pulls/{pr_number}** - Retrieves all events related to a specific pull request.
 
 ## 🤝 Contributing
 
