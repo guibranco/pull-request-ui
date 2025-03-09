@@ -10,7 +10,7 @@ interface SelectDataStepProps {
   onSelect: (repo: string, pr: string) => void;
 }
 
-export function SelectDataStep({ apiKey, onSelect }: SelectDataStepProps) {
+export function SelectDataStep({ apiKey, onSelect }: Readonly<SelectDataStepProps>) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [selectedRepo, setSelectedRepo] = useState('');
@@ -18,13 +18,12 @@ export function SelectDataStep({ apiKey, onSelect }: SelectDataStepProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const api = new ApiService(apiKey);
-
   useEffect(() => {
     async function fetchRepositories() {
       setLoading(true);
       setError(null);
       try {
+        const api = new ApiService(apiKey);
         const data = await api.getRepositories();
         setRepositories(data);
       } catch (err) {
@@ -47,6 +46,7 @@ export function SelectDataStep({ apiKey, onSelect }: SelectDataStepProps) {
       setPullRequests([]);
 
       try {
+        const api = new ApiService(apiKey);
         const [owner, repo] = selectedRepo.split('/');
         const data = await api.getPullRequests(owner, repo);
         setPullRequests(data.pull_requests);

@@ -1,6 +1,5 @@
-import React from 'react';
-
 interface PayloadModalProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
   onClose: () => void;
 }

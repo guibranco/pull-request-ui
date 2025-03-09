@@ -1,4 +1,3 @@
-import React from 'react';
 import { PullRequest } from '../../types';
 
 interface PullRequestSelectProps {
