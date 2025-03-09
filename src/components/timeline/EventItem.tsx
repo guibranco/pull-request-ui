@@ -1,13 +1,14 @@
-import { Calendar, Code, User } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Calendar, Code, User, Globe } from 'lucide-react';
 import { Event } from '../../types';
+import { getAppAvatarUrl } from '../../utils/avatar';
 
 interface EventItemProps {
   event: Event;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onViewPayload: (payload: any) => void;
 }
 
-export function EventItem({ event, onViewPayload }: EventItemProps) {
+export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString();
@@ -36,6 +37,66 @@ export function EventItem({ event, onViewPayload }: EventItemProps) {
     return '';
   };
 
+  const getEventConclusion = (event: Event): { text: string; color: string } | null => {
+    const conclusion = 
+      event.payload.check_run?.conclusion ||
+      event.payload.check_suite?.conclusion ||
+      event.payload.status?.state ||
+      event.payload.review?.state ||
+      event.payload.workflow_run?.conclusion ||
+      event.payload.workflow_job?.conclusion;
+
+    if (!conclusion) {
+      const status = 
+        event.payload.workflow_run?.status ||
+        event.payload.workflow_job?.status;
+      
+      if (status) {
+        switch (status.toLowerCase()) {
+          case 'completed':
+            return { text: 'Completed', color: 'bg-green-400 text-green-900' };
+          case 'in_progress':
+            return { text: 'In Progress', color: 'bg-yellow-400 text-yellow-900' };
+          case 'queued':
+            return { text: 'Queued', color: 'bg-blue-400 text-blue-900' };
+          case 'waiting':
+            return { text: 'Waiting', color: 'bg-purple-400 text-purple-900' };
+          default:
+            return { text: status, color: 'bg-blue-400 text-blue-900' };
+        }
+      }
+      return null;
+    }
+
+    switch (conclusion.toLowerCase()) {
+      case 'success':
+      case 'completed':
+      case 'approved':
+        return { text: conclusion, color: 'bg-green-400 text-green-900' };
+      case 'failure':
+      case 'failed':
+      case 'changes_requested':
+        return { text: conclusion, color: 'bg-red-400 text-red-900' };
+      case 'cancelled':
+      case 'timed_out':
+      case 'dismissed':
+        return { text: conclusion, color: 'bg-gray-400 text-gray-900' };
+      case 'neutral':
+      case 'pending':
+      case 'queued':
+      case 'in_progress':
+        return { text: conclusion, color: 'bg-yellow-400 text-yellow-900' };
+      case 'skipped':
+      case 'stale':
+        return { text: conclusion, color: 'bg-purple-400 text-purple-900' };
+      default:
+        return { text: conclusion, color: 'bg-blue-400 text-blue-900' };
+    }
+  };
+
+  const appData = event.payload[event.type]?.app || null;
+  const conclusion = getEventConclusion(event);
+
   return (
     <div className="border-l-2 border-gray-700 pl-6 py-4 ml-6">
       <div className="flex items-center justify-between mb-3">
@@ -51,29 +112,57 @@ export function EventItem({ event, onViewPayload }: EventItemProps) {
             </span>
           </div>
         </div>
-        <span className="text-base font-medium text-blue-400">
-          {event.action}
-        </span>
-      </div>
-      
-      {event.payload.sender && (
-        <div className="flex items-center space-x-3 mt-2 mb-3">
-          {event.payload.sender.avatar_url ? (
-            <img
-              src={event.payload.sender.avatar_url}
-              alt={`${event.payload.sender.login}'s avatar`}
-              className="w-6 h-6 rounded-full"
-            />
-          ) : (
-            <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
-              <User className="w-4 h-4 text-gray-400" />
-            </div>
+        <div className="flex items-center space-x-3">
+          {conclusion && (
+            <span className={`px-2 py-1 rounded text-sm font-medium ${conclusion.color}`}>
+              {conclusion.text}
+            </span>
           )}
-          <span className="text-sm text-gray-300">
-            {event.payload.sender.login}
+          <span className="text-base font-medium text-blue-400">
+            {event.action}
           </span>
         </div>
-      )}
+      </div>
+      
+      <div className="flex items-center space-x-4 mt-2 mb-3">
+        {appData && (
+          <div className="flex items-center space-x-3">
+            {appData.id ? (
+              <img
+                src={getAppAvatarUrl(appData.id)}
+                alt={`${appData.name}'s avatar`}
+                className="w-6 h-6 rounded"
+              />
+            ) : (
+              <div className="w-6 h-6 rounded bg-gray-700 flex items-center justify-center">
+                <Globe className="w-4 h-4 text-gray-400" />
+              </div>
+            )}
+            <span className="text-sm text-gray-300">
+              {appData.name}
+            </span>
+          </div>
+        )}
+        
+        {event.payload.sender && (
+          <div className="flex items-center space-x-3">
+            {event.payload.sender.avatar_url ? (
+              <img
+                src={event.payload.sender.avatar_url}
+                alt={`${event.payload.sender.login}'s avatar`}
+                className="w-6 h-6 rounded-full"
+              />
+            ) : (
+              <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
+                <User className="w-4 h-4 text-gray-400" />
+              </div>
+            )}
+            <span className="text-sm text-gray-300">
+              {event.payload.sender.login}
+            </span>
+          </div>
+        )}
+      </div>
 
       <div className="flex items-center justify-end mt-3">
         <button

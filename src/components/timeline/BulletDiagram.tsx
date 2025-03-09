@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { Circle, User, Code } from 'lucide-react';
+import { Circle, User, Code, Globe } from 'lucide-react';
 import { Event } from '../../types';
+import { getAppAvatarUrl } from '../../utils/avatar';
 
 interface BulletDiagramProps {
   events: Event[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onViewPayload: (payload: any) => void;
 }
 
@@ -129,55 +130,79 @@ export function BulletDiagram({ events, onViewPayload }: BulletDiagramProps) {
     <div className="overflow-x-auto">
       <div className="min-w-full w-max">
         <div className="flex items-center space-x-2 min-h-[160px] py-4">
-          {events.map((event, index) => (
-            <React.Fragment key={`${event.delivery_id}-${event.type}-${event.action}`}>
-              {index > 0 && (
-                <div className="h-[2px] w-16 bg-gray-700 relative">
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500">
-                    →
-                  </div>
-                </div>
-              )}
-              <div className="flex flex-col items-center space-y-2">
-                {event.payload.sender && (
-                  <div className="flex flex-col items-center mb-1">
-                    {event.payload.sender.avatar_url ? (
-                      <img
-                        src={event.payload.sender.avatar_url}
-                        alt={`${event.payload.sender.login}'s avatar`}
-                        className="w-6 h-6 rounded-full mb-1"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mb-1">
-                        <User className="w-4 h-4 text-gray-400" />
-                      </div>
-                    )}
-                    <span className="text-xs text-gray-400">
-                      {event.payload.sender.login}
-                    </span>
+          {events.map((event, index) => {
+            const appData = event.payload[event.type]?.app;
+            
+            return (
+              <React.Fragment key={`${event.delivery_id}-${event.type}-${event.action}`}>
+                {index > 0 && (
+                  <div className="h-[2px] w-16 bg-gray-700 relative">
+                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500">
+                      →
+                    </div>
                   </div>
                 )}
-                <button
-                  onClick={() => onViewPayload(event.payload)}
-                  className="group flex flex-col items-center hover:scale-105 transition-transform"
-                  title="View event payload"
-                >
-                  <div className={`w-4 h-4 ${getEventColor(event)} rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-1 group-hover:ring-offset-gray-900 transition-all`}>
-                    <Circle className="w-3 h-3 text-gray-900" />
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="flex flex-col items-center gap-2 mb-1">
+                    {appData && (
+                      <div className="flex flex-col items-center">
+                        {appData.id ? (
+                          <img
+                            src={getAppAvatarUrl(appData.id)}
+                            alt={`${appData.name}'s avatar`}
+                            className="w-6 h-6 rounded mb-1"
+                          />
+                        ) : (
+                          <div className="w-6 h-6 rounded bg-gray-700 flex items-center justify-center mb-1">
+                            <Globe className="w-4 h-4 text-gray-400" />
+                          </div>
+                        )}
+                        <span className="text-xs text-gray-400">
+                          {appData.name}
+                        </span>
+                      </div>
+                    )}
+                    {event.payload.sender && (
+                      <div className="flex flex-col items-center">
+                        {event.payload.sender.avatar_url ? (
+                          <img
+                            src={event.payload.sender.avatar_url}
+                            alt={`${event.payload.sender.login}'s avatar`}
+                            className="w-6 h-6 rounded-full mb-1"
+                          />
+                        ) : (
+                          <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mb-1">
+                            <User className="w-4 h-4 text-gray-400" />
+                          </div>
+                        )}
+                        <span className="text-xs text-gray-400">
+                          {event.payload.sender.login}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-xs font-medium text-gray-300 whitespace-nowrap group-hover:text-blue-400 transition-colors">
-                      {getEventLabel(event)}
-                    </span>
-                    <span className="text-xs text-gray-400 whitespace-nowrap">
-                      {formatDateTime(event.date)}
-                    </span>
-                  </div>
-                  <Code className="w-4 h-4 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
-                </button>
-              </div>
-            </React.Fragment>
-          ))}
+                  <button
+                    onClick={() => onViewPayload(event.payload)}
+                    className="group flex flex-col items-center hover:scale-105 transition-transform"
+                    title="View event payload"
+                  >
+                    <div className={`w-4 h-4 ${getEventColor(event)} rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-1 group-hover:ring-offset-gray-900 transition-all`}>
+                      <Circle className="w-3 h-3 text-gray-900" />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-medium text-gray-300 whitespace-nowrap group-hover:text-blue-400 transition-colors">
+                        {getEventLabel(event)}
+                      </span>
+                      <span className="text-xs text-gray-400 whitespace-nowrap">
+                        {formatDateTime(event.date)}
+                      </span>
+                    </div>
+                    <Code className="w-4 h-4 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
+                  </button>
+                </div>
+              </React.Fragment>
+            );
+          })}
         </div>
       </div>
     </div>

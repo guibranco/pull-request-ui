@@ -1,7 +1,7 @@
 const BASE_URL = 'https://guilhermebranco.com.br/webhooks/api/v1';
 
 export class ApiService {
-  private readonly apiKey: string;
+  private apiKey: string;
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
