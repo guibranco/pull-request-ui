@@ -9,6 +9,17 @@ interface BulletDiagramProps {
   onViewPayload: (payload: any) => void;
 }
 
+/**
+ * Renders a bullet diagram based on a list of events.
+ *
+ * @param {Object} props - The properties for the BulletDiagram component.
+ * @param {Array<Event>} props.events - An array of event objects to be displayed in the diagram.
+ * @param {Function} props.onViewPayload - A callback function that is triggered when an event payload is viewed.
+ *
+ * @returns {JSX.Element} The rendered bullet diagram component.
+ *
+ * @throws {Error} Throws an error if the events array is not provided or is empty.
+ */
 export function BulletDiagram({ events, onViewPayload }: BulletDiagramProps) {
   const formatDateTime = (date: string) => {
     return new Date(date).toLocaleString(undefined, {
