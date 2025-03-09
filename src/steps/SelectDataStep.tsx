@@ -1,22 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { GitFork, Loader2, ArrowLeft } from 'lucide-react';
-import { RepositorySelect } from '../components/select-data/RepositorySelect';
-import { PullRequestSelect } from '../components/select-data/PullRequestSelect';
+import React, { useState, useEffect, useCallback } from 'react';
+import { SelectForm } from '../components/select-data/SelectForm';
+import { ErrorMessage } from '../components/select-data/ErrorMessage';
+import { RecentPullRequests } from '../components/select-data/RecentPullRequests';
 import { ApiService } from '../services/api';
-import type { Repository, PullRequest } from '../types';
+import type { Repository, PullRequest, RecentPullRequest } from '../types';
 
 interface SelectDataStepProps {
   apiKey: string;
   onSelect: (repo: string, pr: string) => void;
 }
 
-export function SelectDataStep({ apiKey, onSelect }: Readonly<SelectDataStepProps>) {
+export function SelectDataStep({ apiKey, onSelect }: SelectDataStepProps) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
+  const [recentPullRequests, setRecentPullRequests] = useState<RecentPullRequest[]>([]);
   const [selectedRepo, setSelectedRepo] = useState('');
   const [selectedPR, setSelectedPR] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingRecent, setLoadingRecent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const fetchRecentPullRequests = useCallback(async () => {
+    setLoadingRecent(true);
+    try {
+      const api = new ApiService(apiKey);
+      const data = await api.getRecentPullRequests();
+      setRecentPullRequests(data);
+    } catch (err) {
+      console.error('Recent PRs error:', err);
+    } finally {
+      setLoadingRecent(false);
+    }
+  }, [apiKey]);
+
+  useEffect(() => {
+    fetchRecentPullRequests();
+    const interval = setInterval(fetchRecentPullRequests, 30000);
+    return () => clearInterval(interval);
+  }, [fetchRecentPullRequests]);
 
   useEffect(() => {
     async function fetchRepositories() {
@@ -83,83 +104,47 @@ export function SelectDataStep({ apiKey, onSelect }: Readonly<SelectDataStepProp
     setError(null);
   };
 
+  const handleRecentSelect = (owner: string, repo: string, pr: string) => {
+    const fullName = `${owner}/${repo}`;
+    setSelectedRepo(fullName);
+    setSelectedPR(pr);
+    onSelect(fullName, pr);
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    setLoading(false);
+    if (!selectedRepo) {
+      window.location.reload();
+    } else {
+      setSelectedPR('');
+      setPullRequests([]);
+    }
+  };
+
   if (error) {
-    return (
-      <div className="max-w-md mx-auto">
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-          <div className="text-red-400 text-center mb-4">
-            <p>{error}</p>
-          </div>
-          <button
-            onClick={() => {
-              setError(null);
-              setLoading(false);
-              if (!selectedRepo) {
-                window.location.reload();
-              } else {
-                setSelectedPR('');
-                setPullRequests([]);
-              }
-            }}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
+    return <ErrorMessage message={error} onRetry={handleRetry} />;
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-blue-900 rounded-full mx-auto mb-4">
-          <GitFork className="w-6 h-6 text-blue-400" />
-        </div>
-        <h2 className="text-2xl font-bold text-center text-gray-100 mb-6">
-          Select Repository and Pull Request
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <RepositorySelect
-            repositories={repositories}
-            selectedRepo={selectedRepo}
-            onChange={handleRepoChange}
-            disabled={loading}
-          />
+    <div className="max-w-7xl mx-auto space-y-8">
+      <SelectForm
+        repositories={repositories}
+        pullRequests={pullRequests}
+        selectedRepo={selectedRepo}
+        selectedPR={selectedPR}
+        loading={loading}
+        onRepoChange={handleRepoChange}
+        onPRChange={setSelectedPR}
+        onSubmit={handleSubmit}
+        onLogout={handleLogout}
+      />
 
-          {selectedRepo && (
-            <PullRequestSelect
-              pullRequests={pullRequests}
-              selectedPR={selectedPR}
-              onChange={setSelectedPR}
-              disabled={loading}
-            />
-          )}
-
-          <div className="space-y-2">
-            <button
-              type="submit"
-              disabled={!selectedRepo || !selectedPR || loading}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin mx-auto" />
-              ) : (
-                'Continue'
-              )}
-            </button>
-            
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-2 px-4 rounded-md border border-gray-600 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to API Key
-            </button>
-          </div>
-        </form>
-      </div>
+      <RecentPullRequests
+        pullRequests={recentPullRequests}
+        onSelect={handleRecentSelect}
+        loading={loadingRecent}
+      />
     </div>
   );
 }

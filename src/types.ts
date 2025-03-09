@@ -12,6 +12,16 @@ export interface PullRequest {
   title: string;
 }
 
+export interface RecentPullRequest {
+  date: string;
+  owner: string;
+  name: string;
+  number: number;
+  title: string;
+  sender: string;
+  sender_avatar: string;
+}
+
 export interface AppData {
   id: number;
   name: string;
