@@ -1,17 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
 import { Event } from '../../types';
 import { BulletDiagram } from './BulletDiagram';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface EventTimelineProps {
   events: Event[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onViewPayload: (payload: any) => void;
 }
 
 export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineProps>) {
-  // Group events by their payload event ID
+  const [isExpanded, setIsExpanded] = useState(() => {
+    const saved = localStorage.getItem('isBulletDiagramExpanded');
+    return saved ? JSON.parse(saved) : true;
+  });
+
   const eventsByPayloadId = events.reduce((acc, event) => {
-    // Extract the ID from various payload types
     let eventId = null;
     if (event.payload.issue?.id) {
       eventId = `issue_${event.payload.issue.id}`;
@@ -42,12 +47,10 @@ export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineP
     return acc;
   }, {} as Record<string, Event[]>);
 
-  // Sort events within each ID by date
   Object.values(eventsByPayloadId).forEach(idEvents => {
     idEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   });
 
-  // Only show groups that have more than one event
   const relevantIds = Object.entries(eventsByPayloadId)
     .filter(([_, events]) => events.length > 1)
     .map(([id]) => id);
@@ -55,6 +58,14 @@ export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineP
   if (relevantIds.length === 0) {
     return null;
   }
+
+  const handleToggle = () => {
+    setIsExpanded(prev => {
+      const newValue = !prev;
+      localStorage.setItem('isBulletDiagramExpanded', JSON.stringify(newValue));
+      return newValue;
+    });
+  };
 
   const getEventTitle = (events: Event[]): string => {
     const firstEvent = events[0];
@@ -81,23 +92,41 @@ export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineP
   };
 
   return (
-    <div className="space-y-6">
-      {relevantIds.map(id => (
-        <div key={id} className="bg-gray-900 rounded-lg p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm text-gray-300 font-medium">
-              {getEventTitle(eventsByPayloadId[id])}
-            </div>
-            <div className="text-xs text-gray-500">
-              #{id.split('_')[1]}
-            </div>
-          </div>
-          <BulletDiagram 
-            events={eventsByPayloadId[id]} 
-            onViewPayload={onViewPayload} 
-          />
+    <div className="bg-gray-900 rounded-lg p-4">
+      <button
+        onClick={handleToggle}
+        className="flex items-center justify-between w-full text-left mb-4"
+      >
+        <div className="text-lg font-medium text-gray-300">
+          Event Sequences
         </div>
-      ))}
+        {isExpanded ? (
+          <ChevronDown className="w-5 h-5 text-gray-400" />
+        ) : (
+          <ChevronRight className="w-5 h-5 text-gray-400" />
+        )}
+      </button>
+
+      {isExpanded && (
+        <div className="space-y-6">
+          {relevantIds.map(id => (
+            <div key={id} className="bg-gray-800 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-gray-300 font-medium">
+                  {getEventTitle(eventsByPayloadId[id])}
+                </div>
+                <div className="text-xs text-gray-500">
+                  #{id.split('_')[1]}
+                </div>
+              </div>
+              <BulletDiagram 
+                events={eventsByPayloadId[id]} 
+                onViewPayload={onViewPayload} 
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
