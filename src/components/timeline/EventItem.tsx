@@ -8,6 +8,17 @@ interface EventItemProps {
   onViewPayload: (payload: any) => void;
 }
 
+/**
+ * Renders an event item component displaying event details, including the event ID, date, conclusion, and associated application data.
+ *
+ * @param {Readonly<EventItemProps>} props - The properties for the event item component.
+ * @param {Event} props.event - The event object containing details to be displayed.
+ * @param {function} props.onViewPayload - Callback function to handle viewing the event payload.
+ *
+ * @returns {JSX.Element} The rendered event item component.
+ *
+ * @throws {Error} Throws an error if the event data is invalid or if rendering fails.
+ */
 export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -37,6 +48,22 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     return '';
   };
 
+  /**
+   * Retrieves the conclusion or status of a given event and returns an object containing
+   * a descriptive text and a corresponding color code.
+   *
+   * The function checks various properties of the event's payload to determine the conclusion
+   * or status. If a conclusion is found, it is returned with a specific color based on its value.
+   * If no conclusion is found, the function will check for the status and return a default message
+   * and color based on that status.
+   *
+   * @param {Event} event - The event object containing the payload to evaluate.
+   * @returns {{ text: string; color: string } | null} An object with text and color properties
+   *          representing the conclusion or status, or null if neither is available.
+   *
+   * @throws {Error} Throws an error if the event parameter is invalid or if it does not contain
+   *                 the expected structure.
+   */
   const getEventConclusion = (event: Event): { text: string; color: string } | null => {
     const conclusion = 
       event.payload.check_run?.conclusion ||
