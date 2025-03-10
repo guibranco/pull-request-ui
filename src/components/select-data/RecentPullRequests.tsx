@@ -76,7 +76,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPu
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <GitPullRequest className="w-4 h-4 text-green-400" />
+                <GitPullRequest className="w-4 h-4 text-green-400 flex-shrink-0" />
                 <span>#{pr.number}</span>
               </div>
               <div className="flex items-center space-x-2">
@@ -90,23 +90,27 @@ export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPu
               {pr.title}
             </h4>
             
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-400">
-                {pr.owner}/{pr.name}
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <div className="text-sm text-gray-400 break-all">
+                <span className="inline-block max-w-[200px] truncate">
+                  {pr.owner}/{pr.name}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 {pr.sender_avatar ? (
                   <img
                     src={pr.sender_avatar}
                     alt={pr.sender}
-                    className="w-6 h-6 rounded-full"
+                    className="w-6 h-6 rounded-full flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
                     <User className="w-4 h-4 text-gray-400" />
                   </div>
                 )}
-                <span className="text-sm text-gray-400">{pr.sender}</span>
+                <span className="text-sm text-gray-400 truncate max-w-[100px]">
+                  {pr.sender}
+                </span>
               </div>
             </div>
           </button>
