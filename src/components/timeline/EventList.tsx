@@ -44,6 +44,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
   );
 
   const totalEvents = events.length;
+  const totalTypes = sortedTypeEntries.length;
 
   const handleEventSelect = (event: Event) => {
     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
@@ -106,9 +107,14 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
           <h3 className="text-2xl font-medium text-gray-100">
             Event Timeline
           </h3>
-          <span className="text-gray-400 text-lg">
-            ({totalEvents} event{totalEvents !== 1 ? 's' : ''})
-          </span>
+          <div className="flex items-center space-x-2">
+            <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
+              {totalEvents} event{totalEvents !== 1 ? 's' : ''}
+            </span>
+            <span className="px-2.5 py-0.5 bg-purple-500/20 text-purple-400 rounded-full text-sm font-medium">
+              {totalTypes} type{totalTypes !== 1 ? 's' : ''}
+            </span>
+          </div>
         </div>
         {isExpanded ? (
           <ChevronDown className="w-6 h-6 text-gray-400" />

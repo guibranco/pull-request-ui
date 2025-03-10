@@ -9,22 +9,43 @@ interface MermaidDiagramProps {
   onToggle: () => void;
 }
 
-export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramProps) {
+export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<MermaidDiagramProps>) {
   const mermaidRef = useRef<HTMLDivElement>(null);
-
-  const sanitizeParticipant = (name: string): string => {
-    return name.replace(/[^\w]/g, '_').substring(0, 20);
-  };
 
   const truncateText = (text: string, maxLength: number = 30): string => {
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
   };
 
-  const formatEventTime = (date: string): string => {
-    return new Date(date).toLocaleTimeString([], { 
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  const getEventTitle = (event: Event): string => {
+    if (event.payload.issue) {
+      return `Issue #${event.payload.issue.number}`;
+    }
+    if (event.payload.pull_request) {
+      return `PR #${event.payload.pull_request.number}`;
+    }
+    if (event.payload.check_run) {
+      return `Check: ${event.payload.check_run.name}`;
+    }
+    if (event.payload.workflow_run) {
+      return `Workflow: ${event.payload.workflow_run.name}`;
+    }
+    if (event.payload.workflow_job) {
+      return `Job: ${event.payload.workflow_job.name}`;
+    }
+    if (event.payload.release) {
+      return `Release: ${event.payload.release.tag_name}`;
+    }
+    return 'Event';
+  };
+
+  const getEventStatus = (event: Event): string | null => {
+    return event.payload.check_run?.conclusion ||
+      event.payload.check_suite?.conclusion ||
+      event.payload.status?.state ||
+      event.payload.review?.state ||
+      event.payload.workflow_run?.conclusion ||
+      event.payload.workflow_job?.conclusion ||
+      null;
   };
 
   const generateSequenceDiagram = useCallback(() => {
@@ -35,75 +56,92 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramP
     Note over GH,PR: No events found`;
     }
 
+    // Group events by their type and ID
+    const groupedEvents = events.reduce((acc, event) => {
+      const id = event.payload.issue?.id ||
+        event.payload.pull_request?.id ||
+        event.payload.check_run?.id ||
+        event.payload.workflow_run?.id ||
+        event.payload.workflow_job?.id ||
+        event.payload.release?.id ||
+        event.delivery_id;
+
+      const key = `${event.type}_${id}`;
+      
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(event);
+      return acc;
+    }, {} as Record<string, Event[]>);
+
+    // Sort events within each group by date
+    Object.values(groupedEvents).forEach(group => {
+      group.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    });
+
     let diagram = 'sequenceDiagram\n';
-    
-    // Add core participants
     diagram += '    participant GH as GitHub\n';
     diagram += '    participant PR as Pull Request\n';
-    
-    // Track unique actors to avoid duplicates
-    const actors = new Set<string>();
-    
-    // First pass: collect all actors (limited to first 5 unique actors)
-    let actorCount = 0;
-    for (const event of events) {
-      const sender = event.payload?.sender?.login;
-      if (sender && !actors.has(sender) && actorCount < 5) {
-        const safeSender = sanitizeParticipant(sender);
-        actors.add(sender);
-        diagram += `    participant ${safeSender} as ${truncateText(sender, 15)}\n`;
-        actorCount++;
-      }
-    }
 
-    // Second pass: add events with proper timing
-    let lastEventTime = '';
-    events.forEach((event, index) => {
-      const eventTime = formatEventTime(event.date);
-      const sender = event.payload?.sender?.login && actors.has(event.payload.sender.login)
-        ? sanitizeParticipant(event.payload.sender.login)
-        : 'GH';
-      
-      // Truncate action text
-      const action = truncateText(
-        event.action ? `${event.type}:${event.action}` : event.type,
-        25
-      );
-      
-      diagram += `    ${sender}->PR: ${action}\n`;
-      
-      // Only add time note if it's different from the last one
-      if (eventTime !== lastEventTime) {
-        diagram += `    Note over PR: ${eventTime}\n`;
-        lastEventTime = eventTime;
+    // Create a map for actors to ensure unique IDs
+    const actorMap = new Map<string, string>();
+    let actorCounter = 0;
+
+    const getActorId = (name: string): string => {
+      if (!actorMap.has(name)) {
+        actorMap.set(name, `Actor${actorCounter++}`);
       }
-      
-      // Add minimal payload information
-      if (event.payload) {
-        const notes = [];
-        if (event.payload.comment?.body) {
-          notes.push('Comment');
-        }
-        if (event.payload.review?.state) {
-          notes.push(event.payload.review.state);
-        }
-        if (event.payload.check_suite?.conclusion) {
-          notes.push(event.payload.check_suite.conclusion);
-        }
-        
-        if (notes.length > 0) {
-          diagram += `    Note over ${sender},PR: ${truncateText(notes.join(', '), 20)}\n`;
-        }
-      }
-      
-      // Add spacing between events
-      if (index < events.length - 1) {
-        diagram += '\n';
+      return actorMap.get(name)!;
+    };
+
+    // Add actors (limit to 5 most active)
+    const actorCounts = new Map<string, number>();
+    events.forEach(event => {
+      const sender = event.payload.sender?.login;
+      if (sender) {
+        actorCounts.set(sender, (actorCounts.get(sender) || 0) + 1);
       }
     });
 
+    // Sort actors by frequency and take top 5
+    const topActors = Array.from(actorCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([actor]) => actor);
+
+    // Add actor participants
+    topActors.forEach(actor => {
+      const actorId = getActorId(actor);
+      diagram += `    participant ${actorId} as ${truncateText(actor, 15)}\n`;
+    });
+
+    // Add event groups
+    Object.values(groupedEvents).forEach(group => {
+      const title = getEventTitle(group[0]);
+      diagram += `\n    Note over GH,PR: ${title}\n`;
+
+      group.forEach(event => {
+        // Determine the actor
+        let actor = 'GH';
+        if (event.payload.sender?.login && topActors.includes(event.payload.sender.login)) {
+          actor = getActorId(event.payload.sender.login);
+        }
+
+        // Create the event message
+        const message = event.action ? `${event.type}:${event.action}` : event.type;
+        diagram += `    ${actor}->>PR: ${truncateText(message, 25)}\n`;
+
+        // Add status if available
+        const status = getEventStatus(event);
+        if (status) {
+          diagram += `    Note right of PR: ${status}\n`;
+        }
+      });
+    });
+
     return diagram;
-  }, [events]); // Include events in the dependencies
+  }, [events]);
 
   useEffect(() => {
     if (mermaidRef.current && events.length > 0 && isExpanded) {
@@ -112,24 +150,21 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramP
         theme: 'dark',
         sequence: {
           showSequenceNumbers: false,
-          actorMargin: 50,
+          actorMargin: 80,
           messageMargin: 40,
-          boxMargin: 10,
-          noteMargin: 10,
           mirrorActors: false,
-          bottomMarginAdj: 2,
+          bottomMarginAdj: 10,
           useMaxWidth: true,
-          diagramMarginX: 50,
-          diagramMarginY: 30,
+          rightAngles: true,
+          boxMargin: 10,
           boxTextMargin: 5,
-          noteMarginX: 10,
-          noteMarginY: 10,
+          noteMargin: 10,
           messageAlign: 'center',
           actorFontSize: 14,
           noteFontSize: 13,
           messageFontSize: 13,
           wrap: true,
-          maxMessageWidth: 200,
+          maxMessageWidth: 150,
         },
         themeVariables: {
           primaryColor: '#1e40af',
@@ -147,10 +182,8 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramP
         }
       });
 
-      const diagram = generateSequenceDiagram();
-      
       try {
-        mermaid.render('mermaid-diagram', diagram).then((result) => {
+        mermaid.render('mermaid-diagram', generateSequenceDiagram()).then((result) => {
           if (mermaidRef.current) {
             mermaidRef.current.innerHTML = result.svg;
           }
@@ -167,7 +200,7 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: MermaidDiagramP
         }
       }
     }
-  }, [events, isExpanded, generateSequenceDiagram]); // Include generateSequenceDiagram in dependencies
+  }, [events, isExpanded, generateSequenceDiagram]);
 
   return (
     <div className="bg-gray-800 rounded-lg shadow-lg w-full overflow-hidden">

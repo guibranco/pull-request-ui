@@ -49,7 +49,9 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     if (!conclusion) {
       const status = 
         event.payload.workflow_run?.status ||
-        event.payload.workflow_job?.status;
+        event.payload.workflow_job?.status ||
+        event.payload.check_suite?.status ||
+        event.payload.check_run?.status;
       
       if (status) {
         switch (status.toLowerCase()) {
@@ -94,7 +96,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     }
   };
 
-  const appData = event.payload[event.type]?.app || null;
+  const appData = event.payload[event.type]?.app;
   const conclusion = getEventConclusion(event);
 
   return (

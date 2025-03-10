@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Loader2, GitPullRequest, GitFork } from 'lucide-react';
+import { ArrowLeft, Loader2, GitPullRequest, GitFork, ExternalLink } from 'lucide-react';
 import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
 import { PayloadModal } from '../components/timeline/PayloadModal';
@@ -150,6 +150,7 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: Readonly<Timeline
   }
 
   const [owner, repository] = repo.split('/');
+  const githubPrUrl = `https://github.com/${owner}/${repository}/pull/${pr}`;
 
   return (
     <div className="space-y-6">
@@ -181,23 +182,28 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: Readonly<Timeline
             </div>
             
             {pullRequestInfo && (
-              <div className="flex items-center space-x-2">
-                <GitPullRequest className="w-5 h-5 text-green-400" />
-                <span className="text-xl font-medium text-gray-100">
-                  #{pr} {pullRequestInfo.title}
-                </span>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <GitPullRequest className="w-5 h-5 text-green-400" />
+                  <span className="text-xl font-medium text-gray-100">
+                    #{pr} {pullRequestInfo.title}
+                  </span>
+                </div>
+                <a
+                  href={githubPrUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span className="text-sm">View on GitHub</span>
+                </a>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <MermaidDiagram 
-        events={events} 
-        isExpanded={isSequenceExpanded}
-        onToggle={handleSequenceToggle}
-      />
-      
       <EventList
         events={events}
         expandedItems={expandedItems}
@@ -205,6 +211,12 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: Readonly<Timeline
         onViewPayload={setSelectedPayload}
         isExpanded={isTimelineExpanded}
         onToggle={handleTimelineToggle}
+      />
+      
+      <MermaidDiagram 
+        events={events} 
+        isExpanded={isSequenceExpanded}
+        onToggle={handleSequenceToggle}
       />
 
       {selectedPayload && (
