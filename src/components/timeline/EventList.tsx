@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Event } from '../../types';
@@ -8,18 +7,18 @@ import { PayloadModal } from './PayloadModal';
 import { orderBy } from 'lodash-es';
 
 interface EventListProps {
-  events: Event[];
-  expandedItems: Set<string>;
-  onToggleExpand: (id: string) => void;
-  isExpanded: boolean;
-  onToggle: () => void;
+  readonly events: readonly Event[];
+  readonly expandedItems: ReadonlySet<string>;
+  readonly onToggleExpand: (id: string) => void;
+  readonly isExpanded: boolean;
+  readonly onToggle: () => void;
 }
 
 export function EventList({ events, expandedItems, onToggleExpand, isExpanded, onToggle }: Readonly<EventListProps>) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showingPayload, setShowingPayload] = useState<{
-    payload: any;
-    comparePayload?: any;
+    payload: Record<string, unknown>;
+    comparePayload?: Record<string, unknown>;
   } | null>(null);
 
   // Group events by type and sort the types alphabetically
@@ -32,8 +31,8 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
   }, {} as Record<string, Event[]>);
 
   // Sort events within each type by date
-  Object.keys(eventsByType).forEach(type => {
-    eventsByType[type] = orderBy(eventsByType[type], ['date'], ['asc']);
+  Object.values(eventsByType).forEach(typeEvents => {
+    orderBy(typeEvents, ['date'], ['asc']);
   });
 
   // Get sorted type entries
@@ -75,7 +74,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
     });
   };
 
-  const handleViewPayload = (payload: any) => {
+  const handleViewPayload = (payload: Record<string, unknown>) => {
     if (selectedEvents.length === 2) {
       // If two items are selected, do nothing when clicking view payload
       return;
@@ -84,7 +83,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
     setShowingPayload({ payload });
   };
 
-  const handleCompare = (payload: any) => {
+  const handleCompare = (payload: Record<string, unknown>) => {
     const selectedEvent = events.find(e => 
       selectedEvents.includes(`${e.delivery_id}-${e.type}-${e.action}`)
     );

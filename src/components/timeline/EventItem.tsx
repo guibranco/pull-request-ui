@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { Calendar, Code, User, Globe } from 'lucide-react';
 import { Event } from '../../types';
 import { getAppAvatarUrl } from '../../utils/avatar';
 
 interface EventItemProps {
-  event: Event;
-  onViewPayload: (payload: any) => void;
+  readonly event: Event;
+  readonly onViewPayload: (payload: Record<string, unknown>) => void;
 }
 
 export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {

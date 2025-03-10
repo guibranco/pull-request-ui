@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Pause, Play } from 'lucide-react';
 
 interface RefreshButtonProps {
-  onRefresh: () => Promise<void>;
-  isLoading: boolean;
+  readonly onRefresh: () => Promise<void>;
+  readonly isLoading: boolean;
 }
 
-export function RefreshButton({ onRefresh, isLoading }: RefreshButtonProps) {
+export function RefreshButton({ onRefresh, isLoading }: Readonly<RefreshButtonProps>) {
   const INITIAL_COUNTDOWN = 15;
   const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN);
   const [isPaused, setIsPaused] = useState(() => {

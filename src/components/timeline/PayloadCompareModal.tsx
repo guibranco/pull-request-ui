@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { X, ArrowLeftRight } from 'lucide-react';
 import { JSONView } from './JSONView';
 
 interface PayloadCompareModalProps {
-  leftPayload: any;
-  rightPayload: any;
-  onClose: () => void;
+  readonly leftPayload: Readonly<Record<string, unknown>>;
+  readonly rightPayload: Readonly<Record<string, unknown>>;
+  readonly onClose: () => void;
 }
 
-export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: PayloadCompareModalProps) {
+export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Readonly<PayloadCompareModalProps>) {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(['']));
   const [showDifferencesOnly, setShowDifferencesOnly] = useState(false);
 
@@ -28,12 +27,12 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Payl
   const handleExpandAll = () => {
     const allPaths = new Set<string>();
     
-    function collectPaths(obj: any, path = '') {
+    function collectPaths(obj: Record<string, unknown>, path = '') {
       if (obj && typeof obj === 'object') {
         allPaths.add(path);
         Object.keys(obj).forEach(key => {
           const newPath = path ? `${path}.${key}` : key;
-          collectPaths(obj[key], newPath);
+          collectPaths(obj[key] as Record<string, unknown>, newPath);
         });
       }
     }

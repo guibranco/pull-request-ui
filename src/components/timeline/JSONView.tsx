@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { isEqual } from 'lodash-es';
 
 interface JSONViewProps {
-  data: any;
+  data: Record<string, unknown>;
   path?: string;
   expanded: Set<string>;
   onToggle: (path: string) => void;
-  compareWith?: any;
+  compareWith?: Record<string, unknown>;
   showDifferencesOnly?: boolean;
   side?: 'left' | 'right';
 }
 
-export function JSONView({
-  data,
-  path = '',
-  expanded,
+export function JSONView({ 
+  data, 
+  path = '', 
+  expanded, 
   onToggle,
   compareWith,
   showDifferencesOnly = false,
@@ -68,14 +68,14 @@ export function JSONView({
   const toggleExpand = () => onToggle(path);
   const currentPath = (key: string) => path ? `${path}.${key}` : key;
 
-  const getCompareValue = (key: string | number) => {
+  const getCompareValue = (key: string | number): Record<string, unknown> | undefined => {
     if (!compareWith) return undefined;
-    return isArray ? compareWith[key] : compareWith[key];
+    return isArray ? compareWith[key as number] as Record<string, unknown> : compareWith[key as string] as Record<string, unknown>;
   };
 
   return (
     <div className={`relative ${isDifferent ? 'bg-red-500/20 rounded px-1' : ''}`}>
-      <div
+      <div 
         className="flex items-center cursor-pointer hover:text-blue-400 transition-colors"
         onClick={toggleExpand}
       >
@@ -95,11 +95,11 @@ export function JSONView({
       {isExpanded && (
         <div className="ml-4 border-l border-gray-700 pl-4">
           {isArray ? (
-            data.map((item: any, index: number) => (
+            (data as unknown[]).map((item, index) => (
               <div key={index} className="py-1">
                 <span className="text-gray-400 mr-2">{index}:</span>
                 <JSONView
-                  data={item}
+                  data={item as Record<string, unknown>}
                   path={currentPath(index.toString())}
                   expanded={expanded}
                   onToggle={onToggle}
@@ -114,7 +114,7 @@ export function JSONView({
               <div key={key} className="py-1">
                 <span className="text-purple-400 mr-2">"{key}":</span>
                 <JSONView
-                  data={value}
+                  data={value as Record<string, unknown>}
                   path={currentPath(key)}
                   expanded={expanded}
                   onToggle={onToggle}

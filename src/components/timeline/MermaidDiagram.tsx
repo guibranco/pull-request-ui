@@ -4,9 +4,9 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Event } from '../../types';
 
 interface MermaidDiagramProps {
-  events: Event[];
-  isExpanded: boolean;
-  onToggle: () => void;
+  readonly events: readonly Event[];
+  readonly isExpanded: boolean;
+  readonly onToggle: () => void;
 }
 
 export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<MermaidDiagramProps>) {
@@ -144,62 +144,68 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
   }, [events]);
 
   useEffect(() => {
-    if (mermaidRef.current && events.length > 0 && isExpanded) {
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        sequence: {
-          showSequenceNumbers: false,
-          actorMargin: 80,
-          messageMargin: 40,
-          mirrorActors: false,
-          bottomMarginAdj: 10,
-          useMaxWidth: true,
-          rightAngles: true,
-          boxMargin: 10,
-          boxTextMargin: 5,
-          noteMargin: 10,
-          messageAlign: 'center',
-          actorFontSize: 14,
-          noteFontSize: 13,
-          messageFontSize: 13,
-          wrap: true,
-          maxMessageWidth: 150,
-        },
-        themeVariables: {
-          primaryColor: '#1e40af',
-          primaryTextColor: '#fff',
-          primaryBorderColor: '#60a5fa',
-          lineColor: '#4b5563',
-          secondaryColor: '#1f2937',
-          tertiaryColor: '#374151',
-          noteBkgColor: '#374151',
-          noteTextColor: '#fff',
-          noteBorderColor: '#60a5fa',
-          actorBkg: '#1e40af',
-          actorTextColor: '#fff',
-          actorLineColor: '#60a5fa'
-        }
-      });
+    if (!mermaidRef.current || !events.length || !isExpanded) {
+      return;
+    }
 
+    const initializeMermaid = async () => {
       try {
-        mermaid.render('mermaid-diagram', generateSequenceDiagram()).then((result) => {
-          if (mermaidRef.current) {
-            mermaidRef.current.innerHTML = result.svg;
-          }
-        }).catch((error) => {
-          console.error('Mermaid rendering error:', error);
-          if (mermaidRef.current) {
-            mermaidRef.current.innerHTML = '<div class="text-red-400">Error rendering diagram</div>';
+        await mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          sequence: {
+            showSequenceNumbers: false,
+            actorMargin: 80,
+            messageMargin: 40,
+            mirrorActors: false,
+            bottomMarginAdj: 10,
+            useMaxWidth: true,
+            rightAngles: true,
+            boxMargin: 10,
+            boxTextMargin: 5,
+            noteMargin: 10,
+            messageAlign: 'center',
+            actorFontSize: 14,
+            noteFontSize: 13,
+            messageFontSize: 13,
+            wrap: true,
+            maxMessageWidth: 150,
+          },
+          themeVariables: {
+            primaryColor: '#1e40af',
+            primaryTextColor: '#fff',
+            primaryBorderColor: '#60a5fa',
+            lineColor: '#4b5563',
+            secondaryColor: '#1f2937',
+            tertiaryColor: '#374151',
+            noteBkgColor: '#374151',
+            noteTextColor: '#fff',
+            noteBorderColor: '#60a5fa',
+            actorBkg: '#1e40af',
+            actorTextColor: '#fff',
+            actorLineColor: '#60a5fa'
           }
         });
-      } catch (error) {
-        console.error('Mermaid error:', error);
+
+        const diagram = generateSequenceDiagram();
+        const { svg } = await mermaid.render('mermaid-diagram', diagram);
+        
         if (mermaidRef.current) {
-          mermaidRef.current.innerHTML = '<div class="text-red-400">Error rendering diagram</div>';
+          mermaidRef.current.innerHTML = svg;
+        }
+      } catch (error) {
+        console.error('Mermaid rendering error:', error);
+        if (mermaidRef.current) {
+          mermaidRef.current.innerHTML = `
+            <div class="p-4 bg-red-900/20 border border-red-500/20 rounded-lg">
+              <p class="text-red-400">Error rendering diagram. Please try again later.</p>
+            </div>
+          `;
         }
       }
-    }
+    };
+
+    initializeMermaid();
   }, [events, isExpanded, generateSequenceDiagram]);
 
   return (
