@@ -14,6 +14,21 @@ interface EventListProps {
   readonly onToggle: () => void;
 }
 
+/**
+ * Renders a list of events grouped by type, allowing users to expand and collapse sections,
+ * select events for comparison, and view payloads.
+ *
+ * @param {Object} props - The properties for the EventList component.
+ * @param {Event[]} props.events - An array of events to display.
+ * @param {Set<string>} props.expandedItems - A set of currently expanded item types.
+ * @param {Function} props.onToggleExpand - Callback function to handle expanding or collapsing an event type.
+ * @param {boolean} props.isExpanded - Indicates if the event list is currently expanded.
+ * @param {Function} props.onToggle - Callback function to toggle the visibility of the event list.
+ *
+ * @returns {JSX.Element} The rendered EventList component.
+ *
+ * @throws {Error} Throws an error if the events prop is not an array.
+ */
 export function EventList({ events, expandedItems, onToggleExpand, isExpanded, onToggle }: Readonly<EventListProps>) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showingPayload, setShowingPayload] = useState<{
@@ -32,8 +47,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
 
   // Sort events within each type by date
   Object.values(eventsByType).forEach(typeEvents => {
--    orderBy(typeEvents, ['date'], ['asc']);
-+    typeEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    typeEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   });
 
   // Get sorted type entries
@@ -63,7 +77,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
         const selectedPayloads = events
           .filter(e => newSelected.includes(`${e.delivery_id}-${e.type}-${e.action}`))
           .map(e => e.payload);
-        setShowingPayload({ 
+        setShowingPayload({
           payload: selectedPayloads[0],
           comparePayload: selectedPayloads[1]
         });
@@ -80,12 +94,12 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
       // If two items are selected, do nothing when clicking view payload
       return;
     }
-    
+
     setShowingPayload({ payload });
   };
 
   const handleCompare = (payload: Record<string, unknown>) => {
-    const selectedEvent = events.find(e => 
+    const selectedEvent = events.find(e =>
       selectedEvents.includes(`${e.delivery_id}-${e.type}-${e.action}`)
     );
 
@@ -145,7 +159,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
               {expandedItems.has(type) && (
                 <div className="mt-6 space-y-6">
                   <EventTimeline events={typeEvents} onViewPayload={handleViewPayload} />
-                  
+
                   {typeEvents.map((event) => {
                     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
                     const isSelected = selectedEvents.includes(eventId);
@@ -159,7 +173,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                             className="peer"
                             id={eventId}
                           />
-                          <label 
+                          <label
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />
