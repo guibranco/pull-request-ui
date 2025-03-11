@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Event } from '../../types';
@@ -8,11 +7,11 @@ import { PayloadModal } from './PayloadModal';
 import { orderBy } from 'lodash-es';
 
 interface EventListProps {
-  events: Event[];
-  expandedItems: Set<string>;
-  onToggleExpand: (id: string) => void;
-  isExpanded: boolean;
-  onToggle: () => void;
+  readonly events: readonly Event[];
+  readonly expandedItems: ReadonlySet<string>;
+  readonly onToggleExpand: (id: string) => void;
+  readonly isExpanded: boolean;
+  readonly onToggle: () => void;
 }
 
 /**
@@ -33,8 +32,8 @@ interface EventListProps {
 export function EventList({ events, expandedItems, onToggleExpand, isExpanded, onToggle }: Readonly<EventListProps>) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showingPayload, setShowingPayload] = useState<{
-    payload: any;
-    comparePayload?: any;
+    payload: Record<string, unknown>;
+    comparePayload?: Record<string, unknown>;
   } | null>(null);
 
   // Group events by type and sort the types alphabetically
@@ -47,8 +46,8 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
   }, {} as Record<string, Event[]>);
 
   // Sort events within each type by date
-  Object.keys(eventsByType).forEach(type => {
-    eventsByType[type] = orderBy(eventsByType[type], ['date'], ['asc']);
+  Object.values(eventsByType).forEach(typeEvents => {
+    typeEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   });
 
   // Get sorted type entries
@@ -78,7 +77,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
         const selectedPayloads = events
           .filter(e => newSelected.includes(`${e.delivery_id}-${e.type}-${e.action}`))
           .map(e => e.payload);
-        setShowingPayload({ 
+        setShowingPayload({
           payload: selectedPayloads[0],
           comparePayload: selectedPayloads[1]
         });
@@ -90,17 +89,17 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
     });
   };
 
-  const handleViewPayload = (payload: any) => {
+  const handleViewPayload = (payload: Record<string, unknown>) => {
     if (selectedEvents.length === 2) {
       // If two items are selected, do nothing when clicking view payload
       return;
     }
-    
+
     setShowingPayload({ payload });
   };
 
-  const handleCompare = (payload: any) => {
-    const selectedEvent = events.find(e => 
+  const handleCompare = (payload: Record<string, unknown>) => {
+    const selectedEvent = events.find(e =>
       selectedEvents.includes(`${e.delivery_id}-${e.type}-${e.action}`)
     );
 
@@ -160,7 +159,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
               {expandedItems.has(type) && (
                 <div className="mt-6 space-y-6">
                   <EventTimeline events={typeEvents} onViewPayload={handleViewPayload} />
-                  
+
                   {typeEvents.map((event) => {
                     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
                     const isSelected = selectedEvents.includes(eventId);
@@ -174,7 +173,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                             className="peer"
                             id={eventId}
                           />
-                          <label 
+                          <label
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />

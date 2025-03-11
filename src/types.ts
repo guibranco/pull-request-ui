@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Repository {
   id: string;
   owner: string;
@@ -40,7 +39,7 @@ export interface Event {
       avatar_url: string;
     };
     app?: AppData;
-    [key: string]: any;
+    [key: string]: Record<string, unknown> | undefined;
   };
 }
 

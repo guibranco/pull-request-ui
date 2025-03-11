@@ -1,26 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Circle, User, Code, Globe } from 'lucide-react';
 import { Event } from '../../types';
 import { getAppAvatarUrl } from '../../utils/avatar';
+import { groupEventsByPayloadId } from '../../utils/events';
 
 interface BulletDiagramProps {
-  events: Event[];
-  onViewPayload: (payload: any) => void;
+  readonly events: readonly Event[];
+  readonly onViewPayload: (payload: Record<string, unknown>) => void;
 }
 
-/**
- * Renders a bullet diagram based on a list of events.
- *
- * @param {Object} props - The properties for the BulletDiagram component.
- * @param {Array<Event>} props.events - An array of event objects to be displayed in the diagram.
- * @param {Function} props.onViewPayload - A callback function that is triggered when an event payload is viewed.
- *
- * @returns {JSX.Element} The rendered bullet diagram component.
- *
- * @throws {Error} Throws an error if the events array is not provided or is empty.
- */
-export function BulletDiagram({ events, onViewPayload }: BulletDiagramProps) {
+export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramProps>) {
   const formatDateTime = (date: string) => {
     return new Date(date).toLocaleString(undefined, {
       year: 'numeric',
@@ -137,11 +126,19 @@ export function BulletDiagram({ events, onViewPayload }: BulletDiagramProps) {
     }
   };
 
+  // Group events by their delivery ID to maintain order
+  const groupedEvents = groupEventsByPayloadId(events);
+
+  // Flatten grouped events back into a single array
+  const sortedEvents = Object.values(groupedEvents)
+    .flat()
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-full w-max">
         <div className="flex items-center space-x-2 min-h-[160px] py-4">
-          {events.map((event, index) => {
+          {sortedEvents.map((event, index) => {
             const appData = event.payload[event.type]?.app;
             
             return (

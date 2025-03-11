@@ -1,18 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { X, ArrowLeftRight } from 'lucide-react';
 import { JSONView } from './JSONView';
 import { PayloadCompareModal } from './PayloadCompareModal';
+import { collectJsonPaths } from '../../utils/jsonTree';
 
 interface PayloadModalProps {
-  payload: any;
-  onClose: () => void;
-  comparePayload?: any;
-  onCompare?: (payload: any) => void;
-  selectedCount?: number;
+  readonly payload: Readonly<Record<string, unknown>>;
+  readonly onClose: () => void;
+  readonly comparePayload?: Readonly<Record<string, unknown>>;
+  readonly onCompare?: (payload: Record<string, unknown>) => void;
+  readonly selectedCount?: number;
 }
 
-export function PayloadModal({ payload, onClose, comparePayload, onCompare, selectedCount = 0 }: PayloadModalProps) {
+export function PayloadModal({ payload, onClose, comparePayload, onCompare, selectedCount = 0 }: Readonly<PayloadModalProps>) {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(['']));
 
   // If we have a comparePayload, directly render the compare modal
@@ -39,20 +39,7 @@ export function PayloadModal({ payload, onClose, comparePayload, onCompare, sele
   };
 
   const handleExpandAll = () => {
-    const allPaths = new Set<string>();
-    
-    function collectPaths(obj: any, path = '') {
-      if (obj && typeof obj === 'object') {
-        allPaths.add(path);
-        Object.keys(obj).forEach(key => {
-          const newPath = path ? `${path}.${key}` : key;
-          collectPaths(obj[key], newPath);
-        });
-      }
-    }
-    
-    collectPaths(payload);
-    setExpandedPaths(allPaths);
+    setExpandedPaths(collectJsonPaths(payload));
   };
 
   const handleCollapseAll = () => {
