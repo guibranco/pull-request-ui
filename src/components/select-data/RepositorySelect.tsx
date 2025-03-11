@@ -9,6 +9,20 @@ interface RepositorySelectProps {
   readonly disabled: boolean;
 }
 
+/**
+ * A functional component that renders a repository selection interface.
+ * It allows users to search for repositories and select one from a dropdown list.
+ *
+ * @param {Readonly<RepositorySelectProps>} props - The properties for the component.
+ * @param {Array<Repository>} props.repositories - An array of repository objects to display.
+ * @param {string} props.selectedRepo - The currently selected repository's full name.
+ * @param {function} props.onChange - Callback function to handle changes in selected repository.
+ * @param {boolean} props.disabled - Indicates whether the selection is disabled.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @throws {Error} Throws an error if the provided repositories are not in the expected format.
+ */
 export function RepositorySelect({ repositories, selectedRepo, onChange, disabled }: Readonly<RepositorySelectProps>) {
   const [searchQuery, setSearchQuery] = useState('');
 
