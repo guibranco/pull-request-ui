@@ -9,6 +9,20 @@ interface PullRequestSelectProps {
   readonly disabled: boolean;
 }
 
+/**
+ * A React component that allows users to select a pull request from a list.
+ * It includes a search input to filter pull requests based on their title or number.
+ *
+ * @param {Object} props - The properties for the component.
+ * @param {Array} props.pullRequests - An array of pull request objects to display.
+ * @param {string} props.selectedPR - The currently selected pull request number.
+ * @param {function} props.onChange - Callback function that is called when the selected pull request changes.
+ * @param {boolean} props.disabled - Indicates whether the component should be disabled.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @throws {Error} Throws an error if the pullRequests prop is not an array.
+ */
 export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled }: Readonly<PullRequestSelectProps>) {
   const [searchQuery, setSearchQuery] = useState('');
 
