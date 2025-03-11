@@ -11,7 +11,7 @@ interface PullRequestSelectProps {
 
 /**
  * A React component that allows users to select a pull request from a list.
- * It includes a search input to filter pull requests based on their title or number.
+ * It includes a search input to filter the pull requests based on their title or number.
  *
  * @param {Object} props - The properties for the component.
  * @param {Array} props.pullRequests - An array of pull request objects to display.
