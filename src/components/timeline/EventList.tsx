@@ -14,6 +14,21 @@ interface EventListProps {
   readonly onToggle: () => void;
 }
 
+/**
+ * Renders a list of events grouped by type, allowing users to expand and collapse sections,
+ * select events for comparison, and view payloads.
+ *
+ * @param {Object} props - The properties for the EventList component.
+ * @param {Event[]} props.events - An array of events to display.
+ * @param {Set<string>} props.expandedItems - A set of currently expanded item types.
+ * @param {Function} props.onToggleExpand - Callback function to handle expanding or collapsing an event type.
+ * @param {boolean} props.isExpanded - Indicates if the event list is currently expanded.
+ * @param {Function} props.onToggle - Callback function to toggle the visibility of the event list.
+ *
+ * @returns {JSX.Element} The rendered EventList component.
+ *
+ * @throws {Error} Throws an error if the events prop is not an array.
+ */
 export function EventList({ events, expandedItems, onToggleExpand, isExpanded, onToggle }: Readonly<EventListProps>) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showingPayload, setShowingPayload] = useState<{
