@@ -9,6 +9,18 @@ interface EventTimelineProps {
   readonly onViewPayload: (payload: Record<string, unknown>) => void;
 }
 
+/**
+ * Renders an event timeline component that displays grouped events based on their payload event ID.
+ * The component allows users to toggle the visibility of the event groups.
+ *
+ * @param {Readonly<EventTimelineProps>} props - The properties for the EventTimeline component.
+ * @param {Event[]} props.events - An array of events to be displayed in the timeline.
+ * @param {function} props.onViewPayload - A callback function to handle viewing the payload of an event.
+ *
+ * @returns {JSX.Element | null} Returns a JSX element representing the event timeline, or null if there are no relevant event groups.
+ *
+ * @throws {Error} Throws an error if the events cannot be processed correctly.
+ */
 export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineProps>) {
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem('isBulletDiagramExpanded');
