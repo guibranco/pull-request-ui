@@ -1,26 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Circle, User, Code, Globe } from 'lucide-react';
 import { Event } from '../../types';
 import { getAppAvatarUrl } from '../../utils/avatar';
 
 interface BulletDiagramProps {
-  events: Event[];
-  onViewPayload: (payload: any) => void;
+  readonly events: readonly Event[];
+  readonly onViewPayload: (payload: Record<string, unknown>) => void;
 }
 
-/**
- * Renders a bullet diagram based on a list of events.
- *
- * @param {Object} props - The properties for the BulletDiagram component.
- * @param {Array<Event>} props.events - An array of event objects to be displayed in the diagram.
- * @param {Function} props.onViewPayload - A callback function that is triggered when an event payload is viewed.
- *
- * @returns {JSX.Element} The rendered bullet diagram component.
- *
- * @throws {Error} Throws an error if the events array is not provided or is empty.
- */
-export function BulletDiagram({ events, onViewPayload }: BulletDiagramProps) {
+export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramProps>) {
   const formatDateTime = (date: string) => {
     return new Date(date).toLocaleString(undefined, {
       year: 'numeric',
@@ -137,11 +125,53 @@ export function BulletDiagram({ events, onViewPayload }: BulletDiagramProps) {
     }
   };
 
+  // Group events by their delivery ID to maintain order
+  const groupedEvents = events.reduce((acc, event) => {
+    let eventId = event.delivery_id;
+
+    // For issue_comment events, use the comment ID instead of issue ID
+    if (event.type === 'issue_comment' && event.payload.comment?.id) {
+      eventId = `comment_${event.payload.comment.id}`;
+    } else if (event.payload.issue?.id) {
+      eventId = `issue_${event.payload.issue.id}`;
+    } else if (event.payload.pull_request?.id) {
+      eventId = `pr_${event.payload.pull_request.id}`;
+    } else if (event.payload.review?.id) {
+      eventId = `review_${event.payload.review.id}`;
+    } else if (event.payload.check_run?.id) {
+      eventId = `check_${event.payload.check_run.id}`;
+    } else if (event.payload.check_suite?.id) {
+      eventId = `suite_${event.payload.check_suite.id}`;
+    } else if (event.payload.workflow_run?.id) {
+      eventId = `workflow_${event.payload.workflow_run.id}`;
+    } else if (event.payload.workflow_job?.id) {
+      eventId = `job_${event.payload.workflow_job.id}`;
+    } else if (event.payload.release?.id) {
+      eventId = `release_${event.payload.release.id}`;
+    }
+
+    if (!acc[eventId]) {
+      acc[eventId] = [];
+    }
+    acc[eventId].push(event);
+    return acc;
+  }, {} as Record<string, Event[]>);
+
+  // Sort events within each group by date
+  Object.values(groupedEvents).forEach(group => {
+    group.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  });
+
+  // Flatten grouped events back into a single array
+  const sortedEvents = Object.values(groupedEvents)
+    .flat()
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-full w-max">
         <div className="flex items-center space-x-2 min-h-[160px] py-4">
-          {events.map((event, index) => {
+          {sortedEvents.map((event, index) => {
             const appData = event.payload[event.type]?.app;
             
             return (
