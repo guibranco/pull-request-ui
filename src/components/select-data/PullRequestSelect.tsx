@@ -16,8 +16,8 @@ interface PullRequestSelectProps {
  * @param {Object} props - The properties for the component.
  * @param {Array} props.pullRequests - An array of pull request objects to display.
  * @param {string} props.selectedPR - The currently selected pull request number.
- * @param {function} props.onChange - Callback function to handle changes in selection.
- * @param {boolean} props.disabled - Indicates whether the component is disabled.
+ * @param {function} props.onChange - Callback function that is called when the selected pull request changes.
+ * @param {boolean} props.disabled - Indicates whether the component should be disabled.
  *
  * @returns {JSX.Element} The rendered component.
  *
