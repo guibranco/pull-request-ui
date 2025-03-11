@@ -32,8 +32,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
 
   // Sort events within each type by date
   Object.values(eventsByType).forEach(typeEvents => {
--    orderBy(typeEvents, ['date'], ['asc']);
-+    typeEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    typeEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   });
 
   // Get sorted type entries
@@ -63,7 +62,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
         const selectedPayloads = events
           .filter(e => newSelected.includes(`${e.delivery_id}-${e.type}-${e.action}`))
           .map(e => e.payload);
-        setShowingPayload({ 
+        setShowingPayload({
           payload: selectedPayloads[0],
           comparePayload: selectedPayloads[1]
         });
@@ -80,12 +79,12 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
       // If two items are selected, do nothing when clicking view payload
       return;
     }
-    
+
     setShowingPayload({ payload });
   };
 
   const handleCompare = (payload: Record<string, unknown>) => {
-    const selectedEvent = events.find(e => 
+    const selectedEvent = events.find(e =>
       selectedEvents.includes(`${e.delivery_id}-${e.type}-${e.action}`)
     );
 
@@ -145,7 +144,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
               {expandedItems.has(type) && (
                 <div className="mt-6 space-y-6">
                   <EventTimeline events={typeEvents} onViewPayload={handleViewPayload} />
-                  
+
                   {typeEvents.map((event) => {
                     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
                     const isSelected = selectedEvents.includes(eventId);
@@ -159,7 +158,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                             className="peer"
                             id={eventId}
                           />
-                          <label 
+                          <label
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />

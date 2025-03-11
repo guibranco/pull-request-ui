@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, ArrowLeftRight } from 'lucide-react';
 import { JSONView } from './JSONView';
 import { PayloadCompareModal } from './PayloadCompareModal';
+import { collectJsonPaths } from '../../utils/jsonTree';
 
 interface PayloadModalProps {
   readonly payload: Readonly<Record<string, unknown>>;
@@ -38,20 +39,7 @@ export function PayloadModal({ payload, onClose, comparePayload, onCompare, sele
   };
 
   const handleExpandAll = () => {
-    const allPaths = new Set<string>();
-    
-    function collectPaths(obj: Record<string, unknown>, path = '') {
-      if (obj && typeof obj === 'object') {
-        allPaths.add(path);
-        Object.keys(obj).forEach(key => {
-          const newPath = path ? `${path}.${key}` : key;
-          collectPaths(obj[key] as Record<string, unknown>, newPath);
-        });
-      }
-    }
-    
-    collectPaths(payload);
-    setExpandedPaths(allPaths);
+    setExpandedPaths(collectJsonPaths(payload));
   };
 
   const handleCollapseAll = () => {

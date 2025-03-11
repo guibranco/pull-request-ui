@@ -2,6 +2,7 @@ import React from 'react';
 import { Circle, User, Code, Globe } from 'lucide-react';
 import { Event } from '../../types';
 import { getAppAvatarUrl } from '../../utils/avatar';
+import { groupEventsByPayloadId } from '../../utils/events';
 
 interface BulletDiagramProps {
   readonly events: readonly Event[];
@@ -126,41 +127,7 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
   };
 
   // Group events by their delivery ID to maintain order
-  const groupedEvents = events.reduce((acc, event) => {
-    let eventId = event.delivery_id;
-
-    // For issue_comment events, use the comment ID instead of issue ID
-    if (event.type === 'issue_comment' && event.payload.comment?.id) {
-      eventId = `comment_${event.payload.comment.id}`;
-    } else if (event.payload.issue?.id) {
-      eventId = `issue_${event.payload.issue.id}`;
-    } else if (event.payload.pull_request?.id) {
-      eventId = `pr_${event.payload.pull_request.id}`;
-    } else if (event.payload.review?.id) {
-      eventId = `review_${event.payload.review.id}`;
-    } else if (event.payload.check_run?.id) {
-      eventId = `check_${event.payload.check_run.id}`;
-    } else if (event.payload.check_suite?.id) {
-      eventId = `suite_${event.payload.check_suite.id}`;
-    } else if (event.payload.workflow_run?.id) {
-      eventId = `workflow_${event.payload.workflow_run.id}`;
-    } else if (event.payload.workflow_job?.id) {
-      eventId = `job_${event.payload.workflow_job.id}`;
-    } else if (event.payload.release?.id) {
-      eventId = `release_${event.payload.release.id}`;
-    }
-
-    if (!acc[eventId]) {
-      acc[eventId] = [];
-    }
-    acc[eventId].push(event);
-    return acc;
-  }, {} as Record<string, Event[]>);
-
-  // Sort events within each group by date
-  Object.values(groupedEvents).forEach(group => {
-    group.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  });
+  const groupedEvents = groupEventsByPayloadId(events);
 
   // Flatten grouped events back into a single array
   const sortedEvents = Object.values(groupedEvents)

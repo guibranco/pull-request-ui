@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Event } from '../../types';
 import { BulletDiagram } from './BulletDiagram';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { groupEventsByPayloadId } from '../../utils/events';
 
 interface EventTimelineProps {
   readonly events: readonly Event[];
@@ -15,44 +16,7 @@ export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineP
   });
 
   // Group events by their payload event ID
-  const eventsByPayloadId = events.reduce((acc, event) => {
-    // Extract the ID from various payload types
-    let eventId = null;
-    if (event.type === 'issue_comment' && event.payload.comment?.id) {
-      eventId = `comment_${event.payload.comment.id}`;
-    } else if (event.payload.issue?.id) {
-      eventId = `issue_${event.payload.issue.id}`;
-    } else if (event.payload.pull_request?.id) {
-      eventId = `pr_${event.payload.pull_request.id}`;
-    } else if (event.payload.comment?.id) {
-      eventId = `comment_${event.payload.comment.id}`;
-    } else if (event.payload.review?.id) {
-      eventId = `review_${event.payload.review.id}`;
-    } else if (event.payload.check_run?.id) {
-      eventId = `check_${event.payload.check_run.id}`;
-    } else if (event.payload.check_suite?.id) {
-      eventId = `suite_${event.payload.check_suite.id}`;
-    } else if (event.payload.workflow_run?.id) {
-      eventId = `workflow_${event.payload.workflow_run.id}`;
-    } else if (event.payload.workflow_job?.id) {
-      eventId = `job_${event.payload.workflow_job.id}`;
-    } else if (event.payload.release?.id) {
-      eventId = `release_${event.payload.release.id}`;
-    }
-
-    if (eventId) {
-      if (!acc[eventId]) {
-        acc[eventId] = [];
-      }
-      acc[eventId].push(event);
-    }
-    return acc;
-  }, {} as Record<string, Event[]>);
-
-  // Sort events within each ID by date
-  Object.values(eventsByPayloadId).forEach(idEvents => {
-    idEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  });
+  const eventsByPayloadId = groupEventsByPayloadId(events);
 
   // Only show groups that have more than one event
   const relevantIds = Object.entries(eventsByPayloadId)
