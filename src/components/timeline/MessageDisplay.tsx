@@ -11,7 +11,7 @@ interface MessageDisplayProps {
 export function MessageDisplay({ type, message, onAction, actionLabel }: MessageDisplayProps) {
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-gray-800 p-6 rounded-lg shadow">
+      <div className="bg-gray-800 p-6 rounded-lg shadow-sm">
         <div className={`flex items-center justify-center mb-4 ${
           type === 'error' ? 'text-red-400' : 'text-gray-300'
         }`}>
@@ -25,7 +25,7 @@ export function MessageDisplay({ type, message, onAction, actionLabel }: Message
         {onAction && actionLabel && (
           <button
             onClick={onAction}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
           >
             {actionLabel}
           </button>
