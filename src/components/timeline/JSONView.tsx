@@ -74,7 +74,7 @@ export function JSONView({
   };
 
   return (
-    <div className={`relative ${isDifferent ? 'bg-red-500/20 rounded px-1' : ''}`}>
+    <div className={`relative ${isDifferent ? 'bg-red-500/20 rounded-sm px-1' : ''}`}>
       <div 
         className="flex items-center cursor-pointer hover:text-blue-400 transition-colors"
         onClick={toggleExpand}
