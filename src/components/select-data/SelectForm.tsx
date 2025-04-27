@@ -16,26 +16,6 @@ interface SelectFormProps {
   onLogout: () => void;
 }
 
-/**
- * A functional component that renders a form for selecting a repository and a pull request.
- * It allows users to choose from available repositories and pull requests, and provides
- * buttons for submission and logout.
- *
- * @param {Object} props - The properties for the component.
- * @param {Array} props.repositories - An array of available repositories.
- * @param {Array} props.pullRequests - An array of available pull requests.
- * @param {string} props.selectedRepo - The currently selected repository.
- * @param {string} props.selectedPR - The currently selected pull request.
- * @param {boolean} props.loading - Indicates if the form is in a loading state.
- * @param {Function} props.onRepoChange - Callback function triggered when the repository selection changes.
- * @param {Function} props.onPRChange - Callback function triggered when the pull request selection changes.
- * @param {Function} props.onSubmit - Callback function triggered when the form is submitted.
- * @param {Function} props.onLogout - Callback function triggered when the logout button is clicked.
- *
- * @throws {Error} Throws an error if required props are not provided.
- *
- * @returns {JSX.Element} The rendered form component.
- */
 export function SelectForm({
   repositories,
   pullRequests,
@@ -76,7 +56,7 @@ export function SelectForm({
           <button
             type="submit"
             disabled={!selectedRepo || !selectedPR || loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin mx-auto" />
@@ -88,7 +68,7 @@ export function SelectForm({
           <button
             type="button"
             onClick={onLogout}
-            className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-2 px-4 rounded-md border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-2 px-4 rounded-md border border-gray-600 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to API Key

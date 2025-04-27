@@ -6,20 +6,6 @@ interface ErrorMessageProps {
   onRetry: () => void;
 }
 
-/**
- * Renders an error message component with a retry button.
- *
- * This component displays a message indicating an error and provides
- * a button that allows the user to attempt an action again.
- *
- * @param {Object} props - The properties for the component.
- * @param {string} props.message - The error message to display.
- * @param {function} props.onRetry - The function to call when the retry button is clicked.
- *
- * @returns {JSX.Element} The rendered error message component.
- *
- * @throws {Error} Throws an error if the onRetry function is not provided.
- */
 export function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
   return (
     <div className="max-w-md mx-auto">
@@ -30,7 +16,7 @@ export function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
         </div>
         <button
           onClick={onRetry}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
         >
           Retry
         </button>

@@ -47,7 +47,7 @@ export function PayloadModal({ payload, onClose, comparePayload, onCompare, sele
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-gray-800 rounded-lg shadow-xl w-[90vw] max-w-6xl h-[90vh] flex flex-col">
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center space-x-4">

@@ -22,7 +22,7 @@ export function JSONView({
   side = 'left'
 }: JSONViewProps) {
   const isDifferent = compareWith !== undefined && !isEqual(data, compareWith);
-
+  
   const shouldShow = !showDifferencesOnly || isDifferent;
 
   if (!shouldShow) {
@@ -74,7 +74,7 @@ export function JSONView({
   };
 
   return (
-    <div className={`relative ${isDifferent ? 'bg-red-500/20 rounded-sm px-1' : ''}`}>
+    <div className={`relative ${isDifferent ? 'bg-red-500/20 rounded px-1' : ''}`}>
       <div 
         className="flex items-center cursor-pointer hover:text-blue-400 transition-colors"
         onClick={toggleExpand}
@@ -91,7 +91,7 @@ export function JSONView({
           </span>
         )}
       </div>
-
+      
       {isExpanded && (
         <div className="ml-4 border-l border-gray-700 pl-4">
           {isArray ? (

@@ -84,7 +84,7 @@ export function RefreshButton({ onRefresh, isLoading }: Readonly<RefreshButtonPr
       <button
         onClick={handleRefreshNow}
         disabled={isLoading}
-        className="px-3 py-1 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition-colors disabled:bg-blue-800 disabled:cursor-not-allowed text-sm"
+        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-blue-800 disabled:cursor-not-allowed text-sm"
       >
         Refresh Now
       </button>

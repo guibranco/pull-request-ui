@@ -8,32 +8,7 @@ interface RecentPullRequestsProps {
   loading: boolean;
 }
 
-/**
- * Renders a component displaying a list of recent pull requests.
- *
- * @param {RecentPullRequestsProps} props - The properties for the component.
- * @param {Array<PullRequest>} props.pullRequests - An array of pull request objects to display.
- * @param {function} props.onSelect - A callback function that is called when a pull request is selected.
- * @param {boolean} props.loading - A boolean indicating whether the data is currently loading.
- *
- * @returns {JSX.Element} The rendered component.
- *
- * @throws {Error} Throws an error if the pull requests cannot be loaded or processed.
- */
 export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPullRequestsProps) {
-  /**
-   * Formats a given date string into a localized string representation.
-   *
-   * This function takes a date string as input, converts it to a Date object,
-   * and returns a formatted string that includes the abbreviated month name,
-   * day of the month, and the time in hours and minutes.
-   *
-   * @param {string} dateString - The date string to be formatted.
-   *                              It should be a valid date format recognized by the Date constructor.
-   * @returns {string} A localized string representation of the formatted date.
-   *
-   * @throws {Error} Throws an error if the dateString is invalid and cannot be parsed into a Date object.
-   */
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString(undefined, {
@@ -76,7 +51,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPu
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <GitPullRequest className="w-4 h-4 text-green-400 shrink-0" />
+                <GitPullRequest className="w-4 h-4 text-green-400 flex-shrink-0" />
                 <span>#{pr.number}</span>
               </div>
               <div className="flex items-center space-x-2">
@@ -101,10 +76,10 @@ export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPu
                   <img
                     src={pr.sender_avatar}
                     alt={pr.sender}
-                    className="w-6 h-6 rounded-full shrink-0"
+                    className="w-6 h-6 rounded-full flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
                     <User className="w-4 h-4 text-gray-400" />
                   </div>
                 )}

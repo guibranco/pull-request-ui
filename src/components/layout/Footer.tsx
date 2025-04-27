@@ -1,70 +1,57 @@
-import { Github } from 'lucide-react';
+import React from 'react';
+import { Github, Heart } from 'lucide-react';
 
-/**
- * Renders the footer component of the application.
- *
- * This component includes links to the developer's profile and the project's GitHub repository.
- * It is styled with responsive design principles to ensure proper display across different screen sizes.
- *
- * @returns {JSX.Element} The rendered footer element containing links and developer information.
- *
- * @example
- * // Usage in a React component
- * return (
- *   <div>
- *     <Footer />
- *   </div>
- * );
- */
 export function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-700 mt-auto py-6">
+    <footer className="border-t border-gray-700 mt-auto py-8">
       <div className="container mx-auto px-6 lg:px-8 max-w-[90rem]">
-        <div className="flex flex-col space-y-4">
-          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between">
-            <div className="flex items-center space-x-2">
-              <a
-                href="https://guibranco.github.io/?utm_campaign=project&utm_media=GitHub+Pages&utm_source=pull-requests-ui"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
-              >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="flex items-center justify-center md:justify-start space-x-6">
+            <a
+              href="https://guilherme.stracini.com.br/?utm_campaign=project&utm_media=GitHub+Pages&utm_source=pull-requests-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-4 group"
+            >
+              <div className="relative w-[27px] h-[50px]">
                 <img
                   alt="Guilherme Branco Stracini"
-                  className="rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all"
+                  className="absolute inset-0 w-full h-full object-cover rounded-full ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all"
                   loading="lazy"
-                  src="https://guibranco.github.io/photo.png"
-                  width="40"
-                  height="40"
+                  src="https://guilherme.stracini.com.br/photo.png"
                 />
-                <div className="flex flex-col items-start">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Develop by 
-                  </span>
-                  <span className="font-medium">
-                    Guilherme Branco Stracini
-                  </span>
-                </div>
-              </a>
-            </div>
-
-            <div className="flex items-center">
-              <a
-                href="https://github.com/guibranco/pull-request-ui"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors group"
-              >
-                <Github className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                <div className="flex flex-col items-start">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Repository
-                  </span>
-                  <span className="font-medium">GitHub</span>
-                </div>
-              </a>
-            </div>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-400">
+                  Developed with <Heart className="w-4 h-4 inline text-red-500 animate-pulse" /> by
+                </span>
+                <span className="text-lg font-medium text-gray-200 group-hover:text-primary transition-colors">
+                  Guilherme Branco Stracini
+                </span>
+              </div>
+            </a>
           </div>
+
+          <div className="flex items-center justify-center md:justify-end">
+            <a
+              href="https://github.com/guibranco/pull-request-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-3 text-gray-400 hover:text-primary transition-colors group"
+            >
+              <Github className="w-6 h-6 group-hover:scale-110 transition-transform" />
+              <div className="flex flex-col items-start">
+                <span className="text-sm">View on</span>
+                <span className="font-medium">GitHub</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
+          <p>
+            © {new Date().getFullYear()} Pull Request Flow Viewer. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

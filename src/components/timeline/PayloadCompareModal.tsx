@@ -39,7 +39,7 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Read
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-[80vh] flex flex-col">
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -52,7 +52,7 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Read
                 type="checkbox"
                 checked={showDifferencesOnly}
                 onChange={(e) => setShowDifferencesOnly(e.target.checked)}
-                className="rounded-sm border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
+                className="rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
               />
               <span className="text-gray-300">Show differences only</span>
             </label>
