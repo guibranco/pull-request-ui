@@ -116,7 +116,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
         </div>
         <div className="flex items-center space-x-3">
           {conclusion && (
-            <span className={`px-2 py-1 rounded text-sm font-medium ${conclusion.color}`}>
+            <span className={`px-2 py-1 rounded-sm text-sm font-medium ${conclusion.color}`}>
               {conclusion.text}
             </span>
           )}
@@ -133,10 +133,10 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
               <img
                 src={getAppAvatarUrl(appData.id)}
                 alt={`${appData.name}'s avatar`}
-                className="w-6 h-6 rounded"
+                className="w-6 h-6 rounded-sm"
               />
             ) : (
-              <div className="w-6 h-6 rounded bg-gray-700 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-sm bg-gray-700 flex items-center justify-center">
                 <Globe className="w-4 h-4 text-gray-400" />
               </div>
             )}

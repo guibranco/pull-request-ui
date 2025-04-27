@@ -13,7 +13,7 @@ export function Header({ currentStep }: HeaderProps) {
   ];
 
   return (
-    <div className="bg-gray-800 shadow">
+    <div className="bg-gray-800 shadow-sm">
       <div className="container mx-auto px-6 lg:px-8 max-w-[90rem]">
         <div className="py-4">
           <div className="flex items-center justify-center mb-6">

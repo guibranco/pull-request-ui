@@ -56,7 +56,7 @@ export function SelectForm({
           <button
             type="submit"
             disabled={!selectedRepo || !selectedPR || loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin mx-auto" />
@@ -68,7 +68,7 @@ export function SelectForm({
           <button
             type="button"
             onClick={onLogout}
-            className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-2 px-4 rounded-md border border-gray-600 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-2 px-4 rounded-md border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to API Key

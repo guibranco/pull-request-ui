@@ -158,10 +158,10 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
                           <img
                             src={getAppAvatarUrl(appData.id)}
                             alt={`${appData.name}'s avatar`}
-                            className="w-6 h-6 rounded mb-1"
+                            className="w-6 h-6 rounded-sm mb-1"
                           />
                         ) : (
-                          <div className="w-6 h-6 rounded bg-gray-700 flex items-center justify-center mb-1">
+                          <div className="w-6 h-6 rounded-sm bg-gray-700 flex items-center justify-center mb-1">
                             <Globe className="w-4 h-4 text-gray-400" />
                           </div>
                         )}

@@ -41,7 +41,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
 
         {error && (
           <div className="mb-6 p-4 bg-red-900/20 border border-red-500/20 rounded-lg flex items-center text-red-400">
-            <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+            <AlertCircle className="w-5 h-5 mr-2 shrink-0" />
             <p>{error}</p>
           </div>
         )}
@@ -59,7 +59,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
               id="apiKey"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100 text-lg"
+              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100 text-lg"
               placeholder="Enter your API key"
               required
             />
@@ -67,7 +67,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
           <div className="space-y-3">
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
+              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
             >
               Continue
             </button>
@@ -75,7 +75,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all"
+                className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all"
               >
                 <LogOut className="w-5 h-5 mr-2" />
                 Logout

@@ -162,7 +162,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />
-                          <div className="absolute inset-0 rounded opacity-0 group-hover:opacity-100 peer-focus:opacity-100 transition-opacity bg-blue-500/10 pointer-events-none" />
+                          <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 peer-focus:opacity-100 transition-opacity bg-blue-500/10 pointer-events-none" />
                         </div>
                         <div className="flex-1">
                           <EventItem
