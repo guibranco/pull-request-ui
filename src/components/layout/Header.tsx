@@ -5,18 +5,6 @@ interface HeaderProps {
   currentStep: 'api-key' | 'select-data' | 'timeline';
 }
 
-/**
- * Renders the header component for the Pull Request Flow Viewer.
- * This component displays the current step in a multi-step process,
- * along with navigation indicators for each step.
- *
- * @param {HeaderProps} props - The properties for the Header component.
- * @param {string} props.currentStep - The ID of the current step in the process.
- *
- * @returns {JSX.Element} The rendered header component.
- *
- * @throws {Error} Throws an error if the currentStep does not match any defined step IDs.
- */
 export function Header({ currentStep }: HeaderProps) {
   const steps = [
     { id: 'api-key', label: 'API Key', icon: Key },

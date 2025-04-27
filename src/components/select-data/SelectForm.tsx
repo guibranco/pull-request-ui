@@ -16,26 +16,6 @@ interface SelectFormProps {
   onLogout: () => void;
 }
 
-/**
- * A functional component that renders a form for selecting a repository and a pull request.
- * It allows users to choose from available repositories and pull requests, and provides
- * buttons for submission and logout.
- *
- * @param {Object} props - The properties for the component.
- * @param {Array} props.repositories - An array of available repositories.
- * @param {Array} props.pullRequests - An array of available pull requests.
- * @param {string} props.selectedRepo - The currently selected repository.
- * @param {string} props.selectedPR - The currently selected pull request.
- * @param {boolean} props.loading - Indicates if the form is in a loading state.
- * @param {Function} props.onRepoChange - Callback function triggered when the repository selection changes.
- * @param {Function} props.onPRChange - Callback function triggered when the pull request selection changes.
- * @param {Function} props.onSubmit - Callback function triggered when the form is submitted.
- * @param {Function} props.onLogout - Callback function triggered when the logout button is clicked.
- *
- * @throws {Error} Throws an error if required props are not provided.
- *
- * @returns {JSX.Element} The rendered form component.
- */
 export function SelectForm({
   repositories,
   pullRequests,

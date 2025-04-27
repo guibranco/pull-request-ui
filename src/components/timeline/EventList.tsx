@@ -14,21 +14,6 @@ interface EventListProps {
   readonly onToggle: () => void;
 }
 
-/**
- * Renders a list of events grouped by type, allowing users to expand and collapse sections,
- * select events for comparison, and view payloads.
- *
- * @param {Object} props - The properties for the EventList component.
- * @param {Event[]} props.events - An array of events to display.
- * @param {Set<string>} props.expandedItems - A set of currently expanded item types.
- * @param {Function} props.onToggleExpand - Callback function to handle expanding or collapsing an event type.
- * @param {boolean} props.isExpanded - Indicates if the event list is currently expanded.
- * @param {Function} props.onToggle - Callback function to toggle the visibility of the event list.
- *
- * @returns {JSX.Element} The rendered EventList component.
- *
- * @throws {Error} Throws an error if the events prop is not an array.
- */
 export function EventList({ events, expandedItems, onToggleExpand, isExpanded, onToggle }: Readonly<EventListProps>) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showingPayload, setShowingPayload] = useState<{
@@ -60,19 +45,6 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
   const totalEvents = events.length;
   const totalTypes = sortedTypeEntries.length;
 
-  /**
-   * Handles the selection of an event and manages the state of selected events.
-   * This function updates the selected events based on user interaction and
-   * automatically shows a comparison modal if exactly two events are selected.
-   *
-   * @param {Event} event - The event object containing details about the event
-   *                        being selected, including delivery_id, type, and action.
-   *
-   * @throws {Error} Throws an error if the event object is missing required properties.
-   *
-   * @returns {void} This function does not return a value. It updates the state
-   *                 of selected events and the payload to be displayed.
-   */
   const handleEventSelect = (event: Event) => {
     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
     setSelectedEvents(prev => {
@@ -90,7 +62,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
         const selectedPayloads = events
           .filter(e => newSelected.includes(`${e.delivery_id}-${e.type}-${e.action}`))
           .map(e => e.payload);
-        setShowingPayload({
+        setShowingPayload({ 
           payload: selectedPayloads[0],
           comparePayload: selectedPayloads[1]
         });
@@ -102,43 +74,17 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
     });
   };
 
-  /**
-   * Handles the view payload action based on the selected events.
-   * If exactly two items are selected, the function does nothing.
-   * Otherwise, it updates the state to show the provided payload.
-   *
-   * @param {Record<string, unknown>} payload - The payload to be displayed.
-   * @returns {void} This function does not return a value.
-   *
-   * @throws {Error} Throws an error if the payload is invalid or cannot be processed.
-   */
   const handleViewPayload = (payload: Record<string, unknown>) => {
     if (selectedEvents.length === 2) {
       // If two items are selected, do nothing when clicking view payload
       return;
     }
-
+    
     setShowingPayload({ payload });
   };
 
-  /**
-   * Handles the comparison of a given payload with a selected event.
-   * It searches for an event in the `events` array that matches the
-   * criteria defined by the `selectedEvents` array. If a matching
-   * event is found, it updates the state to show the current payload
-   * alongside the payload of the selected event.
-   *
-   * @param {Record<string, unknown>} payload - The payload to be compared
-   * with the selected event's payload. This is an object that can contain
-   * any key-value pairs.
-   *
-   * @returns {void} This function does not return a value.
-   *
-   * @throws {Error} Throws an error if there is an issue accessing
-   * the `events` or `selectedEvents` variables.
-   */
   const handleCompare = (payload: Record<string, unknown>) => {
-    const selectedEvent = events.find(e =>
+    const selectedEvent = events.find(e => 
       selectedEvents.includes(`${e.delivery_id}-${e.type}-${e.action}`)
     );
 
@@ -198,7 +144,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
               {expandedItems.has(type) && (
                 <div className="mt-6 space-y-6">
                   <EventTimeline events={typeEvents} onViewPayload={handleViewPayload} />
-
+                  
                   {typeEvents.map((event) => {
                     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
                     const isSelected = selectedEvents.includes(eventId);
@@ -212,7 +158,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                             className="peer"
                             id={eventId}
                           />
-                          <label
+                          <label 
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />
