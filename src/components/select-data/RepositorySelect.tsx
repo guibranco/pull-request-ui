@@ -50,14 +50,17 @@ export function RepositorySelect({ repositories, selectedRepo, onChange, disable
               ${selectedRepo ? 'text-gray-100' : 'text-gray-400'}`}
             required
             disabled={disabled}
-          >
-            <option value="" className="text-gray-400">Select a repository</option>
-            {filteredRepositories.map((repo) => (
-              <option key={repo.id} value={repo.full_name}>
-                {repo.full_name}
-              </option>
-            ))}
-          </select>
+            dangerouslySetInnerHTML={{
+              __html: `
+                <option value="" class="text-gray-400">Select a repository</option>
+                ${filteredRepositories.map(repo => `
+                  <option value="${repo.full_name}" class="text-gray-100">
+                    ${repo.full_name}
+                  </option>
+                `).join('')}
+              `
+            }}
+          />
           <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
             <GitFork className="w-5 h-5" />
           </div>

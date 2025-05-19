@@ -52,14 +52,30 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
               ${selectedPR ? 'text-gray-100' : 'text-gray-400'}`}
             required
             disabled={disabled}
-          >
-            <option value="" className="text-gray-400">Select a pull request</option>
-            {filteredPullRequests.map((pr) => (
-              <option key={pr.number} value={pr.number.toString()}>
-                #{pr.number} - {pr.title} ({pr.sender})
-              </option>
-            ))}
-          </select>
+            dangerouslySetInnerHTML={{
+              __html: `
+                <option value="" class="text-gray-400">Select a pull request</option>
+                ${filteredPullRequests.map(pr => `
+                  <option value="${pr.number}" class="${pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}">
+                    <div class="flex items-center space-x-2">
+                      ${pr.sender_avatar ? `
+                        <img src="${pr.sender_avatar}" alt="${pr.sender}" class="w-4 h-4 rounded-full" />
+                      ` : `
+                        <span class="w-4 h-4 rounded-full bg-gray-700 flex items-center justify-center">
+                          <svg class="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                        </span>
+                      `}
+                      <span>#${pr.number} - ${pr.title}</span>
+                      <span class="text-gray-400">(${pr.sender})</span>
+                    </div>
+                  </option>
+                `).join('')}
+              `
+            }}
+          />
           <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
             <GitPullRequest className="w-5 h-5" />
           </div>
