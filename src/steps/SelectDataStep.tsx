@@ -4,6 +4,7 @@ import { ErrorMessage } from '../components/select-data/ErrorMessage';
 import { RecentPullRequests } from '../components/select-data/RecentPullRequests';
 import { RefreshButton } from '../components/select-data/RefreshButton';
 import { ApiService } from '../services/api';
+import { ArrowLeft } from 'lucide-react';
 import type { Repository, PullRequest, RecentPullRequest } from '../types';
 
 interface SelectDataStepProps {
@@ -172,7 +173,15 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={handleLogout}
+          className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          Back to API Key
+        </button>
+
         <RefreshButton 
           onRefresh={handleRefresh}
           isLoading={loading || loadingRecent}
@@ -188,7 +197,6 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
         onRepoChange={handleRepoChange}
         onPRChange={setSelectedPR}
         onSubmit={handleSubmit}
-        onLogout={handleLogout}
       />
 
       <RecentPullRequests
