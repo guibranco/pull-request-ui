@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { SelectForm } from '../components/select-data/SelectForm';
 import { ErrorMessage } from '../components/select-data/ErrorMessage';
 import { RecentPullRequests } from '../components/select-data/RecentPullRequests';
+import { RefreshButton } from '../components/select-data/RefreshButton';
 import { ApiService } from '../services/api';
 import type { Repository, PullRequest, RecentPullRequest } from '../types';
 
@@ -48,68 +49,74 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
     }
   }, [apiKey]);
 
-  useEffect(() => {
-    fetchRecentPullRequests();
-    const interval = setInterval(fetchRecentPullRequests, 30000);
-    return () => clearInterval(interval);
-  }, [fetchRecentPullRequests]);
-
-  useEffect(() => {
-    async function fetchRepositories() {
-      setLoading(true);
-      setError(null);
-      try {
-        const api = new ApiService(apiKey);
-        const data = await api.getRepositories();
-        setRepositories(data);
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch repositories';
-        if (errorMessage.includes('403')) {
-          handleUnauthorized('Your API key is invalid or has expired. Please enter a valid API key.');
-          return;
-        }
-        setError(errorMessage);
-        setRepositories([]);
-      } finally {
-        setLoading(false);
+  const fetchRepositories = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const api = new ApiService(apiKey);
+      const data = await api.getRepositories();
+      setRepositories(data);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch repositories';
+      if (errorMessage.includes('403')) {
+        handleUnauthorized('Your API key is invalid or has expired. Please enter a valid API key.');
+        return;
       }
+      setError(errorMessage);
+      setRepositories([]);
+    } finally {
+      setLoading(false);
     }
-
-    fetchRepositories();
   }, [apiKey]);
 
-  useEffect(() => {
-    async function fetchPullRequests() {
-      if (!selectedRepo) return;
+  const fetchPullRequests = useCallback(async () => {
+    if (!selectedRepo) return;
 
-      setLoading(true);
-      setError(null);
-      setPullRequests([]);
+    setLoading(true);
+    setError(null);
+    setPullRequests([]);
 
-      try {
-        const api = new ApiService(apiKey);
-        const [owner, repo] = selectedRepo.split('/');
-        const data = await api.getPullRequests(owner, repo);
-        setPullRequests(data.pull_requests);
-        
-        if (data.pull_requests.length === 0) {
-          setError('No pull requests found for this repository');
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch pull requests';
-        if (errorMessage.includes('403')) {
-          handleUnauthorized('Your API key is invalid or has expired. Please enter a valid API key.');
-          return;
-        }
-        setError(errorMessage);
-        setPullRequests([]);
-      } finally {
-        setLoading(false);
+    try {
+      const api = new ApiService(apiKey);
+      const [owner, repo] = selectedRepo.split('/');
+      const data = await api.getPullRequests(owner, repo);
+      setPullRequests(data.pull_requests);
+      
+      if (data.pull_requests.length === 0) {
+        setError('No pull requests found for this repository');
       }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch pull requests';
+      if (errorMessage.includes('403')) {
+        handleUnauthorized('Your API key is invalid or has expired. Please enter a valid API key.');
+        return;
+      }
+      setError(errorMessage);
+      setPullRequests([]);
+    } finally {
+      setLoading(false);
     }
-
-    fetchPullRequests();
   }, [selectedRepo, apiKey]);
+
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([
+      fetchRepositories(),
+      selectedRepo && fetchPullRequests(),
+      fetchRecentPullRequests()
+    ]);
+  }, [fetchRepositories, fetchPullRequests, fetchRecentPullRequests, selectedRepo]);
+
+  useEffect(() => {
+    fetchRepositories();
+  }, [fetchRepositories]);
+
+  useEffect(() => {
+    fetchPullRequests();
+  }, [fetchPullRequests]);
+
+  useEffect(() => {
+    fetchRecentPullRequests();
+  }, [fetchRecentPullRequests]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,6 +172,13 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
+      <div className="flex items-center justify-end">
+        <RefreshButton 
+          onRefresh={handleRefresh}
+          isLoading={loading || loadingRecent}
+        />
+      </div>
+
       <SelectForm
         repositories={repositories}
         pullRequests={pullRequests}
