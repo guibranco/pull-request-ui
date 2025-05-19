@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Loader2, GitPullRequest, GitFork, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Loader2, GitPullRequest, GitFork, ExternalLink, User } from 'lucide-react';
 import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
 import { PayloadModal } from '../components/timeline/PayloadModal';
@@ -181,22 +181,41 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
             </div>
             
             {pullRequestInfo && (
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <GitPullRequest className={`w-5 h-5 ${pullRequestInfo.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`} />
-                  <span className="text-xl font-medium text-gray-100">
-                    #{pr} {pullRequestInfo.title}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <GitPullRequest className={`w-5 h-5 ${pullRequestInfo.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`} />
+                    <span className="text-xl font-medium text-gray-100">
+                      #{pr} {pullRequestInfo.title}
+                    </span>
+                  </div>
+                  <a
+                    href={githubPrUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span className="text-sm">View on GitHub</span>
+                  </a>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  {pullRequestInfo.sender_avatar ? (
+                    <img
+                      src={pullRequestInfo.sender_avatar}
+                      alt={`${pullRequestInfo.sender}'s avatar`}
+                      className="w-6 h-6 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
+                      <User className="w-4 h-4 text-gray-400" />
+                    </div>
+                  )}
+                  <span className="text-sm text-gray-300">
+                    {pullRequestInfo.sender}
                   </span>
                 </div>
-                <a
-                  href={githubPrUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  <span className="text-sm">View on GitHub</span>
-                </a>
               </div>
             )}
           </div>
