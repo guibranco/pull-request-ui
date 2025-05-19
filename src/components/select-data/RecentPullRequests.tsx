@@ -73,14 +73,10 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
           const timelineUrl = `#${pr.owner}/${pr.name}/${pr.number}`;
           
           return (
-            <a
+            <div
               key={`${pr.owner}/${pr.name}#${pr.number}`}
-              href={timelineUrl}
-              onClick={(e) => {
-                e.preventDefault();
-                onSelect(pr.owner, pr.name, pr.number.toString());
-              }}
-              className="block bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group"
+              onClick={() => onSelect(pr.owner, pr.name, pr.number.toString())}
+              className="block bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group cursor-pointer"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -123,16 +119,12 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
               </div>
 
               <div className="mt-4 flex items-center justify-between">
-                <a
-                  href={timelineUrl}
+                <button
+                  onClick={() => onSelect(pr.owner, pr.name, pr.number.toString())}
                   className="text-blue-400 hover:text-blue-300 transition-colors text-sm"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onSelect(pr.owner, pr.name, pr.number.toString());
-                  }}
                 >
                   View Timeline
-                </a>
+                </button>
                 <a
                   href={githubUrl}
                   target="_blank"
@@ -144,7 +136,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
-            </a>
+            </div>
           );
         })}
       </div>
