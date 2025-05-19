@@ -11,7 +11,7 @@ interface RecentPullRequestsProps {
 export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPullRequestsProps) {
   const [showOpenOnly, setShowOpenOnly] = useState(() => {
     const saved = localStorage.getItem('showOpenPRsOnly');
-    return saved ? JSON.parse(saved) : false;
+    return saved ? JSON.parse(saved) : true;
   });
 
   const formatDate = (dateString: string) => {
