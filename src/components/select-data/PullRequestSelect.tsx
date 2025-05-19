@@ -55,23 +55,8 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
           >
             <option value="" className="text-gray-400">Select a pull request</option>
             {filteredPullRequests.map((pr) => (
-              <option key={pr.number} value={pr.number.toString()} className="flex items-center gap-2 py-2">
-                <div className={`flex items-center gap-2 ${pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`}>
-                  <div className="flex items-center gap-2">
-                    {pr.sender_avatar ? (
-                      <img
-                        src={pr.sender_avatar}
-                        alt={pr.sender}
-                        className="w-6 h-6 rounded-full inline-block"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center inline-block">
-                        <User className="w-4 h-4 text-gray-400" />
-                      </div>
-                    )}
-                    #{pr.number} - {pr.title} ({pr.sender})
-                  </div>
-                </div>
+              <option key={pr.number} value={pr.number.toString()}>
+                #{pr.number} - {pr.title} ({pr.sender})
               </option>
             ))}
           </select>

@@ -53,7 +53,7 @@ export function RepositorySelect({ repositories, selectedRepo, onChange, disable
           >
             <option value="" className="text-gray-400">Select a repository</option>
             {filteredRepositories.map((repo) => (
-              <option key={repo.id} value={repo.full_name} className="text-gray-100 bg-gray-700">
+              <option key={repo.id} value={repo.full_name}>
                 {repo.full_name}
               </option>
             ))}
