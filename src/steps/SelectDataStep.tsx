@@ -125,8 +125,7 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
   };
 
   const handleBackToApiKey = () => {
-    window.location.hash = '';
-    window.location.reload();
+    window.location.hash = '#/api-key';
   };
 
   const handleRepoChange = (repo: string) => {
