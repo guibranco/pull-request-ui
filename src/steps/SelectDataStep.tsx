@@ -8,13 +8,14 @@ import type { Repository, PullRequest, RecentPullRequest } from '../types';
 interface SelectDataStepProps {
   apiKey: string;
   onSelect: (repo: string, pr: string) => void;
+  preselectedRepo?: string;
 }
 
-export function SelectDataStep({ apiKey, onSelect }: SelectDataStepProps) {
+export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectDataStepProps) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [recentPullRequests, setRecentPullRequests] = useState<RecentPullRequest[]>([]);
-  const [selectedRepo, setSelectedRepo] = useState('');
+  const [selectedRepo, setSelectedRepo] = useState(preselectedRepo || '');
   const [selectedPR, setSelectedPR] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingRecent, setLoadingRecent] = useState(false);
@@ -125,6 +126,14 @@ export function SelectDataStep({ apiKey, onSelect }: SelectDataStepProps) {
     setSelectedPR('');
     setPullRequests([]);
     setError(null);
+
+    // Update hash with repository info
+    if (repo) {
+      const [owner, repoName] = repo.split('/');
+      window.location.hash = `${owner}/${repoName}`;
+    } else {
+      window.location.hash = '';
+    }
   };
 
   const handleRecentSelect = (owner: string, repo: string, pr: string) => {

@@ -18,6 +18,21 @@ function App() {
     if (storedApiKey) {
       setApiKey(storedApiKey);
       setCurrentStep('select-data');
+
+      // Parse hash parameters
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const [owner, repo, pr] = hash.split('/');
+        if (owner && repo) {
+          const fullRepo = `${owner}/${repo}`;
+          setSelectedRepo(fullRepo);
+          
+          if (pr) {
+            setSelectedPR(pr);
+            setCurrentStep('timeline');
+          }
+        }
+      }
     }
   }, []);
 
@@ -31,10 +46,22 @@ function App() {
     setSelectedRepo(repo);
     setSelectedPR(pr);
     setCurrentStep('timeline');
+    
+    // Update hash
+    const [owner, repoName] = repo.split('/');
+    window.location.hash = `${owner}/${repoName}/${pr}`;
   };
 
   const handleBackToSelect = () => {
     setCurrentStep('select-data');
+    
+    // Update hash to keep only repository info
+    if (selectedRepo) {
+      const [owner, repo] = selectedRepo.split('/');
+      window.location.hash = `${owner}/${repo}`;
+    } else {
+      window.location.hash = '';
+    }
   };
 
   return (
@@ -49,6 +76,7 @@ function App() {
           <SelectDataStep
             apiKey={apiKey}
             onSelect={handleDataSelection}
+            preselectedRepo={selectedRepo}
           />
         )}
         {currentStep === 'timeline' && (
