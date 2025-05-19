@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Key, LogOut, AlertCircle } from 'lucide-react';
+import { Key, LogOut, AlertCircle, Lock, Unlock } from 'lucide-react';
 
 interface ApiKeyStepProps {
   onSubmit: (apiKey: string) => void;
 }
 
 export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('apiKey') || '');
+  const [isEditing, setIsEditing] = useState(!apiKey);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,9 +25,9 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
     onSubmit(apiKey);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('apiKey');
-    window.location.reload();
+  const handleClearApiKey = () => {
+    setApiKey('');
+    setIsEditing(true);
   };
 
   return (
@@ -36,7 +37,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
           <Key className="w-8 h-8 text-blue-400" />
         </div>
         <h2 className="text-3xl font-bold text-center text-gray-100 mb-8">
-          Enter API Key
+          API Key
         </h2>
 
         {error && (
@@ -54,31 +55,40 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
             >
               API Key
             </label>
-            <input
-              type="password"
-              id="apiKey"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100 text-lg"
-              placeholder="Enter your API key"
-              required
-            />
+            <div className="relative">
+              <input
+                type="password"
+                id="apiKey"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                disabled={!isEditing}
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
+                placeholder="Enter your API key"
+                required
+              />
+              {!isEditing && (
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <Lock className="w-5 h-5 text-gray-400" />
+                </div>
+              )}
+            </div>
           </div>
           <div className="space-y-3">
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
-            >
-              Continue
-            </button>
-            {localStorage.getItem('apiKey') && (
+            {isEditing ? (
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
+              >
+                Continue
+              </button>
+            ) : (
               <button
                 type="button"
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all"
+                onClick={handleClearApiKey}
+                className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all space-x-2"
               >
-                <LogOut className="w-5 h-5 mr-2" />
-                Logout
+                <Unlock className="w-5 h-5" />
+                <span>Change API Key</span>
               </button>
             )}
           </div>
