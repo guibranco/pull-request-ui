@@ -73,10 +73,10 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
           const timelineUrl = `#${pr.owner}/${pr.name}/${pr.number}`;
           
           return (
-            <div
+            <a
               key={`${pr.owner}/${pr.name}#${pr.number}`}
-              onClick={() => onSelect(pr.owner, pr.name, pr.number.toString())}
-              className="block bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group cursor-pointer"
+              href={timelineUrl}
+              className="block bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -118,13 +118,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-between">
-                <button
-                  onClick={() => onSelect(pr.owner, pr.name, pr.number.toString())}
-                  className="text-blue-400 hover:text-blue-300 transition-colors text-sm"
-                >
-                  View Timeline
-                </button>
+              <div className="mt-4 flex items-center justify-end">
                 <a
                   href={githubUrl}
                   target="_blank"
@@ -136,7 +130,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
-            </div>
+            </a>
           );
         })}
       </div>
