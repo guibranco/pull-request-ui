@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { GitPullRequest, Search, User } from 'lucide-react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { GitPullRequest, Search, User, ChevronDown } from 'lucide-react';
 import { PullRequest } from '../../types';
 
 interface PullRequestSelectProps {
@@ -11,6 +11,8 @@ interface PullRequestSelectProps {
 
 export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled }: Readonly<PullRequestSelectProps>) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const filteredPullRequests = useMemo(() => {
     if (!searchQuery) return pullRequests;
@@ -23,6 +25,22 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
     );
   }, [pullRequests, searchQuery]);
 
+  const selectedPullRequest = useMemo(() => 
+    pullRequests.find(pr => pr.number.toString() === selectedPR),
+    [pullRequests, selectedPR]
+  );
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="mb-6">
       <label
@@ -31,57 +49,94 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
       >
         Pull Request
       </label>
-      <div className="relative">
-        <div className="relative">
+      <div className="relative" ref={dropdownRef}>
+        <div 
+          className={`relative cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+        >
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-          <select
-            id="pullRequest"
-            value={selectedPR}
-            onChange={(e) => {
-              onChange(e.target.value);
-              setSearchQuery('');
-            }}
-            onKeyDown={(e) => {
-              if (e.key.length === 1) {
-                setSearchQuery(prev => prev + e.key);
-              }
-            }}
-            className={`w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm appearance-none
-              focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100
-              disabled:opacity-50 disabled:cursor-not-allowed
+          <div
+            className={`w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm
+              focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500
               ${selectedPR ? 'text-gray-100' : 'text-gray-400'}`}
-            required
-            disabled={disabled}
-            dangerouslySetInnerHTML={{
-              __html: `
-                <option value="" class="text-gray-400">Select a pull request</option>
-                ${filteredPullRequests.map(pr => `
-                  <option value="${pr.number}" class="${pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}">
-                    <div class="flex items-center space-x-2">
-                      ${pr.sender_avatar ? `
-                        <img src="${pr.sender_avatar}" alt="${pr.sender}" class="w-4 h-4 rounded-full" />
-                      ` : `
-                        <span class="w-4 h-4 rounded-full bg-gray-700 flex items-center justify-center">
-                          <svg class="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                          </svg>
-                        </span>
-                      `}
-                      <span>#${pr.number} - ${pr.title}</span>
-                      <span class="text-gray-400">(${pr.sender})</span>
-                    </div>
-                  </option>
-                `).join('')}
-              `
-            }}
-          />
+          >
+            {selectedPullRequest ? (
+              <div className="flex items-center space-x-3">
+                {selectedPullRequest.sender_avatar ? (
+                  <img
+                    src={selectedPullRequest.sender_avatar}
+                    alt={selectedPullRequest.sender}
+                    className="w-6 h-6 rounded-full"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center">
+                    <User className="w-4 h-4 text-gray-400" />
+                  </div>
+                )}
+                <span className={selectedPullRequest.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}>
+                  #{selectedPullRequest.number} - {selectedPullRequest.title}
+                </span>
+                <span className="text-gray-400">({selectedPullRequest.sender})</span>
+              </div>
+            ) : (
+              'Select a pull request'
+            )}
+          </div>
           <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
-            <GitPullRequest className="w-5 h-5" />
+            <ChevronDown className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
           </div>
         </div>
-        {filteredPullRequests.length === 0 && (
-          <p className="text-sm text-gray-400 mt-2">No pull requests found matching your search.</p>
+
+        {isOpen && !disabled && (
+          <div className="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-2 bg-gray-800 border-b border-gray-600 rounded-t-lg focus:outline-none text-gray-100"
+              placeholder="Search pull requests..."
+              onClick={(e) => e.stopPropagation()}
+            />
+            {filteredPullRequests.length === 0 ? (
+              <div className="p-4 text-gray-400 text-center">
+                No pull requests found
+              </div>
+            ) : (
+              <div className="py-1">
+                {filteredPullRequests.map((pr) => (
+                  <div
+                    key={pr.number}
+                    className={`px-4 py-2 hover:bg-gray-600 cursor-pointer ${
+                      pr.number.toString() === selectedPR ? 'bg-gray-600' : ''
+                    }`}
+                    onClick={() => {
+                      onChange(pr.number.toString());
+                      setIsOpen(false);
+                      setSearchQuery('');
+                    }}
+                  >
+                    <div className="flex items-center space-x-3">
+                      {pr.sender_avatar ? (
+                        <img
+                          src={pr.sender_avatar}
+                          alt={pr.sender}
+                          className="w-6 h-6 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center">
+                          <User className="w-4 h-4 text-gray-400" />
+                        </div>
+                      )}
+                      <span className={pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}>
+                        #{pr.number} - {pr.title}
+                      </span>
+                      <span className="text-gray-400">({pr.sender})</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>
