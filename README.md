@@ -1,4 +1,4 @@
-# 🏗️ GitHub Webhooks UI
+# 🏗️ Pull Request Flow Viewer
 
 A sleek and interactive UI to visualize GitHub webhook events for pull requests! 🚀
 
@@ -84,6 +84,8 @@ Before using the app, ensure you have the **GitHub API URL** set up. The API URL
  │
  └── 📂 utils
      ├── 📄 avatar.ts
+     ├── 📄 events.ts
+     ├── 📄 jsonTree.ts
 ```
 
 ## 📡 API Usage
