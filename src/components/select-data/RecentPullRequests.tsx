@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitPullRequest, Clock, User, ExternalLink } from 'lucide-react';
+import { GitPullRequest, Clock, User } from 'lucide-react';
 import { RecentPullRequest } from '../../types';
 
 interface RecentPullRequestsProps {
@@ -69,7 +69,6 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
       </div>
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filteredPullRequests.map((pr) => {
-          const githubUrl = `https://github.com/${pr.owner}/${pr.name}/pull/${pr.number}`;
           const timelineUrl = `#${pr.owner}/${pr.name}/${pr.number}`;
           
           return (
@@ -116,19 +115,6 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
                     {pr.sender}
                   </span>
                 </div>
-              </div>
-
-              <div className="mt-4 flex items-center justify-end">
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-1 text-gray-400 hover:text-gray-300 transition-colors text-sm"
-                  onClick={e => e.stopPropagation()}
-                >
-                  <span>View on GitHub</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
               </div>
             </a>
           );
