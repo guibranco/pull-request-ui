@@ -10,6 +10,8 @@ export interface PullRequest {
   number: number;
   title: string;
   state: 'OPEN' | 'CLOSED';
+  sender: string;
+  sender_avatar: string;
 }
 
 export interface RecentPullRequest {
