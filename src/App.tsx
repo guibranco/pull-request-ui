@@ -17,11 +17,16 @@ function App() {
     const storedApiKey = localStorage.getItem('apiKey');
     if (storedApiKey) {
       setApiKey(storedApiKey);
-      setCurrentStep('select-data');
+
+      // Check if we're explicitly on the API key screen
+      if (window.location.hash === '#/api-key') {
+        setCurrentStep('api-key');
+        return;
+      }
 
       // Parse hash parameters
       const hash = window.location.hash.slice(1);
-      if (hash) {
+      if (hash && hash !== '/api-key') {
         const [owner, repo, pr] = hash.split('/');
         if (owner && repo) {
           const fullRepo = `${owner}/${repo}`;
@@ -30,8 +35,14 @@ function App() {
           if (pr) {
             setSelectedPR(pr);
             setCurrentStep('timeline');
+          } else {
+            setCurrentStep('select-data');
           }
+        } else {
+          setCurrentStep('select-data');
         }
+      } else {
+        setCurrentStep('select-data');
       }
     }
   }, []);
@@ -40,6 +51,7 @@ function App() {
     localStorage.setItem('apiKey', key);
     setApiKey(key);
     setCurrentStep('select-data');
+    window.location.hash = '';
   };
 
   const handleDataSelection = (repo: string, pr: string) => {
