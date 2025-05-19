@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Key, LogOut, AlertCircle, Lock, Unlock } from 'lucide-react';
+import { Key, LogOut, AlertCircle, Lock, Unlock, ArrowRight } from 'lucide-react';
 
 interface ApiKeyStepProps {
   onSubmit: (apiKey: string) => void;
@@ -28,6 +28,10 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
   const handleClearApiKey = () => {
     setApiKey('');
     setIsEditing(true);
+  };
+
+  const handleContinue = () => {
+    onSubmit(apiKey);
   };
 
   return (
@@ -82,14 +86,24 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
                 Continue
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={handleClearApiKey}
-                className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all space-x-2"
-              >
-                <Unlock className="w-5 h-5" />
-                <span>Change API Key</span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handleContinue}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <span>Continue to Select Data</span>
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClearApiKey}
+                  className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all space-x-2"
+                >
+                  <Unlock className="w-5 h-5" />
+                  <span>Change API Key</span>
+                </button>
+              </>
             )}
           </div>
         </form>
