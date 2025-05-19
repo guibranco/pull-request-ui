@@ -70,11 +70,17 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filteredPullRequests.map((pr) => {
           const githubUrl = `https://github.com/${pr.owner}/${pr.name}/pull/${pr.number}`;
+          const timelineUrl = `#${pr.owner}/${pr.name}/${pr.number}`;
           
           return (
-            <div
+            <a
               key={`${pr.owner}/${pr.name}#${pr.number}`}
-              className="bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group"
+              href={timelineUrl}
+              onClick={(e) => {
+                e.preventDefault();
+                onSelect(pr.owner, pr.name, pr.number.toString());
+              }}
+              className="block bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -117,12 +123,16 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
               </div>
 
               <div className="mt-4 flex items-center justify-between">
-                <button
-                  onClick={() => onSelect(pr.owner, pr.name, pr.number.toString())}
+                <a
+                  href={timelineUrl}
                   className="text-blue-400 hover:text-blue-300 transition-colors text-sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSelect(pr.owner, pr.name, pr.number.toString());
+                  }}
                 >
                   View Timeline
-                </button>
+                </a>
                 <a
                   href={githubUrl}
                   target="_blank"
@@ -134,7 +144,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading, error, onR
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
-            </div>
+            </a>
           );
         })}
       </div>
