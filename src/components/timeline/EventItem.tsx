@@ -1,7 +1,6 @@
 import React from 'react';
-import { Calendar, Code, User, Globe } from 'lucide-react';
+import { Calendar, Code, User } from 'lucide-react';
 import { Event } from '../../types';
-import { getAppAvatarUrl } from '../../utils/avatar';
 
 interface EventItemProps {
   readonly event: Event;
@@ -96,7 +95,6 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     }
   };
 
-  const appData = event.payload[event.type]?.app;
   const conclusion = getEventConclusion(event);
 
   return (
@@ -125,46 +123,25 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
           </span>
         </div>
       </div>
-      
-      <div className="flex items-center space-x-4 mt-2 mb-3">
-        {appData && (
-          <div className="flex items-center space-x-3">
-            {appData.id ? (
-              <img
-                src={getAppAvatarUrl(appData.id)}
-                alt={`${appData.name}'s avatar`}
-                className="w-6 h-6 rounded-sm"
-              />
-            ) : (
-              <div className="w-6 h-6 rounded-sm bg-gray-700 flex items-center justify-center">
-                <Globe className="w-4 h-4 text-gray-400" />
-              </div>
-            )}
-            <span className="text-sm text-gray-300">
-              {appData.name}
-            </span>
-          </div>
-        )}
-        
-        {event.payload.sender && (
-          <div className="flex items-center space-x-3">
-            {event.payload.sender.avatar_url ? (
-              <img
-                src={event.payload.sender.avatar_url}
-                alt={`${event.payload.sender.login}'s avatar`}
-                className="w-6 h-6 rounded-full"
-              />
-            ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
-                <User className="w-4 h-4 text-gray-400" />
-              </div>
-            )}
-            <span className="text-sm text-gray-300">
-              {event.payload.sender.login}
-            </span>
-          </div>
-        )}
-      </div>
+
+      {event.payload.sender && (
+        <div className="flex items-center space-x-3 mb-3">
+          {event.payload.sender.avatar_url ? (
+            <img
+              src={event.payload.sender.avatar_url}
+              alt={`${event.payload.sender.login}'s avatar`}
+              className="w-6 h-6 rounded-full"
+            />
+          ) : (
+            <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-400" />
+            </div>
+          )}
+          <span className="text-sm text-gray-300">
+            {event.payload.sender.login}
+          </span>
+        </div>
+      )}
 
       <div className="flex items-center justify-end mt-3">
         <button
