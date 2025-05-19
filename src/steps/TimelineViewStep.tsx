@@ -84,8 +84,8 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
   }, [fetchEvents, fetchPullRequestInfo]);
 
   const handleRefresh = useCallback(async () => {
-    await fetchEvents();
-  }, [fetchEvents]);
+    await Promise.all([fetchEvents(), fetchPullRequestInfo()]);
+  }, [fetchEvents, fetchPullRequestInfo]);
 
   const toggleExpand = (id: string) => {
     setExpandedItems(prev => {
