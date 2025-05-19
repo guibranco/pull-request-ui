@@ -124,8 +124,8 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
     onSelect(selectedRepo, selectedPR);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('apiKey');
+  const handleBackToApiKey = () => {
+    window.location.hash = '';
     window.location.reload();
   };
 
@@ -175,7 +175,7 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
     <div className="max-w-7xl mx-auto space-y-8">
       <div className="flex items-center justify-between">
         <button
-          onClick={handleLogout}
+          onClick={handleBackToApiKey}
           className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
