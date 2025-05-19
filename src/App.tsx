@@ -27,7 +27,7 @@ function App() {
       // Parse hash parameters
       const hash = window.location.hash.slice(1);
       if (hash && hash !== '/api-key') {
-        const [owner, repo, pr] = hash.split('/');
+        const [owner, repo, pr] = hash.split('/').filter(Boolean);
         if (owner && repo) {
           const fullRepo = `${owner}/${repo}`;
           setSelectedRepo(fullRepo);
@@ -45,6 +45,18 @@ function App() {
         setCurrentStep('select-data');
       }
     }
+  }, []);
+
+  // Listen for hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#/api-key') {
+        setCurrentStep('api-key');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const handleApiKeySubmit = (key: string) => {
