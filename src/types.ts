@@ -9,6 +9,7 @@ export interface PullRequest {
   date: string;
   number: number;
   title: string;
+  state: 'OPEN' | 'CLOSED';
 }
 
 export interface RecentPullRequest {
@@ -19,6 +20,7 @@ export interface RecentPullRequest {
   title: string;
   sender: string;
   sender_avatar: string;
+  state: 'OPEN' | 'CLOSED';
 }
 
 export interface AppData {

@@ -183,7 +183,7 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
             {pullRequestInfo && (
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                  <GitPullRequest className="w-5 h-5 text-green-400" />
+                  <GitPullRequest className={`w-5 h-5 ${pullRequestInfo.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`} />
                   <span className="text-xl font-medium text-gray-100">
                     #{pr} {pullRequestInfo.title}
                   </span>

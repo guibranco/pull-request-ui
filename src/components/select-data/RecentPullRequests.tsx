@@ -51,7 +51,7 @@ export function RecentPullRequests({ pullRequests, onSelect, loading }: RecentPu
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <GitPullRequest className="w-4 h-4 text-green-400 shrink-0" />
+                <GitPullRequest className={`w-4 h-4 ${pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'} shrink-0`} />
                 <span>#{pr.number}</span>
               </div>
               <div className="flex items-center space-x-2">
