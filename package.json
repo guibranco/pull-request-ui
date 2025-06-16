@@ -16,7 +16,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "lodash-es": "^4.17.21",
-    "lucide-react": "^0.513.0",
+    "lucide-react": "^0.515.0",
     "mermaid": "^11.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
@@ -36,9 +36,9 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
-    "happy-dom": "^17.6.3",
+    "happy-dom": "^18.0.1",
     "jsdom": "^26.1.0",
-    "postcss": "^8.5.5",
+    "postcss": "^8.5.6",
     "prettier": "^3.5.3",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
