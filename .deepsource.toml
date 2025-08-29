@@ -10,5 +10,8 @@ name = "javascript"
     "browser"
   ]
 
+[[analyzers]]
+name = "secrets"
+
 [[transformers]]
 name = "prettier"
