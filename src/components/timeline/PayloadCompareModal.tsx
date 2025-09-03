@@ -9,8 +9,14 @@ interface PayloadCompareModalProps {
   readonly onClose: () => void;
 }
 
-export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Readonly<PayloadCompareModalProps>) {
-  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(['']));
+export function PayloadCompareModal({
+  leftPayload,
+  rightPayload,
+  onClose,
+}: Readonly<PayloadCompareModalProps>) {
+  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
+    new Set([''])
+  );
   const [showDifferencesOnly, setShowDifferencesOnly] = useState(false);
 
   const handleToggle = (path: string) => {
@@ -43,7 +49,9 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Read
       <div className="bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-[80vh] flex flex-col">
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <h3 className="text-lg font-medium text-gray-100">Compare Payloads</h3>
+            <h3 className="text-lg font-medium text-gray-100">
+              Compare Payloads
+            </h3>
             <ArrowLeftRight className="w-5 h-5 text-gray-400" />
           </div>
           <div className="flex items-center space-x-4">
@@ -51,7 +59,7 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Read
               <input
                 type="checkbox"
                 checked={showDifferencesOnly}
-                onChange={(e) => setShowDifferencesOnly(e.target.checked)}
+                onChange={e => setShowDifferencesOnly(e.target.checked)}
                 className="rounded-sm border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
               />
               <span className="text-gray-300">Show differences only</span>
@@ -79,7 +87,9 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Read
         <div className="p-6 overflow-auto flex-1">
           <div className="grid grid-cols-2 gap-6">
             <div className="font-mono text-sm">
-              <div className="mb-2 text-gray-400 font-semibold">Left Payload</div>
+              <div className="mb-2 text-gray-400 font-semibold">
+                Left Payload
+              </div>
               <JSONView
                 data={leftPayload}
                 expanded={expandedPaths}
@@ -90,7 +100,9 @@ export function PayloadCompareModal({ leftPayload, rightPayload, onClose }: Read
               />
             </div>
             <div className="font-mono text-sm border-l border-gray-700 pl-6">
-              <div className="mb-2 text-gray-400 font-semibold">Right Payload</div>
+              <div className="mb-2 text-gray-400 font-semibold">
+                Right Payload
+              </div>
               <JSONView
                 data={rightPayload}
                 expanded={expandedPaths}

@@ -31,7 +31,7 @@ function App() {
         if (owner && repo) {
           const fullRepo = `${owner}/${repo}`;
           setSelectedRepo(fullRepo);
-          
+
           if (pr) {
             setSelectedPR(pr);
             setCurrentStep('timeline');
@@ -70,7 +70,7 @@ function App() {
     setSelectedRepo(repo);
     setSelectedPR(pr);
     setCurrentStep('timeline');
-    
+
     // Update hash
     const [owner, repoName] = repo.split('/');
     window.location.hash = `${owner}/${repoName}/${pr}`;
@@ -78,7 +78,7 @@ function App() {
 
   const handleBackToSelect = () => {
     setCurrentStep('select-data');
-    
+
     // Update hash to keep only repository info
     if (selectedRepo) {
       const [owner, repo] = selectedRepo.split('/');

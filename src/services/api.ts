@@ -10,14 +10,16 @@ export class ApiService {
   private async fetch<T>(endpoint: string): Promise<T> {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       headers: {
-        'Authorization': `token ${this.apiKey}`,
-        'Accept': 'application/json'
-      }
+        Authorization: `token ${this.apiKey}`,
+        Accept: 'application/json',
+      },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`API Error: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`);
+      throw new Error(
+        `API Error: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`
+      );
     }
 
     const data = await response.json();
@@ -40,7 +42,9 @@ export class ApiService {
 
     if (this.isPullRequestsResponse(data)) {
       if (!Array.isArray(data.pull_requests)) {
-        throw new Error('Invalid response format: pull_requests must be an array');
+        throw new Error(
+          'Invalid response format: pull_requests must be an array'
+        );
       }
       return data as T;
     }
@@ -56,41 +60,73 @@ export class ApiService {
   }
 
   private isRepositoryArray(data: unknown): boolean {
-    return Array.isArray(data) && data.every(item => 
-      item && typeof item === 'object' &&
-      'id' in item && typeof item.id === 'string' &&
-      'owner' in item && typeof item.owner === 'string' &&
-      'name' in item && typeof item.name === 'string' &&
-      'full_name' in item && typeof item.full_name === 'string'
+    return (
+      Array.isArray(data) &&
+      data.every(
+        item =>
+          item &&
+          typeof item === 'object' &&
+          'id' in item &&
+          typeof item.id === 'string' &&
+          'owner' in item &&
+          typeof item.owner === 'string' &&
+          'name' in item &&
+          typeof item.name === 'string' &&
+          'full_name' in item &&
+          typeof item.full_name === 'string'
+      )
     );
   }
 
   private isRecentPullRequestsArray(data: unknown): boolean {
-    return Array.isArray(data) && data.every(item =>
-      item && typeof item === 'object' &&
-      'date' in item && typeof item.date === 'string' &&
-      'owner' in item && typeof item.owner === 'string' &&
-      'name' in item && typeof item.name === 'string' &&
-      'number' in item && typeof item.number === 'number' &&
-      'title' in item && typeof item.title === 'string' &&
-      'sender' in item && typeof item.sender === 'string' &&
-      'sender_avatar' in item && typeof item.sender_avatar === 'string'
+    return (
+      Array.isArray(data) &&
+      data.every(
+        item =>
+          item &&
+          typeof item === 'object' &&
+          'date' in item &&
+          typeof item.date === 'string' &&
+          'owner' in item &&
+          typeof item.owner === 'string' &&
+          'name' in item &&
+          typeof item.name === 'string' &&
+          'number' in item &&
+          typeof item.number === 'number' &&
+          'title' in item &&
+          typeof item.title === 'string' &&
+          'sender' in item &&
+          typeof item.sender === 'string' &&
+          'sender_avatar' in item &&
+          typeof item.sender_avatar === 'string'
+      )
     );
   }
 
   private isPullRequestsResponse(data: unknown): boolean {
-    return data && typeof data === 'object' &&
-      'owner' in data && typeof data.owner === 'string' &&
-      'repo' in data && typeof data.repo === 'string' &&
-      'pull_requests' in data;
+    return (
+      data &&
+      typeof data === 'object' &&
+      'owner' in data &&
+      typeof data.owner === 'string' &&
+      'repo' in data &&
+      typeof data.repo === 'string' &&
+      'pull_requests' in data
+    );
   }
 
   private isEventsResponse(data: unknown): boolean {
-    return data && typeof data === 'object' &&
-      'owner' in data && typeof data.owner === 'string' &&
-      'repo' in data && typeof data.repo === 'string' &&
-      'pull_request' in data && typeof data.pull_request === 'number' &&
-      'events' in data;
+    return (
+      data &&
+      typeof data === 'object' &&
+      'owner' in data &&
+      typeof data.owner === 'string' &&
+      'repo' in data &&
+      typeof data.repo === 'string' &&
+      'pull_request' in data &&
+      typeof data.pull_request === 'number' &&
+      'events' in data
+    );
   }
 
   async getRepositories() {
@@ -98,11 +134,15 @@ export class ApiService {
   }
 
   async getPullRequests(owner: string, repo: string) {
-    return this.fetch<PullRequestsResponse>(`/repositories/${owner}/${repo}/pulls`);
+    return this.fetch<PullRequestsResponse>(
+      `/repositories/${owner}/${repo}/pulls`
+    );
   }
 
   async getEvents(owner: string, repo: string, pr: string) {
-    return this.fetch<EventsResponse>(`/repositories/${owner}/${repo}/pulls/${pr}`);
+    return this.fetch<EventsResponse>(
+      `/repositories/${owner}/${repo}/pulls/${pr}`
+    );
   }
 
   async getRecentPullRequests() {
@@ -111,4 +151,11 @@ export class ApiService {
 }
 
 // Re-export types for convenience
-export type { Repository, PullRequest, Event, EventsResponse, PullRequestsResponse, RecentPullRequest } from '../types';
+export type {
+  Repository,
+  PullRequest,
+  Event,
+  EventsResponse,
+  PullRequestsResponse,
+  RecentPullRequest,
+} from '../types';
