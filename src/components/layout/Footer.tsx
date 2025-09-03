@@ -23,7 +23,9 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm text-gray-400">
-                  Developed with <Heart className="w-4 h-4 inline text-red-500 animate-pulse" /> by
+                  Developed with{' '}
+                  <Heart className="w-4 h-4 inline text-red-500 animate-pulse" />{' '}
+                  by
                 </span>
                 <span className="text-lg font-medium text-gray-200 group-hover:text-primary transition-colors">
                   Guilherme Branco Stracini
@@ -50,7 +52,8 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
           <p>
-            © {new Date().getFullYear()} Pull Request Flow Viewer. All rights reserved.
+            © {new Date().getFullYear()} Pull Request Flow Viewer. All rights
+            reserved.
           </p>
         </div>
       </div>

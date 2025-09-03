@@ -9,7 +9,10 @@ interface BulletDiagramProps {
   readonly onViewPayload: (payload: Record<string, unknown>) => void;
 }
 
-export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramProps>) {
+export function BulletDiagram({
+  events,
+  onViewPayload,
+}: Readonly<BulletDiagramProps>) {
   const formatDateTime = (date: string) => {
     return new Date(date).toLocaleString(undefined, {
       year: 'numeric',
@@ -17,7 +20,7 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit'
+      second: '2-digit',
     });
   };
 
@@ -46,7 +49,7 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
 
   const getEventColor = (event: Event): string => {
     // Check for conclusion in various payload types
-    const conclusion = 
+    const conclusion =
       event.payload.check_run?.conclusion ||
       event.payload.check_suite?.conclusion ||
       event.payload.status?.state ||
@@ -56,10 +59,10 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
 
     if (!conclusion) {
       // Check for status in workflow events
-      const status = 
+      const status =
         event.payload.workflow_run?.status ||
         event.payload.workflow_job?.status;
-      
+
       if (status) {
         switch (status.toLowerCase()) {
           case 'completed':
@@ -96,7 +99,7 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
             return 'bg-blue-400';
         }
       }
-      
+
       return 'bg-blue-400';
     }
 
@@ -140,9 +143,11 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
         <div className="flex items-center space-x-2 min-h-[160px] py-4">
           {sortedEvents.map((event, index) => {
             const appData = event.payload[event.type]?.app;
-            
+
             return (
-              <React.Fragment key={`${event.delivery_id}-${event.type}-${event.action}`}>
+              <React.Fragment
+                key={`${event.delivery_id}-${event.type}-${event.action}`}
+              >
                 {index > 0 && (
                   <div className="h-[2px] w-16 bg-gray-700 relative">
                     <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500">
@@ -194,7 +199,9 @@ export function BulletDiagram({ events, onViewPayload }: Readonly<BulletDiagramP
                     className="group flex flex-col items-center hover:scale-105 transition-transform"
                     title="View event payload"
                   >
-                    <div className={`w-4 h-4 ${getEventColor(event)} rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-1 group-hover:ring-offset-gray-900 transition-all`}>
+                    <div
+                      className={`w-4 h-4 ${getEventColor(event)} rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-1 group-hover:ring-offset-gray-900 transition-all`}
+                    >
                       <Circle className="w-3 h-3 text-gray-900" />
                     </div>
                     <div className="flex flex-col items-center">

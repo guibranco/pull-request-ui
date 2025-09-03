@@ -9,30 +9,39 @@ interface PullRequestSelectProps {
   readonly disabled: boolean;
 }
 
-export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled }: Readonly<PullRequestSelectProps>) {
+export function PullRequestSelect({
+  pullRequests,
+  selectedPR,
+  onChange,
+  disabled,
+}: Readonly<PullRequestSelectProps>) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const filteredPullRequests = useMemo(() => {
     if (!searchQuery) return pullRequests;
-    
+
     const query = searchQuery.toLowerCase();
-    return pullRequests.filter(pr => 
-      pr.title.toLowerCase().includes(query) ||
-      pr.number.toString().includes(query) ||
-      pr.sender.toLowerCase().includes(query)
+    return pullRequests.filter(
+      pr =>
+        pr.title.toLowerCase().includes(query) ||
+        pr.number.toString().includes(query) ||
+        pr.sender.toLowerCase().includes(query)
     );
   }, [pullRequests, searchQuery]);
 
-  const selectedPullRequest = useMemo(() => 
-    pullRequests.find(pr => pr.number.toString() === selectedPR),
+  const selectedPullRequest = useMemo(
+    () => pullRequests.find(pr => pr.number.toString() === selectedPR),
     [pullRequests, selectedPR]
   );
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
@@ -50,7 +59,7 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
         Pull Request
       </label>
       <div className="relative" ref={dropdownRef}>
-        <div 
+        <div
           className={`relative cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={() => !disabled && setIsOpen(!isOpen)}
         >
@@ -73,17 +82,27 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
                     <User className="w-4 h-4 text-gray-400" />
                   </div>
                 )}
-                <span className={selectedPullRequest.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}>
+                <span
+                  className={
+                    selectedPullRequest.state === 'OPEN'
+                      ? 'text-green-400'
+                      : 'text-red-400'
+                  }
+                >
                   #{selectedPullRequest.number} - {selectedPullRequest.title}
                 </span>
-                <span className="text-gray-400">({selectedPullRequest.sender})</span>
+                <span className="text-gray-400">
+                  ({selectedPullRequest.sender})
+                </span>
               </div>
             ) : (
               'Select a pull request'
             )}
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
-            <ChevronDown className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            />
           </div>
         </div>
 
@@ -92,10 +111,10 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               className="w-full px-4 py-2 bg-gray-800 border-b border-gray-600 rounded-t-lg focus:outline-none text-gray-100"
               placeholder="Search pull requests..."
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             />
             {filteredPullRequests.length === 0 ? (
               <div className="p-4 text-gray-400 text-center">
@@ -103,7 +122,7 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
               </div>
             ) : (
               <div className="py-1">
-                {filteredPullRequests.map((pr) => (
+                {filteredPullRequests.map(pr => (
                   <div
                     key={pr.number}
                     className={`px-4 py-2 hover:bg-gray-600 cursor-pointer ${
@@ -127,7 +146,13 @@ export function PullRequestSelect({ pullRequests, selectedPR, onChange, disabled
                           <User className="w-4 h-4 text-gray-400" />
                         </div>
                       )}
-                      <span className={pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}>
+                      <span
+                        className={
+                          pr.state === 'OPEN'
+                            ? 'text-green-400'
+                            : 'text-red-400'
+                        }
+                      >
                         #{pr.number} - {pr.title}
                       </span>
                       <span className="text-gray-400">({pr.sender})</span>

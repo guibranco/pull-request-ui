@@ -36,8 +36,10 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
     return '';
   };
 
-  const getEventConclusion = (event: Event): { text: string; color: string } | null => {
-    const conclusion = 
+  const getEventConclusion = (
+    event: Event
+  ): { text: string; color: string } | null => {
+    const conclusion =
       event.payload.check_run?.conclusion ||
       event.payload.check_suite?.conclusion ||
       event.payload.status?.state ||
@@ -46,18 +48,21 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
       event.payload.workflow_job?.conclusion;
 
     if (!conclusion) {
-      const status = 
+      const status =
         event.payload.workflow_run?.status ||
         event.payload.workflow_job?.status ||
         event.payload.check_suite?.status ||
         event.payload.check_run?.status;
-      
+
       if (status) {
         switch (status.toLowerCase()) {
           case 'completed':
             return { text: 'Completed', color: 'bg-green-400 text-green-900' };
           case 'in_progress':
-            return { text: 'In Progress', color: 'bg-yellow-400 text-yellow-900' };
+            return {
+              text: 'In Progress',
+              color: 'bg-yellow-400 text-yellow-900',
+            };
           case 'queued':
             return { text: 'Queued', color: 'bg-blue-400 text-blue-900' };
           case 'waiting':
@@ -114,7 +119,9 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
         </div>
         <div className="flex items-center space-x-3">
           {conclusion && (
-            <span className={`px-2 py-1 rounded-sm text-sm font-medium ${conclusion.color}`}>
+            <span
+              className={`px-2 py-1 rounded-sm text-sm font-medium ${conclusion.color}`}
+            >
               {conclusion.text}
             </span>
           )}

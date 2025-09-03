@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Loader2, GitPullRequest, GitFork, ExternalLink, User } from 'lucide-react';
+import {
+  ArrowLeft,
+  Loader2,
+  GitPullRequest,
+  GitFork,
+  ExternalLink,
+  User,
+} from 'lucide-react';
 import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
 import { PayloadModal } from '../components/timeline/PayloadModal';
@@ -15,16 +22,26 @@ interface TimelineViewStepProps {
   onBack: () => void;
 }
 
-export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepProps) {
+export function TimelineViewStep({
+  apiKey,
+  repo,
+  pr,
+  onBack,
+}: TimelineViewStepProps) {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pullRequestInfo, setPullRequestInfo] = useState<PullRequest | null>(null);
+  const [pullRequestInfo, setPullRequestInfo] = useState<PullRequest | null>(
+    null
+  );
   const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
     const saved = localStorage.getItem('expandedEventTypes');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
-  const [selectedPayload, setSelectedPayload] = useState<Record<string, unknown> | null>(null);
+  const [selectedPayload, setSelectedPayload] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
   const [isSequenceExpanded, setIsSequenceExpanded] = useState(() => {
     const saved = localStorage.getItem('isSequenceExpanded');
     return saved ? JSON.parse(saved) : true;
@@ -36,7 +53,7 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
 
   const fetchPullRequestInfo = useCallback(async () => {
     if (!repo || !pr) return;
-    
+
     const api = new ApiService(apiKey);
     try {
       const [owner, repository] = repo.split('/');
@@ -52,16 +69,16 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
 
   const fetchEvents = useCallback(async () => {
     if (!repo || !pr) return;
-    
+
     const api = new ApiService(apiKey);
     setLoading(true);
     setError(null);
     try {
       const [owner, repository] = repo.split('/');
       const data = await api.getEvents(owner, repository, pr);
-      
-      const sortedEvents = [...data.events].sort((a, b) => 
-        new Date(a.date).getTime() - new Date(b.date).getTime()
+
+      const sortedEvents = [...data.events].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       );
 
       setEvents(sortedEvents);
@@ -70,7 +87,8 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
         setError('No events found for this pull request');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch events';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch events';
       console.error('Pull requests error:', errorMessage);
       setError(errorMessage);
     } finally {
@@ -95,7 +113,10 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
       } else {
         newExpanded.add(id);
       }
-      localStorage.setItem('expandedEventTypes', JSON.stringify([...newExpanded]));
+      localStorage.setItem(
+        'expandedEventTypes',
+        JSON.stringify([...newExpanded])
+      );
       return newExpanded;
     });
   };
@@ -162,10 +183,7 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
           Back to Select Data
         </button>
 
-        <RefreshButton 
-          onRefresh={handleRefresh}
-          isLoading={loading}
-        />
+        <RefreshButton onRefresh={handleRefresh} isLoading={loading} />
       </div>
 
       <div className="bg-gray-800 rounded-lg shadow-lg p-6">
@@ -179,12 +197,14 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
                 <span className="text-blue-400">{repository}</span>
               </span>
             </div>
-            
+
             {pullRequestInfo && (
               <div className="space-y-3">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <GitPullRequest className={`w-5 h-5 ${pullRequestInfo.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`} />
+                    <GitPullRequest
+                      className={`w-5 h-5 ${pullRequestInfo.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`}
+                    />
                     <span className="text-xl font-medium text-gray-100">
                       #{pr} {pullRequestInfo.title}
                     </span>
@@ -230,9 +250,9 @@ export function TimelineViewStep({ apiKey, repo, pr, onBack }: TimelineViewStepP
         isExpanded={isTimelineExpanded}
         onToggle={handleTimelineToggle}
       />
-      
-      <MermaidDiagram 
-        events={events} 
+
+      <MermaidDiagram
+        events={events}
         isExpanded={isSequenceExpanded}
         onToggle={handleSequenceToggle}
       />

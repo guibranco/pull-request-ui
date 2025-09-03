@@ -6,7 +6,10 @@ interface RefreshButtonProps {
   readonly isLoading: boolean;
 }
 
-export function RefreshButton({ onRefresh, isLoading }: Readonly<RefreshButtonProps>) {
+export function RefreshButton({
+  onRefresh,
+  isLoading,
+}: Readonly<RefreshButtonProps>) {
   const INITIAL_COUNTDOWN = 15;
   const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN);
   const [isPaused, setIsPaused] = useState(() => {
@@ -58,8 +61,8 @@ export function RefreshButton({ onRefresh, isLoading }: Readonly<RefreshButtonPr
       <button
         onClick={handleTogglePause}
         className={`flex items-center justify-center w-8 h-8 rounded-full ${
-          isPaused 
-            ? 'bg-blue-600 hover:bg-blue-700' 
+          isPaused
+            ? 'bg-blue-600 hover:bg-blue-700'
             : 'bg-gray-700 hover:bg-gray-600'
         } transition-colors`}
         disabled={isLoading}
@@ -71,10 +74,10 @@ export function RefreshButton({ onRefresh, isLoading }: Readonly<RefreshButtonPr
           <Pause className="w-4 h-4 text-white" />
         )}
       </button>
-      
+
       <div className="flex items-center space-x-2">
-        <RefreshCw 
-          className={`w-5 h-5 text-blue-400 ${isLoading ? 'animate-spin' : ''}`} 
+        <RefreshCw
+          className={`w-5 h-5 text-blue-400 ${isLoading ? 'animate-spin' : ''}`}
         />
         <span className="text-gray-300">
           {isLoading ? 'Refreshing...' : `Refreshing in ${countdown}s`}

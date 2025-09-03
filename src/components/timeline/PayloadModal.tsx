@@ -12,8 +12,16 @@ interface PayloadModalProps {
   readonly selectedCount?: number;
 }
 
-export function PayloadModal({ payload, onClose, comparePayload, onCompare, selectedCount = 0 }: Readonly<PayloadModalProps>) {
-  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(['']));
+export function PayloadModal({
+  payload,
+  onClose,
+  comparePayload,
+  onCompare,
+  selectedCount = 0,
+}: Readonly<PayloadModalProps>) {
+  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
+    new Set([''])
+  );
 
   // If we have a comparePayload, directly render the compare modal
   if (comparePayload) {
