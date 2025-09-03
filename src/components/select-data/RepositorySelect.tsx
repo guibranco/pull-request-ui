@@ -9,14 +9,19 @@ interface RepositorySelectProps {
   readonly disabled: boolean;
 }
 
-export function RepositorySelect({ repositories, selectedRepo, onChange, disabled }: Readonly<RepositorySelectProps>) {
+export function RepositorySelect({
+  repositories,
+  selectedRepo,
+  onChange,
+  disabled,
+}: Readonly<RepositorySelectProps>) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredRepositories = useMemo(() => {
     if (!searchQuery) return repositories;
-    
+
     const query = searchQuery.toLowerCase();
-    return repositories.filter(repo => 
+    return repositories.filter(repo =>
       repo.full_name.toLowerCase().includes(query)
     );
   }, [repositories, searchQuery]);
@@ -35,11 +40,11 @@ export function RepositorySelect({ repositories, selectedRepo, onChange, disable
           <select
             id="repository"
             value={selectedRepo}
-            onChange={(e) => {
+            onChange={e => {
               onChange(e.target.value);
               setSearchQuery('');
             }}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key.length === 1) {
                 setSearchQuery(prev => prev + e.key);
               }
@@ -53,12 +58,16 @@ export function RepositorySelect({ repositories, selectedRepo, onChange, disable
             dangerouslySetInnerHTML={{
               __html: `
                 <option value="" class="text-gray-400">Select a repository</option>
-                ${filteredRepositories.map(repo => `
+                ${filteredRepositories
+                  .map(
+                    repo => `
                   <option value="${repo.full_name}" class="text-gray-100">
                     ${repo.full_name}
                   </option>
-                `).join('')}
-              `
+                `
+                  )
+                  .join('')}
+              `,
             }}
           />
           <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
@@ -66,7 +75,9 @@ export function RepositorySelect({ repositories, selectedRepo, onChange, disable
           </div>
         </div>
         {filteredRepositories.length === 0 && (
-          <p className="text-sm text-gray-400 mt-2">No repositories found matching your search.</p>
+          <p className="text-sm text-gray-400 mt-2">
+            No repositories found matching your search.
+          </p>
         )}
       </div>
     </div>

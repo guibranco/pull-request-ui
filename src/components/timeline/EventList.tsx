@@ -14,7 +14,13 @@ interface EventListProps {
   readonly onToggle: () => void;
 }
 
-export function EventList({ events, expandedItems, onToggleExpand, isExpanded, onToggle }: Readonly<EventListProps>) {
+export function EventList({
+  events,
+  expandedItems,
+  onToggleExpand,
+  isExpanded,
+  onToggle,
+}: Readonly<EventListProps>) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showingPayload, setShowingPayload] = useState<{
     payload: Record<string, unknown>;
@@ -22,17 +28,22 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
   } | null>(null);
 
   // Group events by type and sort the types alphabetically
-  const eventsByType = events.reduce((acc, event) => {
-    if (!acc[event.type]) {
-      acc[event.type] = [];
-    }
-    acc[event.type].push(event);
-    return acc;
-  }, {} as Record<string, Event[]>);
+  const eventsByType = events.reduce(
+    (acc, event) => {
+      if (!acc[event.type]) {
+        acc[event.type] = [];
+      }
+      acc[event.type].push(event);
+      return acc;
+    },
+    {} as Record<string, Event[]>
+  );
 
   // Sort events within each type by date
   Object.values(eventsByType).forEach(typeEvents => {
-    typeEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    typeEvents.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
   });
 
   // Get sorted type entries
@@ -60,11 +71,13 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
       // If we have exactly 2 items selected, automatically show the compare modal
       if (newSelected.length === 2) {
         const selectedPayloads = events
-          .filter(e => newSelected.includes(`${e.delivery_id}-${e.type}-${e.action}`))
+          .filter(e =>
+            newSelected.includes(`${e.delivery_id}-${e.type}-${e.action}`)
+          )
           .map(e => e.payload);
-        setShowingPayload({ 
+        setShowingPayload({
           payload: selectedPayloads[0],
-          comparePayload: selectedPayloads[1]
+          comparePayload: selectedPayloads[1],
         });
       } else {
         setShowingPayload(null);
@@ -79,19 +92,19 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
       // If two items are selected, do nothing when clicking view payload
       return;
     }
-    
+
     setShowingPayload({ payload });
   };
 
   const handleCompare = (payload: Record<string, unknown>) => {
-    const selectedEvent = events.find(e => 
+    const selectedEvent = events.find(e =>
       selectedEvents.includes(`${e.delivery_id}-${e.type}-${e.action}`)
     );
 
     if (selectedEvent) {
       setShowingPayload({
         payload,
-        comparePayload: selectedEvent.payload
+        comparePayload: selectedEvent.payload,
       });
     }
   };
@@ -103,9 +116,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
         className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-700/50 transition-colors"
       >
         <div className="flex items-center space-x-3">
-          <h3 className="text-2xl font-medium text-gray-100">
-            Event Timeline
-          </h3>
+          <h3 className="text-2xl font-medium text-gray-100">Event Timeline</h3>
           <div className="flex items-center space-x-2">
             <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
               {totalEvents} event{totalEvents !== 1 ? 's' : ''}
@@ -137,19 +148,26 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                 )}
                 <span className="text-lg font-medium">{type}</span>
                 <span className="ml-3 text-gray-400 text-base">
-                  ({typeEvents.length} event{typeEvents.length !== 1 ? 's' : ''})
+                  ({typeEvents.length} event{typeEvents.length !== 1 ? 's' : ''}
+                  )
                 </span>
               </button>
 
               {expandedItems.has(type) && (
                 <div className="mt-6 space-y-6">
-                  <EventTimeline events={typeEvents} onViewPayload={handleViewPayload} />
-                  
-                  {typeEvents.map((event) => {
+                  <EventTimeline
+                    events={typeEvents}
+                    onViewPayload={handleViewPayload}
+                  />
+
+                  {typeEvents.map(event => {
                     const eventId = `${event.delivery_id}-${event.type}-${event.action}`;
                     const isSelected = selectedEvents.includes(eventId);
                     return (
-                      <div key={event.delivery_id} className="flex items-start space-x-4">
+                      <div
+                        key={event.delivery_id}
+                        className="flex items-start space-x-4"
+                      >
                         <div className="relative flex items-center group">
                           <input
                             type="checkbox"
@@ -158,7 +176,7 @@ export function EventList({ events, expandedItems, onToggleExpand, isExpanded, o
                             className="peer"
                             id={eventId}
                           />
-                          <label 
+                          <label
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />

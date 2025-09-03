@@ -13,10 +13,16 @@ interface SelectDataStepProps {
   preselectedRepo?: string;
 }
 
-export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectDataStepProps) {
+export function SelectDataStep({
+  apiKey,
+  onSelect,
+  preselectedRepo,
+}: SelectDataStepProps) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
-  const [recentPullRequests, setRecentPullRequests] = useState<RecentPullRequest[]>([]);
+  const [recentPullRequests, setRecentPullRequests] = useState<
+    RecentPullRequest[]
+  >([]);
   const [selectedRepo, setSelectedRepo] = useState(preselectedRepo || '');
   const [selectedPR, setSelectedPR] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,9 +44,14 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
       const data = await api.getRecentPullRequests();
       setRecentPullRequests(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch recent pull requests';
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to fetch recent pull requests';
       if (errorMessage.includes('403')) {
-        setRecentError('Your API key does not have permission to access recent pull requests.');
+        setRecentError(
+          'Your API key does not have permission to access recent pull requests.'
+        );
       } else {
         setRecentError(errorMessage);
       }
@@ -58,9 +69,12 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
       const data = await api.getRepositories();
       setRepositories(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch repositories';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch repositories';
       if (errorMessage.includes('403')) {
-        handleUnauthorized('Your API key is invalid or has expired. Please enter a valid API key.');
+        handleUnauthorized(
+          'Your API key is invalid or has expired. Please enter a valid API key.'
+        );
         return;
       }
       setError(errorMessage);
@@ -82,14 +96,17 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
       const [owner, repo] = selectedRepo.split('/');
       const data = await api.getPullRequests(owner, repo);
       setPullRequests(data.pull_requests);
-      
+
       if (data.pull_requests.length === 0) {
         setError('No pull requests found for this repository');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch pull requests';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch pull requests';
       if (errorMessage.includes('403')) {
-        handleUnauthorized('Your API key is invalid or has expired. Please enter a valid API key.');
+        handleUnauthorized(
+          'Your API key is invalid or has expired. Please enter a valid API key.'
+        );
         return;
       }
       setError(errorMessage);
@@ -103,9 +120,14 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
     await Promise.all([
       fetchRepositories(),
       selectedRepo && fetchPullRequests(),
-      fetchRecentPullRequests()
+      fetchRecentPullRequests(),
     ]);
-  }, [fetchRepositories, fetchPullRequests, fetchRecentPullRequests, selectedRepo]);
+  }, [
+    fetchRepositories,
+    fetchPullRequests,
+    fetchRecentPullRequests,
+    selectedRepo,
+  ]);
 
   useEffect(() => {
     fetchRepositories();
@@ -181,7 +203,7 @@ export function SelectDataStep({ apiKey, onSelect, preselectedRepo }: SelectData
           Back to API Key
         </button>
 
-        <RefreshButton 
+        <RefreshButton
           onRefresh={handleRefresh}
           isLoading={loading || loadingRecent}
         />

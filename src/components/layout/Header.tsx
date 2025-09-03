@@ -22,7 +22,7 @@ export function Header({ currentStep }: HeaderProps) {
               Pull Request Flow Viewer
             </h1>
           </div>
-          
+
           <div className="flex items-center justify-center space-x-4">
             {steps.map((step, index) => (
               <React.Fragment key={step.id}>
@@ -30,7 +30,7 @@ export function Header({ currentStep }: HeaderProps) {
                   <div className="h-0.5 w-16 bg-gray-700">
                     <div
                       className={`h-full ${
-                        steps.findIndex((s) => s.id === currentStep) >= index
+                        steps.findIndex(s => s.id === currentStep) >= index
                           ? 'bg-blue-500'
                           : ''
                       }`}
@@ -39,16 +39,12 @@ export function Header({ currentStep }: HeaderProps) {
                 )}
                 <div
                   className={`flex items-center space-x-2 ${
-                    currentStep === step.id
-                      ? 'text-blue-400'
-                      : 'text-gray-400'
+                    currentStep === step.id ? 'text-blue-400' : 'text-gray-400'
                   }`}
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentStep === step.id
-                        ? 'bg-blue-900'
-                        : 'bg-gray-700'
+                      currentStep === step.id ? 'bg-blue-900' : 'bg-gray-700'
                     }`}
                   >
                     <step.icon className="w-5 h-5" />

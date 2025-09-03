@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Key, LogOut, AlertCircle, Lock, Unlock, ArrowRight } from 'lucide-react';
+import {
+  Key,
+  LogOut,
+  AlertCircle,
+  Lock,
+  Unlock,
+  ArrowRight,
+} from 'lucide-react';
 
 interface ApiKeyStepProps {
   onSubmit: (apiKey: string) => void;
 }
 
 export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('apiKey') || '');
+  const [apiKey, setApiKey] = useState(
+    () => localStorage.getItem('apiKey') || ''
+  );
   const [isEditing, setIsEditing] = useState(!apiKey);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,7 +73,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
                 type="password"
                 id="apiKey"
                 value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
+                onChange={e => setApiKey(e.target.value)}
                 disabled={!isEditing}
                 className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
                 placeholder="Enter your API key"
