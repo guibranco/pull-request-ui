@@ -9,7 +9,10 @@ interface EventTimelineProps {
   readonly onViewPayload: (payload: Record<string, unknown>) => void;
 }
 
-export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineProps>) {
+export function EventTimeline({
+  events,
+  onViewPayload,
+}: Readonly<EventTimelineProps>) {
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem('isBulletDiagramExpanded');
     return saved ? JSON.parse(saved) : true;
@@ -88,13 +91,11 @@ export function EventTimeline({ events, onViewPayload }: Readonly<EventTimelineP
                 <div className="text-sm text-gray-300 font-medium">
                   {getEventTitle(eventsByPayloadId[id])}
                 </div>
-                <div className="text-xs text-gray-500">
-                  #{id.split('_')[1]}
-                </div>
+                <div className="text-xs text-gray-500">#{id.split('_')[1]}</div>
               </div>
-              <BulletDiagram 
-                events={eventsByPayloadId[id]} 
-                onViewPayload={onViewPayload} 
+              <BulletDiagram
+                events={eventsByPayloadId[id]}
+                onViewPayload={onViewPayload}
               />
             </div>
           ))}

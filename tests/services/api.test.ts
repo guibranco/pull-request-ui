@@ -3,7 +3,7 @@ import { ApiService } from '../../src/services/api';
 
 describe('ApiService', () => {
   let apiService: ApiService;
-  
+
   beforeEach(() => {
     apiService = new ApiService('test-key');
     // Reset fetch mock
@@ -17,13 +17,13 @@ describe('ApiService', () => {
           id: 'test-owner/test-repo',
           owner: 'test-owner',
           name: 'test-repo',
-          full_name: 'test-owner/test-repo'
-        }
+          full_name: 'test-owner/test-repo',
+        },
       ];
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await apiService.getRepositories();
@@ -35,10 +35,12 @@ describe('ApiService', () => {
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
-      await expect(apiService.getRepositories()).rejects.toThrow('Invalid response format');
+      await expect(apiService.getRepositories()).rejects.toThrow(
+        'Invalid response format'
+      );
     });
   });
 
@@ -51,17 +53,20 @@ describe('ApiService', () => {
           {
             number: 1,
             title: 'Test PR',
-            date: '2024-03-14T12:00:00Z'
-          }
-        ]
+            date: '2024-03-14T12:00:00Z',
+          },
+        ],
       };
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
-      const result = await apiService.getPullRequests('test-owner', 'test-repo');
+      const result = await apiService.getPullRequests(
+        'test-owner',
+        'test-repo'
+      );
       expect(result).toEqual(mockResponse);
     });
 
@@ -69,16 +74,19 @@ describe('ApiService', () => {
       const mockResponse = {
         owner: 'test-owner',
         repo: 'test-repo',
-        pull_requests: 'invalid'
+        pull_requests: 'invalid',
       };
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
-      await expect(apiService.getPullRequests('test-owner', 'test-repo'))
-        .rejects.toThrow('Invalid response format: pull_requests must be an array');
+      await expect(
+        apiService.getPullRequests('test-owner', 'test-repo')
+      ).rejects.toThrow(
+        'Invalid response format: pull_requests must be an array'
+      );
     });
   });
 
@@ -94,14 +102,14 @@ describe('ApiService', () => {
             type: 'test',
             action: 'created',
             date: '2024-03-14T12:00:00Z',
-            payload: {}
-          }
-        ]
+            payload: {},
+          },
+        ],
       };
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await apiService.getEvents('test-owner', 'test-repo', '1');
@@ -113,16 +121,17 @@ describe('ApiService', () => {
         owner: 'test-owner',
         repo: 'test-repo',
         pull_request: 1,
-        events: 'invalid'
+        events: 'invalid',
       };
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
-      await expect(apiService.getEvents('test-owner', 'test-repo', '1'))
-        .rejects.toThrow('Invalid response format: events must be an array');
+      await expect(
+        apiService.getEvents('test-owner', 'test-repo', '1')
+      ).rejects.toThrow('Invalid response format: events must be an array');
     });
   });
 
@@ -132,11 +141,12 @@ describe('ApiService', () => {
         ok: false,
         status: 404,
         statusText: 'Not Found',
-        text: () => Promise.resolve('Resource not found')
+        text: () => Promise.resolve('Resource not found'),
       });
 
-      await expect(apiService.getRepositories())
-        .rejects.toThrow('API Error: 404 Not Found - Resource not found');
+      await expect(apiService.getRepositories()).rejects.toThrow(
+        'API Error: 404 Not Found - Resource not found'
+      );
     });
 
     it('handles API errors without error text', async () => {
@@ -144,31 +154,34 @@ describe('ApiService', () => {
         ok: false,
         status: 500,
         statusText: 'Internal Server Error',
-        text: () => Promise.resolve('')
+        text: () => Promise.resolve(''),
       });
 
-      await expect(apiService.getRepositories())
-        .rejects.toThrow('API Error: 500 Internal Server Error');
+      await expect(apiService.getRepositories()).rejects.toThrow(
+        'API Error: 500 Internal Server Error'
+      );
     });
 
     it('handles non-object responses', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve('invalid')
+        json: () => Promise.resolve('invalid'),
       });
 
-      await expect(apiService.getRepositories())
-        .rejects.toThrow('Invalid response format: response must be an object');
+      await expect(apiService.getRepositories()).rejects.toThrow(
+        'Invalid response format: response must be an object'
+      );
     });
 
     it('handles null responses', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(null)
+        json: () => Promise.resolve(null),
       });
 
-      await expect(apiService.getRepositories())
-        .rejects.toThrow('Invalid response format: response must be an object');
+      await expect(apiService.getRepositories()).rejects.toThrow(
+        'Invalid response format: response must be an object'
+      );
     });
   });
 });

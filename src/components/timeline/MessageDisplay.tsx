@@ -8,13 +8,20 @@ interface MessageDisplayProps {
   actionLabel?: string;
 }
 
-export function MessageDisplay({ type, message, onAction, actionLabel }: MessageDisplayProps) {
+export function MessageDisplay({
+  type,
+  message,
+  onAction,
+  actionLabel,
+}: MessageDisplayProps) {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-gray-800 p-6 rounded-lg shadow-sm">
-        <div className={`flex items-center justify-center mb-4 ${
-          type === 'error' ? 'text-red-400' : 'text-gray-300'
-        }`}>
+        <div
+          className={`flex items-center justify-center mb-4 ${
+            type === 'error' ? 'text-red-400' : 'text-gray-300'
+          }`}
+        >
           {type === 'error' ? (
             <XCircle className="w-6 h-6 mr-2" />
           ) : (
