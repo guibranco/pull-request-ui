@@ -9,11 +9,17 @@ interface MermaidDiagramProps {
   readonly onToggle: () => void;
 }
 
-export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<MermaidDiagramProps>) {
+export function MermaidDiagram({
+  events,
+  isExpanded,
+  onToggle,
+}: Readonly<MermaidDiagramProps>) {
   const mermaidRef = useRef<HTMLDivElement>(null);
 
   const truncateText = (text: string, maxLength: number = 30): string => {
-    return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+    return text.length > maxLength
+      ? `${text.substring(0, maxLength)}...`
+      : text;
   };
 
   const getEventTitle = (event: Event): string => {
@@ -39,13 +45,15 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
   };
 
   const getEventStatus = (event: Event): string | null => {
-    return event.payload.check_run?.conclusion ||
+    return (
+      event.payload.check_run?.conclusion ||
       event.payload.check_suite?.conclusion ||
       event.payload.status?.state ||
       event.payload.review?.state ||
       event.payload.workflow_run?.conclusion ||
       event.payload.workflow_job?.conclusion ||
-      null;
+      null
+    );
   };
 
   const generateSequenceDiagram = useCallback(() => {
@@ -57,27 +65,33 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
     }
 
     // Group events by their type and ID
-    const groupedEvents = events.reduce((acc, event) => {
-      const id = event.payload.issue?.id ||
-        event.payload.pull_request?.id ||
-        event.payload.check_run?.id ||
-        event.payload.workflow_run?.id ||
-        event.payload.workflow_job?.id ||
-        event.payload.release?.id ||
-        event.delivery_id;
+    const groupedEvents = events.reduce(
+      (acc, event) => {
+        const id =
+          event.payload.issue?.id ||
+          event.payload.pull_request?.id ||
+          event.payload.check_run?.id ||
+          event.payload.workflow_run?.id ||
+          event.payload.workflow_job?.id ||
+          event.payload.release?.id ||
+          event.delivery_id;
 
-      const key = `${event.type}_${id}`;
-      
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(event);
-      return acc;
-    }, {} as Record<string, Event[]>);
+        const key = `${event.type}_${id}`;
+
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(event);
+        return acc;
+      },
+      {} as Record<string, Event[]>
+    );
 
     // Sort events within each group by date
     Object.values(groupedEvents).forEach(group => {
-      group.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      group.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
     });
 
     let diagram = 'sequenceDiagram\n';
@@ -124,12 +138,17 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
       group.forEach(event => {
         // Determine the actor
         let actor = 'GH';
-        if (event.payload.sender?.login && topActors.includes(event.payload.sender.login)) {
+        if (
+          event.payload.sender?.login &&
+          topActors.includes(event.payload.sender.login)
+        ) {
           actor = getActorId(event.payload.sender.login);
         }
 
         // Create the event message
-        const message = event.action ? `${event.type}:${event.action}` : event.type;
+        const message = event.action
+          ? `${event.type}:${event.action}`
+          : event.type;
         diagram += `    ${actor}->>PR: ${truncateText(message, 25)}\n`;
 
         // Add status if available
@@ -183,13 +202,13 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
             noteBorderColor: '#60a5fa',
             actorBkg: '#1e40af',
             actorTextColor: '#fff',
-            actorLineColor: '#60a5fa'
-          }
+            actorLineColor: '#60a5fa',
+          },
         });
 
         const diagram = generateSequenceDiagram();
         const { svg } = await mermaid.render('mermaid-diagram', diagram);
-        
+
         if (mermaidRef.current) {
           mermaidRef.current.innerHTML = svg;
         }
@@ -214,16 +233,14 @@ export function MermaidDiagram({ events, isExpanded, onToggle }: Readonly<Mermai
         onClick={onToggle}
         className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-700/50 transition-colors"
       >
-        <h3 className="text-2xl font-medium text-gray-100">
-          Event Sequence
-        </h3>
+        <h3 className="text-2xl font-medium text-gray-100">Event Sequence</h3>
         {isExpanded ? (
           <ChevronDown className="w-6 h-6 text-gray-400" />
         ) : (
           <ChevronRight className="w-6 h-6 text-gray-400" />
         )}
       </button>
-      
+
       {isExpanded && (
         <div className="p-6 pt-0">
           <div ref={mermaidRef} className="w-full overflow-x-auto" />
