@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "lodash-es": "^4.17.22",
+    "lodash-es": "^4.17.23",
     "lucide-react": "^0.562.0",
     "mermaid": "^11.10.0",
     "react": "^19.2.3",
