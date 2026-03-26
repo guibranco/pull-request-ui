@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
-import { GitHubIcon } from "@/components/icons/GitHubIcon";
+import { GitHubIcon } from '@/components/icons/GitHubIcon';
 
 export function Footer() {
   return (
