@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export function GitHubIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -9,7 +9,8 @@ export function GitHubIcon(props: React.SVGProps<SVGSVGElement>) {
       aria-hidden="true"
       {...props}
     >
-      <path d="M12 .297a12 12 0 00-3.794 23.398c.6.111.82-.261.82-.579
+      <path
+        d="M12 .297a12 12 0 00-3.794 23.398c.6.111.82-.261.82-.579
       0-.287-.01-1.046-.016-2.054-3.338.725-4.042-1.61-4.042-1.61
       -.546-1.387-1.333-1.756-1.333-1.756-1.089-.744.083-.729.083-.729
       1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998
@@ -21,7 +22,8 @@ export function GitHubIcon(props: React.SVGProps<SVGSVGElement>) {
       0 4.61-2.805 5.624-5.476 5.921
       .43.371.823 1.102.823 2.222
       0 1.606-.014 2.901-.014 3.293
-      0 .321.216.694.825.576A12.003 12.003 0 0012 .297z" />
+      0 .321.216.694.825.576A12.003 12.003 0 0012 .297z"
+      />
     </svg>
   );
 }
