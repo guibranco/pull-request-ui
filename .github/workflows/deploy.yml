@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-output
           path: ./dist
@@ -96,7 +96,7 @@ jobs:
 
     steps:
       - name: Create Release
-        uses: ncipollo/release-action@v1.20.0
+        uses: ncipollo/release-action@v1.21.0
         with:
           skipIfReleaseExists: true
           allowUpdates: false
