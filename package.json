@@ -36,7 +36,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.6.0",
-    "happy-dom": "^20.10.3",
+    "happy-dom": "^20.10.5",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
     "prettier": "^3.8.4",
