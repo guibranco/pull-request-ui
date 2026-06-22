@@ -16,7 +16,7 @@ export function MessageDisplay({
 }: MessageDisplayProps) {
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-sm">
+      <div className="bg-zinc-800 p-6 rounded-lg shadow-sm">
         <div
           className={`flex items-center justify-center mb-4 ${
             type === 'error' ? 'text-red-400' : 'text-gray-300'

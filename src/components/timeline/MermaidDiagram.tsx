@@ -228,10 +228,10 @@ export function MermaidDiagram({
   }, [events, isExpanded, generateSequenceDiagram]);
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-lg w-full overflow-hidden">
+    <div className="bg-zinc-800 rounded-lg shadow-lg w-full overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-700/50 transition-colors"
+        className="w-full flex items-center justify-between p-6 text-left hover:bg-zinc-700/50 transition-colors"
       >
         <h3 className="text-2xl font-medium text-gray-100">Event Sequence</h3>
         {isExpanded ? (

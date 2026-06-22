@@ -86,7 +86,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
       case 'cancelled':
       case 'timed_out':
       case 'dismissed':
-        return { text: conclusion, color: 'bg-gray-400 text-gray-900' };
+        return { text: conclusion, color: 'bg-zinc-400 text-gray-900' };
       case 'neutral':
       case 'pending':
       case 'queued':
@@ -140,7 +140,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
               className="w-6 h-6 rounded-full"
             />
           ) : (
-            <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center">
               <User className="w-4 h-4 text-gray-400" />
             </div>
           )}

@@ -45,7 +45,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-8">
+      <div className="bg-zinc-800 shadow-lg rounded-lg p-8">
         <div className="flex items-center justify-center w-16 h-16 bg-green-900 rounded-full mx-auto mb-6">
           <Key className="w-8 h-8 text-green-400" />
         </div>
@@ -75,7 +75,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
                 value={apiKey}
                 onChange={e => setApiKey(e.target.value)}
                 disabled={!isEditing}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-zinc-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
                 placeholder="Enter your API key"
                 required
               />

@@ -9,7 +9,7 @@ interface ErrorMessageProps {
 export function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
   return (
     <div className="max-w-md mx-auto">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-6">
+      <div className="bg-zinc-800 shadow-lg rounded-lg p-6">
         <div className="flex items-center justify-center text-red-400 mb-4">
           <XCircle className="w-8 h-8 mr-2" />
           <p>{message}</p>

@@ -105,7 +105,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
+    <div className="min-h-screen bg-zinc-900 text-gray-100 flex flex-col">
       <Header currentStep={currentStep} />
 
       <div className="container mx-auto px-6 lg:px-8 py-8 flex-1 max-w-[90rem]">

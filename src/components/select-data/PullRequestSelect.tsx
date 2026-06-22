@@ -65,7 +65,7 @@ export function PullRequestSelect({
         >
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
           <div
-            className={`w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm
+            className={`w-full pl-10 pr-12 py-3 bg-zinc-700 border border-gray-600 rounded-lg shadow-sm
               focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-green-500
               ${selectedPR ? 'text-gray-100' : 'text-gray-400'}`}
           >
@@ -78,7 +78,7 @@ export function PullRequestSelect({
                     className="w-6 h-6 rounded-full"
                   />
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-zinc-600 flex items-center justify-center">
                     <User className="w-4 h-4 text-gray-400" />
                   </div>
                 )}
@@ -107,12 +107,12 @@ export function PullRequestSelect({
         </div>
 
         {isOpen && !disabled && (
-          <div className="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto">
+          <div className="absolute z-10 w-full mt-1 bg-zinc-700 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto">
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 border-b border-gray-600 rounded-t-lg focus:outline-none text-gray-100"
+              className="w-full px-4 py-2 bg-zinc-800 border-b border-gray-600 rounded-t-lg focus:outline-none text-gray-100"
               placeholder="Search pull requests..."
               onClick={e => e.stopPropagation()}
             />
@@ -125,8 +125,8 @@ export function PullRequestSelect({
                 {filteredPullRequests.map(pr => (
                   <div
                     key={pr.number}
-                    className={`px-4 py-2 hover:bg-gray-600 cursor-pointer ${
-                      pr.number.toString() === selectedPR ? 'bg-gray-600' : ''
+                    className={`px-4 py-2 hover:bg-zinc-600 cursor-pointer ${
+                      pr.number.toString() === selectedPR ? 'bg-zinc-600' : ''
                     }`}
                     onClick={() => {
                       onChange(pr.number.toString());
@@ -142,7 +142,7 @@ export function PullRequestSelect({
                           className="w-6 h-6 rounded-full"
                         />
                       ) : (
-                        <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full bg-zinc-600 flex items-center justify-center">
                           <User className="w-4 h-4 text-gray-400" />
                         </div>
                       )}

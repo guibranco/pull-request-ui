@@ -186,7 +186,7 @@ export function TimelineViewStep({
         <RefreshButton onRefresh={handleRefresh} isLoading={loading} />
       </div>
 
-      <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+      <div className="bg-zinc-800 rounded-lg shadow-lg p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-3">
             <div className="flex items-center space-x-2 text-gray-300">
@@ -228,7 +228,7 @@ export function TimelineViewStep({
                       className="w-6 h-6 rounded-full"
                     />
                   ) : (
-                    <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center">
                       <User className="w-4 h-4 text-gray-400" />
                     </div>
                   )}

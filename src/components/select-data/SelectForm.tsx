@@ -26,7 +26,7 @@ export function SelectForm({
   onSubmit,
 }: SelectFormProps) {
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-6">
+    <div className="bg-zinc-800 shadow-lg rounded-lg p-6">
       <div className="flex items-center justify-center w-12 h-12 bg-green-900 rounded-full mx-auto mb-4">
         <GitFork className="w-6 h-6 text-green-400" />
       </div>

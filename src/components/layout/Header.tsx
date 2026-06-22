@@ -13,7 +13,7 @@ export function Header({ currentStep }: HeaderProps) {
   ];
 
   return (
-    <div className="bg-gray-800 shadow-sm">
+    <div className="bg-zinc-800 shadow-sm">
       <div className="container mx-auto px-6 lg:px-8 max-w-[90rem]">
         <div className="py-4">
           <div className="flex items-center justify-center mb-6">
@@ -27,7 +27,7 @@ export function Header({ currentStep }: HeaderProps) {
             {steps.map((step, index) => (
               <React.Fragment key={step.id}>
                 {index > 0 && (
-                  <div className="h-0.5 w-16 bg-gray-700">
+                  <div className="h-0.5 w-16 bg-zinc-700">
                     <div
                       className={`h-full ${
                         steps.findIndex(s => s.id === currentStep) >= index
@@ -44,7 +44,7 @@ export function Header({ currentStep }: HeaderProps) {
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentStep === step.id ? 'bg-green-900' : 'bg-gray-700'
+                      currentStep === step.id ? 'bg-green-900' : 'bg-zinc-700'
                     }`}
                   >
                     <step.icon className="w-5 h-5" />

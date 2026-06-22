@@ -115,7 +115,7 @@ export function BulletDiagram({
       case 'cancelled':
       case 'timed_out':
       case 'dismissed':
-        return 'bg-gray-400';
+        return 'bg-zinc-400';
       case 'neutral':
       case 'pending':
       case 'queued':
@@ -149,7 +149,7 @@ export function BulletDiagram({
                 key={`${event.delivery_id}-${event.type}-${event.action}`}
               >
                 {index > 0 && (
-                  <div className="h-[2px] w-16 bg-gray-700 relative">
+                  <div className="h-[2px] w-16 bg-zinc-700 relative">
                     <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500">
                       →
                     </div>
@@ -166,7 +166,7 @@ export function BulletDiagram({
                             className="w-6 h-6 rounded-sm mb-1"
                           />
                         ) : (
-                          <div className="w-6 h-6 rounded-sm bg-gray-700 flex items-center justify-center mb-1">
+                          <div className="w-6 h-6 rounded-sm bg-zinc-700 flex items-center justify-center mb-1">
                             <Globe className="w-4 h-4 text-gray-400" />
                           </div>
                         )}
@@ -184,7 +184,7 @@ export function BulletDiagram({
                             className="w-6 h-6 rounded-full mb-1"
                           />
                         ) : (
-                          <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mb-1">
+                          <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center mb-1">
                             <User className="w-4 h-4 text-gray-400" />
                           </div>
                         )}

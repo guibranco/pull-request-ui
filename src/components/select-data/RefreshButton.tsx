@@ -60,13 +60,13 @@ export function RefreshButton({
   }, [countdown, isPaused, isLoading, handleRefreshNow]);
 
   return (
-    <div className="flex items-center space-x-4 bg-gray-800 p-4 rounded-lg shadow-lg">
+    <div className="flex items-center space-x-4 bg-zinc-800 p-4 rounded-lg shadow-lg">
       <button
         onClick={handleTogglePause}
         className={`flex items-center justify-center w-8 h-8 rounded-full ${
           isPaused
             ? 'bg-green-600 hover:bg-green-700'
-            : 'bg-gray-700 hover:bg-gray-600'
+            : 'bg-zinc-700 hover:bg-zinc-600'
         } transition-colors`}
         disabled={isLoading}
         title={isPaused ? 'Resume auto-refresh' : 'Pause auto-refresh'}
