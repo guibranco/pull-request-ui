@@ -197,7 +197,7 @@ export function SelectDataStep({
       <div className="flex items-center justify-between">
         <button
           onClick={handleBackToApiKey}
-          className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+          className="flex items-center text-green-400 hover:text-green-300 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to API Key

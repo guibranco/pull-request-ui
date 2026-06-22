@@ -118,7 +118,7 @@ export function EventList({
         <div className="flex items-center space-x-3">
           <h3 className="text-2xl font-medium text-gray-100">Event Timeline</h3>
           <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
+            <span className="px-2.5 py-0.5 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
               {totalEvents} event{totalEvents !== 1 ? 's' : ''}
             </span>
             <span className="px-2.5 py-0.5 bg-purple-500/20 text-purple-400 rounded-full text-sm font-medium">
@@ -180,7 +180,7 @@ export function EventList({
                             htmlFor={eventId}
                             className="absolute inset-0 cursor-pointer"
                           />
-                          <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 peer-focus:opacity-100 transition-opacity bg-blue-500/10 pointer-events-none" />
+                          <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 peer-focus:opacity-100 transition-opacity bg-green-500/10 pointer-events-none" />
                         </div>
                         <div className="flex-1">
                           <EventItem

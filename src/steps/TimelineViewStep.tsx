@@ -140,7 +140,7 @@ export function TimelineViewStep({
   if (loading && events.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-green-400" />
       </div>
     );
   }
@@ -177,7 +177,7 @@ export function TimelineViewStep({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+          className="flex items-center text-green-400 hover:text-green-300 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Select Data
@@ -192,9 +192,9 @@ export function TimelineViewStep({
             <div className="flex items-center space-x-2 text-gray-300">
               <GitFork className="w-5 h-5" />
               <span className="text-lg">
-                <span className="text-blue-400">{owner}</span>
+                <span className="text-green-400">{owner}</span>
                 <span className="mx-1">/</span>
-                <span className="text-blue-400">{repository}</span>
+                <span className="text-green-400">{repository}</span>
               </span>
             </div>
 
@@ -213,7 +213,7 @@ export function TimelineViewStep({
                     href={githubPrUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
+                    className="flex items-center space-x-1 text-green-400 hover:text-green-300 transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span className="text-sm">View on GitHub</span>

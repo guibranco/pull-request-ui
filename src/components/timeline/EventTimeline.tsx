@@ -72,7 +72,7 @@ export function EventTimeline({
           <div className="text-lg font-medium text-gray-300">
             Event Sequences
           </div>
-          <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
+          <span className="px-2.5 py-0.5 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
             {relevantIds.length} group{relevantIds.length !== 1 ? 's' : ''}
           </span>
         </div>

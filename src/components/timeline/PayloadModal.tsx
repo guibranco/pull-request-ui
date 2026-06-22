@@ -63,7 +63,7 @@ export function PayloadModal({
             {selectedCount === 1 && onCompare && (
               <button
                 onClick={() => onCompare(payload)}
-                className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors text-sm"
+                className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors text-sm"
               >
                 <ArrowLeftRight className="w-4 h-4" />
                 <span>Compare with selected event</span>
@@ -73,13 +73,13 @@ export function PayloadModal({
           <div className="flex items-center space-x-4">
             <button
               onClick={handleExpandAll}
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-sm text-green-400 hover:text-green-300 transition-colors"
             >
               Expand All
             </button>
             <button
               onClick={handleCollapseAll}
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-sm text-green-400 hover:text-green-300 transition-colors"
             >
               Collapse All
             </button>

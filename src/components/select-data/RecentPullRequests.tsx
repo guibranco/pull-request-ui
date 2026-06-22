@@ -75,7 +75,7 @@ export function RecentPullRequests({
             </div>
             <span className="text-sm text-gray-300">Show Open Only</span>
           </label>
-          <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
+          <span className="px-2.5 py-0.5 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
             {filteredPullRequests.length} PR
             {filteredPullRequests.length !== 1 ? 's' : ''}
           </span>

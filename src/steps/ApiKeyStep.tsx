@@ -46,8 +46,8 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="bg-gray-800 shadow-lg rounded-lg p-8">
-        <div className="flex items-center justify-center w-16 h-16 bg-blue-900 rounded-full mx-auto mb-6">
-          <Key className="w-8 h-8 text-blue-400" />
+        <div className="flex items-center justify-center w-16 h-16 bg-green-900 rounded-full mx-auto mb-6">
+          <Key className="w-8 h-8 text-green-400" />
         </div>
         <h2 className="text-3xl font-bold text-center text-gray-100 mb-8">
           API Key
@@ -75,7 +75,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
                 value={apiKey}
                 onChange={e => setApiKey(e.target.value)}
                 disabled={!isEditing}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
                 placeholder="Enter your API key"
                 required
               />
@@ -90,7 +90,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
             {isEditing ? (
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
+                className="w-full bg-green-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
               >
                 Continue
               </button>
@@ -99,7 +99,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
                 <button
                   type="button"
                   onClick={handleContinue}
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors flex items-center justify-center space-x-2"
+                  className="w-full bg-green-600 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors flex items-center justify-center space-x-2"
                 >
                   <span>Continue to Select Data</span>
                   <ArrowRight className="w-5 h-5" />

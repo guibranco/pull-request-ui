@@ -62,7 +62,7 @@ export function RefreshButton({
         onClick={handleTogglePause}
         className={`flex items-center justify-center w-8 h-8 rounded-full ${
           isPaused
-            ? 'bg-blue-600 hover:bg-blue-700'
+            ? 'bg-green-600 hover:bg-green-700'
             : 'bg-gray-700 hover:bg-gray-600'
         } transition-colors`}
         disabled={isLoading}
@@ -77,7 +77,7 @@ export function RefreshButton({
 
       <div className="flex items-center space-x-2">
         <RefreshCw
-          className={`w-5 h-5 text-blue-400 ${isLoading ? 'animate-spin' : ''}`}
+          className={`w-5 h-5 text-green-400 ${isLoading ? 'animate-spin' : ''}`}
         />
         <span className="text-gray-300">
           {isLoading ? 'Refreshing...' : `Refreshing in ${countdown}s`}
@@ -87,7 +87,7 @@ export function RefreshButton({
       <button
         onClick={handleRefreshNow}
         disabled={isLoading}
-        className="px-3 py-1 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition-colors disabled:bg-blue-800 disabled:cursor-not-allowed text-sm"
+        className="px-3 py-1 bg-green-600 text-white rounded-sm hover:bg-green-700 transition-colors disabled:bg-green-800 disabled:cursor-not-allowed text-sm"
       >
         Refresh Now
       </button>

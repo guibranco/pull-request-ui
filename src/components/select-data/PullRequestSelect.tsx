@@ -66,7 +66,7 @@ export function PullRequestSelect({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
           <div
             className={`w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm
-              focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+              focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-green-500
               ${selectedPR ? 'text-gray-100' : 'text-gray-400'}`}
           >
             {selectedPullRequest ? (

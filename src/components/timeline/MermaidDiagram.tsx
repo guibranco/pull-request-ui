@@ -191,18 +191,18 @@ export function MermaidDiagram({
             maxMessageWidth: 150,
           },
           themeVariables: {
-            primaryColor: '#1e40af',
+            primaryColor: '#166534',
             primaryTextColor: '#fff',
-            primaryBorderColor: '#60a5fa',
+            primaryBorderColor: '#4ade80',
             lineColor: '#4b5563',
             secondaryColor: '#1f2937',
             tertiaryColor: '#374151',
             noteBkgColor: '#374151',
             noteTextColor: '#fff',
-            noteBorderColor: '#60a5fa',
-            actorBkg: '#1e40af',
+            noteBorderColor: '#4ade80',
+            actorBkg: '#166534',
             actorTextColor: '#fff',
-            actorLineColor: '#60a5fa',
+            actorLineColor: '#4ade80',
           },
         });
 
