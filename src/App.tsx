@@ -52,6 +52,22 @@ function App() {
     const handleHashChange = () => {
       if (window.location.hash === '#/api-key') {
         setCurrentStep('api-key');
+        return;
+      }
+
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const [owner, repo, pr] = hash.split('/').filter(Boolean);
+        if (owner && repo) {
+          const fullRepo = `${owner}/${repo}`;
+          setSelectedRepo(fullRepo);
+          if (pr) {
+            setSelectedPR(pr);
+            setCurrentStep('timeline');
+          } else {
+            setCurrentStep('select-data');
+          }
+        }
       }
     };
 
