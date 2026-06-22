@@ -64,11 +64,11 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
               color: 'bg-yellow-400 text-yellow-900',
             };
           case 'queued':
-            return { text: 'Queued', color: 'bg-blue-400 text-blue-900' };
+            return { text: 'Queued', color: 'bg-green-400 text-green-900' };
           case 'waiting':
             return { text: 'Waiting', color: 'bg-purple-400 text-purple-900' };
           default:
-            return { text: status, color: 'bg-blue-400 text-blue-900' };
+            return { text: status, color: 'bg-green-400 text-green-900' };
         }
       }
       return null;
@@ -86,7 +86,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
       case 'cancelled':
       case 'timed_out':
       case 'dismissed':
-        return { text: conclusion, color: 'bg-gray-400 text-gray-900' };
+        return { text: conclusion, color: 'bg-zinc-400 text-gray-900' };
       case 'neutral':
       case 'pending':
       case 'queued':
@@ -96,7 +96,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
       case 'stale':
         return { text: conclusion, color: 'bg-purple-400 text-purple-900' };
       default:
-        return { text: conclusion, color: 'bg-blue-400 text-blue-900' };
+        return { text: conclusion, color: 'bg-green-400 text-green-900' };
     }
   };
 
@@ -108,7 +108,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
         <div className="flex items-center space-x-3">
           <Calendar className="w-5 h-5 text-gray-400" />
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-blue-400">
+            <span className="text-sm font-medium text-green-400">
               {getEventId(event)}
             </span>
             <span className="text-gray-500">•</span>
@@ -125,7 +125,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
               {conclusion.text}
             </span>
           )}
-          <span className="text-base font-medium text-blue-400">
+          <span className="text-base font-medium text-green-400">
             {event.action}
           </span>
         </div>
@@ -140,7 +140,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
               className="w-6 h-6 rounded-full"
             />
           ) : (
-            <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center">
               <User className="w-4 h-4 text-gray-400" />
             </div>
           )}
@@ -153,7 +153,7 @@ export function EventItem({ event, onViewPayload }: Readonly<EventItemProps>) {
       <div className="flex items-center justify-end mt-3">
         <button
           onClick={() => onViewPayload(event.payload)}
-          className="text-base text-blue-400 hover:text-blue-300 flex items-center transition-colors"
+          className="text-base text-green-400 hover:text-green-300 flex items-center transition-colors"
         >
           <Code className="w-5 h-5 mr-2" />
           View Payload

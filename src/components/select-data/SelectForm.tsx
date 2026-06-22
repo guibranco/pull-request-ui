@@ -26,9 +26,9 @@ export function SelectForm({
   onSubmit,
 }: SelectFormProps) {
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-      <div className="flex items-center justify-center w-12 h-12 bg-blue-900 rounded-full mx-auto mb-4">
-        <GitFork className="w-6 h-6 text-blue-400" />
+    <div className="bg-zinc-800 shadow-lg rounded-lg p-6">
+      <div className="flex items-center justify-center w-12 h-12 bg-green-900 rounded-full mx-auto mb-4">
+        <GitFork className="w-6 h-6 text-green-400" />
       </div>
       <h2 className="text-2xl font-bold text-center text-gray-100 mb-6">
         Select Repository and Pull Request
@@ -53,7 +53,7 @@ export function SelectForm({
         <button
           type="submit"
           disabled={!selectedRepo || !selectedPR || loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed"
+          className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-green-800 disabled:text-gray-300 disabled:cursor-not-allowed"
         >
           {loading ? (
             <Loader2 className="w-5 h-5 animate-spin mx-auto" />

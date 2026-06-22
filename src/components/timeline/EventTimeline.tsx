@@ -63,7 +63,7 @@ export function EventTimeline({
   };
 
   return (
-    <div className="bg-gray-900 rounded-lg p-4">
+    <div className="bg-zinc-900 rounded-lg p-4">
       <button
         onClick={handleToggle}
         className="flex items-center justify-between w-full text-left mb-4"
@@ -72,7 +72,7 @@ export function EventTimeline({
           <div className="text-lg font-medium text-gray-300">
             Event Sequences
           </div>
-          <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
+          <span className="px-2.5 py-0.5 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
             {relevantIds.length} group{relevantIds.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -86,7 +86,7 @@ export function EventTimeline({
       {isExpanded && (
         <div className="space-y-6">
           {relevantIds.map(id => (
-            <div key={id} className="bg-gray-800 rounded-lg p-4">
+            <div key={id} className="bg-zinc-800 rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="text-sm text-gray-300 font-medium">
                   {getEventTitle(eventsByPayloadId[id])}
