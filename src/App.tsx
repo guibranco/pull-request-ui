@@ -52,22 +52,6 @@ function App() {
     const handleHashChange = () => {
       if (window.location.hash === '#/api-key') {
         setCurrentStep('api-key');
-        return;
-      }
-
-      const hash = window.location.hash.slice(1);
-      if (hash) {
-        const [owner, repo, pr] = hash.split('/').filter(Boolean);
-        if (owner && repo) {
-          const fullRepo = `${owner}/${repo}`;
-          setSelectedRepo(fullRepo);
-          if (pr) {
-            setSelectedPR(pr);
-            setCurrentStep('timeline');
-          } else {
-            setCurrentStep('select-data');
-          }
-        }
       }
     };
 
@@ -105,7 +89,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
       <Header currentStep={currentStep} />
 
       <div className="container mx-auto px-6 lg:px-8 py-8 flex-1 max-w-[90rem]">

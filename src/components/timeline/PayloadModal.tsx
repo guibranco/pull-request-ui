@@ -56,14 +56,14 @@ export function PayloadModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-zinc-800 rounded-lg shadow-xl w-[90vw] max-w-6xl h-[90vh] flex flex-col">
+      <div className="bg-gray-800 rounded-lg shadow-xl w-[90vw] max-w-6xl h-[90vh] flex flex-col">
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h3 className="text-lg font-medium text-gray-100">Event Payload</h3>
             {selectedCount === 1 && onCompare && (
               <button
                 onClick={() => onCompare(payload)}
-                className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors text-sm"
+                className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors text-sm"
               >
                 <ArrowLeftRight className="w-4 h-4" />
                 <span>Compare with selected event</span>
@@ -73,13 +73,13 @@ export function PayloadModal({
           <div className="flex items-center space-x-4">
             <button
               onClick={handleExpandAll}
-              className="text-sm text-green-400 hover:text-green-300 transition-colors"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Expand All
             </button>
             <button
               onClick={handleCollapseAll}
-              className="text-sm text-green-400 hover:text-green-300 transition-colors"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Collapse All
             </button>

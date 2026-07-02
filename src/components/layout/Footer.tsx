@@ -1,6 +1,5 @@
 import React from 'react';
-import { Heart } from 'lucide-react';
-import { GitHubIcon } from '@/components/icons/GitHubIcon';
+import { Github, Heart } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -42,7 +41,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center space-x-3 text-gray-400 hover:text-primary transition-colors group"
             >
-              <GitHubIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
+              <Github className="w-6 h-6 group-hover:scale-110 transition-transform" />
               <div className="flex flex-col items-start">
                 <span className="text-sm">View on</span>
                 <span className="font-medium">GitHub</span>

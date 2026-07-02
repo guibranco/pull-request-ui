@@ -46,7 +46,7 @@ export function PayloadCompareModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-zinc-800 rounded-lg shadow-xl max-w-6xl w-full max-h-[80vh] flex flex-col">
+      <div className="bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-[80vh] flex flex-col">
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <h3 className="text-lg font-medium text-gray-100">
@@ -60,19 +60,19 @@ export function PayloadCompareModal({
                 type="checkbox"
                 checked={showDifferencesOnly}
                 onChange={e => setShowDifferencesOnly(e.target.checked)}
-                className="rounded-sm border-gray-600 bg-zinc-700 text-green-500 focus:ring-green-500"
+                className="rounded-sm border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
               />
               <span className="text-gray-300">Show differences only</span>
             </label>
             <button
               onClick={handleExpandAll}
-              className="text-sm text-green-400 hover:text-green-300 transition-colors"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Expand All
             </button>
             <button
               onClick={handleCollapseAll}
-              className="text-sm text-green-400 hover:text-green-300 transition-colors"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Collapse All
             </button>

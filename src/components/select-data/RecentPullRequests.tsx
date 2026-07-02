@@ -48,7 +48,7 @@ export function RecentPullRequests({
     return (
       <div className="animate-pulse space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="bg-zinc-700/50 rounded-lg h-32" />
+          <div key={i} className="bg-gray-700/50 rounded-lg h-32" />
         ))}
       </div>
     );
@@ -67,7 +67,7 @@ export function RecentPullRequests({
             onClick={handleToggleOpenOnly}
           >
             <div
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showOpenOnly ? 'bg-green-600' : 'bg-zinc-600'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showOpenOnly ? 'bg-green-600' : 'bg-gray-600'}`}
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showOpenOnly ? 'translate-x-6' : 'translate-x-1'}`}
@@ -75,7 +75,7 @@ export function RecentPullRequests({
             </div>
             <span className="text-sm text-gray-300">Show Open Only</span>
           </label>
-          <span className="px-2.5 py-0.5 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
+          <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
             {filteredPullRequests.length} PR
             {filteredPullRequests.length !== 1 ? 's' : ''}
           </span>
@@ -89,7 +89,7 @@ export function RecentPullRequests({
             <a
               key={`${pr.owner}/${pr.name}#${pr.number}`}
               href={timelineUrl}
-              className="block bg-zinc-700 rounded-lg p-4 text-left hover:bg-zinc-600 transition-colors group"
+              className="block bg-gray-700 rounded-lg p-4 text-left hover:bg-gray-600 transition-colors group"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -123,7 +123,7 @@ export function RecentPullRequests({
                       className="w-6 h-6 rounded-full shrink-0"
                     />
                   ) : (
-                    <div className="w-6 h-6 rounded-full bg-zinc-600 flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center shrink-0">
                       <User className="w-4 h-4 text-gray-400" />
                     </div>
                   )}

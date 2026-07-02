@@ -70,11 +70,11 @@ export function BulletDiagram({
           case 'in_progress':
             return 'bg-yellow-400';
           case 'queued':
-            return 'bg-green-400';
+            return 'bg-blue-400';
           case 'waiting':
             return 'bg-purple-400';
           default:
-            return 'bg-green-400';
+            return 'bg-blue-400';
         }
       }
 
@@ -86,7 +86,7 @@ export function BulletDiagram({
           case 'unpublished':
             return 'bg-red-400';
           case 'created':
-            return 'bg-green-400';
+            return 'bg-blue-400';
           case 'edited':
             return 'bg-yellow-400';
           case 'deleted':
@@ -96,11 +96,11 @@ export function BulletDiagram({
           case 'released':
             return 'bg-green-400';
           default:
-            return 'bg-green-400';
+            return 'bg-blue-400';
         }
       }
 
-      return 'bg-green-400';
+      return 'bg-blue-400';
     }
 
     switch (conclusion.toLowerCase()) {
@@ -115,7 +115,7 @@ export function BulletDiagram({
       case 'cancelled':
       case 'timed_out':
       case 'dismissed':
-        return 'bg-zinc-400';
+        return 'bg-gray-400';
       case 'neutral':
       case 'pending':
       case 'queued':
@@ -125,7 +125,7 @@ export function BulletDiagram({
       case 'stale':
         return 'bg-purple-400';
       default:
-        return 'bg-green-400';
+        return 'bg-blue-400';
     }
   };
 
@@ -149,7 +149,7 @@ export function BulletDiagram({
                 key={`${event.delivery_id}-${event.type}-${event.action}`}
               >
                 {index > 0 && (
-                  <div className="h-[2px] w-16 bg-zinc-700 relative">
+                  <div className="h-[2px] w-16 bg-gray-700 relative">
                     <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500">
                       →
                     </div>
@@ -166,7 +166,7 @@ export function BulletDiagram({
                             className="w-6 h-6 rounded-sm mb-1"
                           />
                         ) : (
-                          <div className="w-6 h-6 rounded-sm bg-zinc-700 flex items-center justify-center mb-1">
+                          <div className="w-6 h-6 rounded-sm bg-gray-700 flex items-center justify-center mb-1">
                             <Globe className="w-4 h-4 text-gray-400" />
                           </div>
                         )}
@@ -184,7 +184,7 @@ export function BulletDiagram({
                             className="w-6 h-6 rounded-full mb-1"
                           />
                         ) : (
-                          <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center mb-1">
+                          <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mb-1">
                             <User className="w-4 h-4 text-gray-400" />
                           </div>
                         )}
@@ -200,12 +200,12 @@ export function BulletDiagram({
                     title="View event payload"
                   >
                     <div
-                      className={`w-4 h-4 ${getEventColor(event)} rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-green-400 group-hover:ring-offset-1 group-hover:ring-offset-gray-900 transition-all`}
+                      className={`w-4 h-4 ${getEventColor(event)} rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-1 group-hover:ring-offset-gray-900 transition-all`}
                     >
                       <Circle className="w-3 h-3 text-gray-900" />
                     </div>
                     <div className="flex flex-col items-center">
-                      <span className="text-xs font-medium text-gray-300 whitespace-nowrap group-hover:text-green-400 transition-colors">
+                      <span className="text-xs font-medium text-gray-300 whitespace-nowrap group-hover:text-blue-400 transition-colors">
                         {getEventLabel(event)}
                       </span>
                       <span className="text-xs text-gray-400 whitespace-nowrap">

@@ -45,7 +45,7 @@ export function JSONView({
 
   if (typeof data === 'number')
     return (
-      <span className={`text-green-400 ${isDifferent ? 'bg-red-500/20' : ''}`}>
+      <span className={`text-blue-400 ${isDifferent ? 'bg-red-500/20' : ''}`}>
         {data}
       </span>
     );
@@ -86,7 +86,7 @@ export function JSONView({
       className={`relative ${isDifferent ? 'bg-red-500/20 rounded-sm px-1' : ''}`}
     >
       <div
-        className="flex items-center cursor-pointer hover:text-green-400 transition-colors"
+        className="flex items-center cursor-pointer hover:text-blue-400 transition-colors"
         onClick={toggleExpand}
       >
         {isExpanded ? (
