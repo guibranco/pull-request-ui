@@ -135,6 +135,44 @@ describe('ApiService', () => {
     });
   });
 
+  describe('getRecentPullRequests', () => {
+    it('validates recent pull requests response format', async () => {
+      const mockResponse = [
+        {
+          date: '2024-03-14T12:00:00Z',
+          owner: 'test-owner',
+          name: 'test-repo',
+          number: 1,
+          title: 'Test PR',
+          sender: 'octocat',
+          sender_avatar: 'https://example.com/avatar.png',
+          state: 'OPEN',
+        },
+      ];
+
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+      });
+
+      const result = await apiService.getRecentPullRequests();
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('throws error for invalid recent pull requests format', async () => {
+      const mockResponse = [{ invalid: 'data' }];
+
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+      });
+
+      await expect(apiService.getRecentPullRequests()).rejects.toThrow(
+        'Invalid response format'
+      );
+    });
+  });
+
   describe('error handling', () => {
     it('handles API errors with error text', async () => {
       global.fetch = vi.fn().mockResolvedValue({
