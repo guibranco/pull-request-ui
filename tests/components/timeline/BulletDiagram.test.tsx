@@ -97,8 +97,11 @@ describe('BulletDiagram', () => {
   });
 
   it.each([
+    ['completed status', { workflow_run: { id: 1, status: 'completed' } }, 'bg-green-400'],
+    ['in_progress status', { workflow_run: { id: 1, status: 'in_progress' } }, 'bg-yellow-400'],
     ['queued status', { workflow_run: { id: 1, status: 'queued' } }, 'bg-green-400'],
     ['waiting status', { workflow_run: { id: 1, status: 'waiting' } }, 'bg-purple-400'],
+    ['unrecognized status', { workflow_job: { id: 1, status: 'mystery' } }, 'bg-green-400'],
   ] as const)('colors the bullet for %s', (_label, payload, expectedClass) => {
     const events = [makeEvent({ delivery_id: 'a', payload })];
 
@@ -112,8 +115,12 @@ describe('BulletDiagram', () => {
   it.each([
     ['published', 'bg-green-400'],
     ['unpublished', 'bg-red-400'],
+    ['created', 'bg-green-400'],
     ['edited', 'bg-yellow-400'],
+    ['deleted', 'bg-red-400'],
     ['prereleased', 'bg-purple-400'],
+    ['released', 'bg-green-400'],
+    ['mystery-action', 'bg-green-400'],
   ] as const)('colors release bullets for the %s action', (action, expectedClass) => {
     const events = [
       makeEvent({
@@ -129,5 +136,41 @@ describe('BulletDiagram', () => {
     );
 
     expect(container.querySelector(`.${expectedClass}`)).toBeInTheDocument();
+  });
+
+  it.each([
+    ['success', 'bg-green-400'],
+    ['failure', 'bg-red-400'],
+    ['cancelled', 'bg-zinc-400'],
+    ['neutral', 'bg-yellow-400'],
+    ['skipped', 'bg-purple-400'],
+    ['mystery-conclusion', 'bg-green-400'],
+  ] as const)('colors the bullet for a %s conclusion', (conclusion, expectedClass) => {
+    const events = [
+      makeEvent({
+        delivery_id: 'a',
+        type: 'check_run',
+        payload: { check_run: { id: 1, conclusion } },
+      }),
+    ];
+
+    const { container } = render(
+      <BulletDiagram events={events} onViewPayload={vi.fn()} />
+    );
+
+    expect(container.querySelector(`.${expectedClass}`)).toBeInTheDocument();
+  });
+
+  it.each([
+    ['comment', { comment: { id: 1 } }, 'Comment opened'],
+    ['review', { review: { id: 1 } }, 'Review opened'],
+    ['check_suite', { check_suite: { id: 1 } }, 'Suite opened'],
+    ['workflow_job', { workflow_job: { id: 1 } }, 'Job opened'],
+  ] as const)('labels %s events from their payload', (_label, payload, expectedText) => {
+    const events = [makeEvent({ delivery_id: 'a', payload })];
+
+    render(<BulletDiagram events={events} onViewPayload={vi.fn()} />);
+
+    expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
 });

@@ -170,6 +170,123 @@ describe('EventList', () => {
     expect(screen.getByText('Compare Payloads')).toBeInTheDocument();
   });
 
+  it('deselects an event when its checkbox is clicked again', () => {
+    const events = [
+      makeEvent({ delivery_id: 'a', type: 'issues', payload: { issue: { id: 1 } } }),
+      makeEvent({ delivery_id: 'b', type: 'issues', action: 'closed', payload: { issue: { id: 1 } } }),
+    ];
+
+    render(
+      <EventList
+        events={events}
+        expandedItems={new Set(['issues'])}
+        onToggleExpand={vi.fn()}
+        isExpanded={true}
+        onToggle={vi.fn()}
+      />
+    );
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[1]);
+    expect(screen.getByText('Compare Payloads')).toBeInTheDocument();
+
+    fireEvent.click(checkboxes[0]);
+
+    expect(screen.queryByText('Compare Payloads')).not.toBeInTheDocument();
+    expect(checkboxes[0]).not.toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+  });
+
+  it('replaces the oldest selection once a third event is checked', () => {
+    const events = [
+      makeEvent({ delivery_id: 'a', type: 'issues', payload: { issue: { id: 1 } } }),
+      makeEvent({ delivery_id: 'b', type: 'issues', action: 'closed', payload: { issue: { id: 1 } } }),
+      makeEvent({ delivery_id: 'c', type: 'issues', action: 'reopened', payload: { issue: { id: 1 } } }),
+    ];
+
+    render(
+      <EventList
+        events={events}
+        expandedItems={new Set(['issues'])}
+        onToggleExpand={vi.fn()}
+        isExpanded={true}
+        onToggle={vi.fn()}
+      />
+    );
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[1]);
+    fireEvent.click(checkboxes[2]);
+
+    expect(screen.getByText('Compare Payloads')).toBeInTheDocument();
+    expect(checkboxes[0]).not.toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+    expect(checkboxes[2]).toBeChecked();
+  });
+
+  it('ignores View Payload clicks while two events are already selected', () => {
+    const events = [
+      makeEvent({ delivery_id: 'a', type: 'issues', payload: { issue: { id: 1 } } }),
+      makeEvent({ delivery_id: 'b', type: 'issues', action: 'closed', payload: { issue: { id: 1 } } }),
+      makeEvent({ delivery_id: 'c', type: 'issues', action: 'reopened', payload: { issue: { id: 1 } } }),
+    ];
+
+    render(
+      <EventList
+        events={events}
+        expandedItems={new Set(['issues'])}
+        onToggleExpand={vi.fn()}
+        isExpanded={true}
+        onToggle={vi.fn()}
+      />
+    );
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[1]);
+    expect(screen.getByText('Compare Payloads')).toBeInTheDocument();
+
+    const closeButton = document
+      .querySelector('svg.lucide-x')
+      ?.closest('button');
+    fireEvent.click(closeButton!);
+    expect(screen.queryByText('Compare Payloads')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByText('View Payload')[2]);
+
+    expect(screen.queryByText('Event Payload')).not.toBeInTheDocument();
+    expect(screen.queryByText('Compare Payloads')).not.toBeInTheDocument();
+  });
+
+  it('opens the compare modal from a single-payload view via Compare with selected event', () => {
+    const events = [
+      makeEvent({ delivery_id: 'a', type: 'issues', payload: { issue: { id: 1 } } }),
+      makeEvent({ delivery_id: 'b', type: 'issues', action: 'closed', payload: { issue: { id: 1 } } }),
+    ];
+
+    render(
+      <EventList
+        events={events}
+        expandedItems={new Set(['issues'])}
+        onToggleExpand={vi.fn()}
+        isExpanded={true}
+        onToggle={vi.fn()}
+      />
+    );
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    fireEvent.click(checkboxes[0]);
+
+    fireEvent.click(screen.getAllByText('View Payload')[1]);
+    expect(screen.getByText('Event Payload')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Compare with selected event'));
+
+    expect(screen.getByText('Compare Payloads')).toBeInTheDocument();
+  });
+
   it('closes the payload modal via onClose', () => {
     const events = [
       makeEvent({ delivery_id: 'a', type: 'issues', payload: { issue: { id: 1 } } }),
