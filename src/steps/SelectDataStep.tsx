@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { SelectForm } from '../components/select-data/SelectForm';
 import { ErrorMessage } from '../components/select-data/ErrorMessage';
 import { RecentPullRequests } from '../components/select-data/RecentPullRequests';
-import { RefreshButton } from '../components/select-data/RefreshButton';
+import { RefreshButton } from '../components/common/RefreshButton';
 import { ApiService } from '../services/api';
 import { ArrowLeft } from 'lucide-react';
 import type { Repository, PullRequest, RecentPullRequest } from '../types';
@@ -206,6 +206,8 @@ export function SelectDataStep({
         <RefreshButton
           onRefresh={handleRefresh}
           isLoading={loading || loadingRecent}
+          intervalSeconds={60}
+          storageKey="isSelectDataRefreshPaused"
         />
       </div>
 

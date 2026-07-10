@@ -10,7 +10,7 @@ import {
 import { MermaidDiagram } from '../components/timeline/MermaidDiagram';
 import { EventList } from '../components/timeline/EventList';
 import { PayloadModal } from '../components/timeline/PayloadModal';
-import { RefreshButton } from '../components/timeline/RefreshButton';
+import { RefreshButton } from '../components/common/RefreshButton';
 import { MessageDisplay } from '../components/timeline/MessageDisplay';
 import { ApiService } from '../services/api';
 import type { Event, PullRequest } from '../types';
@@ -183,7 +183,12 @@ export function TimelineViewStep({
           Back to Select Data
         </button>
 
-        <RefreshButton onRefresh={handleRefresh} isLoading={loading} />
+        <RefreshButton
+          onRefresh={handleRefresh}
+          isLoading={loading}
+          intervalSeconds={15}
+          storageKey="isRefreshPaused"
+        />
       </div>
 
       <div className="bg-zinc-800 rounded-lg shadow-lg p-6">

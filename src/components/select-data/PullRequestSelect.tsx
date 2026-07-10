@@ -1,6 +1,8 @@
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { GitPullRequest, GitMerge, Search, User, ChevronDown, Check } from 'lucide-react';
 import { PullRequest } from '../../types';
+import { highlightMatch } from '../../utils/highlightMatch';
+import { useSearchableDropdown } from '../../hooks/useSearchableDropdown';
 
 interface PullRequestSelectProps {
   readonly pullRequests: readonly PullRequest[];
@@ -17,21 +19,6 @@ function relativeTime(dateStr: string): string {
   if (days < 30) return `${days}d ago`;
   if (days < 365) return `${Math.floor(days / 30)}mo ago`;
   return `${Math.floor(days / 365)}y ago`;
-}
-
-function highlightMatch(text: string, query: string): React.ReactNode {
-  if (!query.trim()) return text;
-  const idx = text.toLowerCase().indexOf(query.toLowerCase().trim());
-  if (idx === -1) return text;
-  return (
-    <>
-      {text.slice(0, idx)}
-      <mark className="bg-green-500/30 text-green-300 rounded-sm not-italic">
-        {text.slice(idx, idx + query.length)}
-      </mark>
-      {text.slice(idx + query.length)}
-    </>
-  );
 }
 
 function StateBadge({ state }: { readonly state: 'OPEN' | 'CLOSED' }) {
@@ -57,12 +44,19 @@ export function PullRequestSelect({
   onChange,
   disabled,
 }: Readonly<PullRequestSelectProps>) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
+  const {
+    searchQuery,
+    setSearchQuery,
+    isOpen,
+    setIsOpen,
+    activeIndex,
+    setActiveIndex,
+    dropdownRef,
+    searchRef,
+    listRef,
+    handleSearchKeyDown,
+    handleTriggerKeyDown,
+  } = useSearchableDropdown();
 
   const filteredPullRequests = useMemo(() => {
     if (!searchQuery.trim()) return [...pullRequests];
@@ -80,64 +74,10 @@ export function PullRequestSelect({
     [pullRequests, selectedPR]
   );
 
-  useEffect(() => {
-    if (isOpen) {
-      setActiveIndex(-1);
-      setTimeout(() => searchRef.current?.focus(), 0);
-    } else {
-      setSearchQuery('');
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (activeIndex >= 0 && listRef.current) {
-      const items = listRef.current.querySelectorAll<HTMLElement>('[data-option]');
-      items[activeIndex]?.scrollIntoView({ block: 'nearest' });
-    }
-  }, [activeIndex]);
-
-  const handleSearchKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      switch (e.key) {
-        case 'Escape':
-          setIsOpen(false);
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          setActiveIndex(i => Math.min(i + 1, filteredPullRequests.length - 1));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setActiveIndex(i => Math.max(i - 1, 0));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (activeIndex >= 0 && filteredPullRequests[activeIndex]) {
-            onChange(filteredPullRequests[activeIndex].number.toString());
-            setIsOpen(false);
-          }
-          break;
-      }
-    },
-    [filteredPullRequests, activeIndex, onChange]
-  );
-
-  const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      setIsOpen(true);
-    }
-  };
+  const onSearchKeyDown = (e: React.KeyboardEvent) =>
+    handleSearchKeyDown(e, filteredPullRequests.length, index => {
+      onChange(filteredPullRequests[index].number.toString());
+    });
 
   return (
     <div className="mb-6">
@@ -201,7 +141,7 @@ export function PullRequestSelect({
                     setSearchQuery(e.target.value);
                     setActiveIndex(-1);
                   }}
-                  onKeyDown={handleSearchKeyDown}
+                  onKeyDown={onSearchKeyDown}
                   className="w-full pl-9 pr-4 py-2 bg-zinc-700 border border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-gray-100 text-sm placeholder-gray-500"
                   placeholder={`Search by title, number, or author…`}
                 />

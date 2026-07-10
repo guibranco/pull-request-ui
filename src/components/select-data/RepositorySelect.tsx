@@ -1,6 +1,8 @@
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { GitFork, Search, ChevronDown, Check } from 'lucide-react';
 import { Repository } from '../../types';
+import { highlightMatch } from '../../utils/highlightMatch';
+import { useSearchableDropdown } from '../../hooks/useSearchableDropdown';
 
 interface RepositorySelectProps {
   readonly repositories: readonly Repository[];
@@ -9,33 +11,25 @@ interface RepositorySelectProps {
   readonly disabled: boolean;
 }
 
-function highlightMatch(text: string, query: string): React.ReactNode {
-  if (!query.trim()) return text;
-  const idx = text.toLowerCase().indexOf(query.toLowerCase().trim());
-  if (idx === -1) return text;
-  return (
-    <>
-      {text.slice(0, idx)}
-      <mark className="bg-green-500/30 text-green-300 rounded-sm not-italic">
-        {text.slice(idx, idx + query.length)}
-      </mark>
-      {text.slice(idx + query.length)}
-    </>
-  );
-}
-
 export function RepositorySelect({
   repositories,
   selectedRepo,
   onChange,
   disabled,
 }: Readonly<RepositorySelectProps>) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
+  const {
+    searchQuery,
+    setSearchQuery,
+    isOpen,
+    setIsOpen,
+    activeIndex,
+    setActiveIndex,
+    dropdownRef,
+    searchRef,
+    listRef,
+    handleSearchKeyDown,
+    handleTriggerKeyDown,
+  } = useSearchableDropdown();
 
   const filteredRepositories = useMemo(() => {
     if (!searchQuery.trim()) return [...repositories];
@@ -59,64 +53,10 @@ export function RepositorySelect({
     [repositories, selectedRepo]
   );
 
-  useEffect(() => {
-    if (isOpen) {
-      setActiveIndex(-1);
-      setTimeout(() => searchRef.current?.focus(), 0);
-    } else {
-      setSearchQuery('');
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (activeIndex >= 0 && listRef.current) {
-      const items = listRef.current.querySelectorAll<HTMLElement>('[data-option]');
-      items[activeIndex]?.scrollIntoView({ block: 'nearest' });
-    }
-  }, [activeIndex]);
-
-  const handleSearchKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      switch (e.key) {
-        case 'Escape':
-          setIsOpen(false);
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          setActiveIndex(i => Math.min(i + 1, filteredRepositories.length - 1));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setActiveIndex(i => Math.max(i - 1, 0));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (activeIndex >= 0 && filteredRepositories[activeIndex]) {
-            onChange(filteredRepositories[activeIndex].full_name);
-            setIsOpen(false);
-          }
-          break;
-      }
-    },
-    [filteredRepositories, activeIndex, onChange]
-  );
-
-  const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      setIsOpen(true);
-    }
-  };
+  const onSearchKeyDown = (e: React.KeyboardEvent) =>
+    handleSearchKeyDown(e, filteredRepositories.length, index => {
+      onChange(filteredRepositories[index].full_name);
+    });
 
   return (
     <div className="mb-6">
@@ -168,7 +108,7 @@ export function RepositorySelect({
                     setSearchQuery(e.target.value);
                     setActiveIndex(-1);
                   }}
-                  onKeyDown={handleSearchKeyDown}
+                  onKeyDown={onSearchKeyDown}
                   className="w-full pl-9 pr-4 py-2 bg-zinc-700 border border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-gray-100 text-sm placeholder-gray-500"
                   placeholder={`Search ${repositories.length} repositories…`}
                 />

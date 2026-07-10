@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { RefreshButton } from '../../../src/components/select-data/RefreshButton';
+import { RefreshButton } from '../../../src/components/common/RefreshButton';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('select-data RefreshButton', () => {
@@ -12,14 +12,28 @@ describe('select-data RefreshButton', () => {
   });
 
   it('renders with the initial 60s countdown', () => {
-    render(<RefreshButton onRefresh={vi.fn()} isLoading={false} />);
+    render(
+      <RefreshButton
+        onRefresh={vi.fn()}
+        isLoading={false}
+        intervalSeconds={60}
+        storageKey="isSelectDataRefreshPaused"
+      />
+    );
 
     expect(screen.getByText(/Refreshing in 60s/)).toBeInTheDocument();
     expect(screen.getByTitle('Pause auto-refresh')).toBeInTheDocument();
   });
 
   it('counts down when not paused', async () => {
-    render(<RefreshButton onRefresh={vi.fn()} isLoading={false} />);
+    render(
+      <RefreshButton
+        onRefresh={vi.fn()}
+        isLoading={false}
+        intervalSeconds={60}
+        storageKey="isSelectDataRefreshPaused"
+      />
+    );
 
     await act(async () => {
       vi.advanceTimersByTime(1000);
@@ -29,7 +43,14 @@ describe('select-data RefreshButton', () => {
   });
 
   it('pauses countdown and persists the preference', () => {
-    render(<RefreshButton onRefresh={vi.fn()} isLoading={false} />);
+    render(
+      <RefreshButton
+        onRefresh={vi.fn()}
+        isLoading={false}
+        intervalSeconds={60}
+        storageKey="isSelectDataRefreshPaused"
+      />
+    );
 
     fireEvent.click(screen.getByTitle('Pause auto-refresh'));
 
@@ -41,14 +62,28 @@ describe('select-data RefreshButton', () => {
   });
 
   it('shows the loading label', () => {
-    render(<RefreshButton onRefresh={vi.fn()} isLoading={true} />);
+    render(
+      <RefreshButton
+        onRefresh={vi.fn()}
+        isLoading={true}
+        intervalSeconds={60}
+        storageKey="isSelectDataRefreshPaused"
+      />
+    );
 
     expect(screen.getByText('Refreshing...')).toBeInTheDocument();
   });
 
   it('manually refreshes and resets the countdown', async () => {
     const onRefresh = vi.fn().mockResolvedValue(undefined);
-    render(<RefreshButton onRefresh={onRefresh} isLoading={false} />);
+    render(
+      <RefreshButton
+        onRefresh={onRefresh}
+        isLoading={false}
+        intervalSeconds={60}
+        storageKey="isSelectDataRefreshPaused"
+      />
+    );
 
     fireEvent.click(screen.getByText('Refresh Now'));
 

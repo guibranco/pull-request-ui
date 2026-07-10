@@ -4,33 +4,33 @@ import { RefreshCw, Pause, Play } from 'lucide-react';
 interface RefreshButtonProps {
   readonly onRefresh: () => Promise<void>;
   readonly isLoading: boolean;
+  readonly intervalSeconds: number;
+  readonly storageKey: string;
 }
 
 export function RefreshButton({
   onRefresh,
   isLoading,
+  intervalSeconds,
+  storageKey,
 }: Readonly<RefreshButtonProps>) {
-  const INITIAL_COUNTDOWN = 60;
-  const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN);
+  const [countdown, setCountdown] = useState(intervalSeconds);
   const [isPaused, setIsPaused] = useState(() => {
-    const saved = localStorage.getItem('isSelectDataRefreshPaused');
+    const saved = localStorage.getItem(storageKey);
     return saved ? JSON.parse(saved) : false;
   });
 
   const handleRefreshNow = useCallback(async () => {
     if (!isLoading) {
       await onRefresh();
-      setCountdown(INITIAL_COUNTDOWN);
+      setCountdown(intervalSeconds);
     }
-  }, [isLoading, onRefresh]);
+  }, [isLoading, onRefresh, intervalSeconds]);
 
   const handleTogglePause = () => {
     setIsPaused(prev => {
       const newValue = !prev;
-      localStorage.setItem(
-        'isSelectDataRefreshPaused',
-        JSON.stringify(newValue)
-      );
+      localStorage.setItem(storageKey, JSON.stringify(newValue));
       return newValue;
     });
   };
