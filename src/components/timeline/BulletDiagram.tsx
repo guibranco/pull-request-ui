@@ -156,7 +156,7 @@ export function BulletDiagram({
                   </div>
                 )}
                 <div className="flex flex-col items-center space-y-2">
-                  <div className="flex flex-col items-center gap-2 mb-1">
+                  <div className="flex flex-col items-center justify-end gap-2 mb-1 h-24">
                     {appData && (
                       <div className="flex flex-col items-center">
                         {appData.id ? (
