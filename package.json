@@ -39,7 +39,7 @@
     "happy-dom": "^20.11.0",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.20",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4.3.2",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0",
