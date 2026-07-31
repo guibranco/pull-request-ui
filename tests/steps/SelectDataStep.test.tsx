@@ -93,7 +93,7 @@ describe('SelectDataStep', () => {
   });
 
   it('fetches repositories and recent pull requests on mount', async () => {
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText('1 available')).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('SelectDataStep', () => {
 
   it('fetches pull requests when a repository is preselected', async () => {
     render(
-      <SelectDataStep apiKey="key" onSelect={vi.fn()} preselectedRepo="a/b" />
+      <SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} preselectedRepo="a/b" />
     );
 
     await waitFor(() => {
@@ -119,7 +119,7 @@ describe('SelectDataStep', () => {
       text: () => Promise.resolve('boom'),
     };
 
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText(/API Error: 500/)).toBeInTheDocument();
@@ -137,11 +137,14 @@ describe('SelectDataStep', () => {
       text: () => Promise.resolve(''),
     };
 
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(window.localStorage.removeItem).toHaveBeenCalledWith('apiKey');
     });
+    expect(window.localStorage.removeItem).toHaveBeenCalledWith(
+      'apiAddress'
+    );
     expect(window.location.href).toContain('error=');
   });
 
@@ -153,7 +156,7 @@ describe('SelectDataStep', () => {
     };
 
     render(
-      <SelectDataStep apiKey="key" onSelect={vi.fn()} preselectedRepo="a/b" />
+      <SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} preselectedRepo="a/b" />
     );
 
     await waitFor(() => {
@@ -168,7 +171,7 @@ describe('SelectDataStep', () => {
 
   it('selects a recent pull request via the recent list', async () => {
     const onSelect = vi.fn();
-    render(<SelectDataStep apiKey="key" onSelect={onSelect} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={onSelect} />);
 
     fireEvent.click(await screen.findByText('select-recent'));
 
@@ -183,7 +186,7 @@ describe('SelectDataStep', () => {
       text: () => Promise.resolve('recent failed'),
     };
 
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText(/RecentError:/)).toBeInTheDocument();
@@ -198,7 +201,7 @@ describe('SelectDataStep', () => {
   });
 
   it('navigates back to the API key step', async () => {
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText('1 available')).toBeInTheDocument();
@@ -210,7 +213,7 @@ describe('SelectDataStep', () => {
   });
 
   it('re-fetches everything when the refresh button is pressed', async () => {
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText('1 available')).toBeInTheDocument();
@@ -229,7 +232,7 @@ describe('SelectDataStep', () => {
   });
 
   it('selects a repository and updates the hash', async () => {
-    render(<SelectDataStep apiKey="key" onSelect={vi.fn()} />);
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText('Select a repository…')).toBeInTheDocument();

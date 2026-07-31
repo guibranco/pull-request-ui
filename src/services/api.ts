@@ -1,14 +1,14 @@
-const BASE_URL = 'https://guilhermebranco.com.br/webhooks/api/v1';
-
 export class ApiService {
   private apiKey: string;
+  private apiAddress: string;
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, apiAddress: string) {
     this.apiKey = apiKey;
+    this.apiAddress = apiAddress;
   }
 
   private async fetch<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    const response = await fetch(`${this.apiAddress}${endpoint}`, {
       headers: {
         Authorization: `token ${this.apiKey}`,
         Accept: 'application/json',

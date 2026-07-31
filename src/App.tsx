@@ -10,13 +10,16 @@ type Step = 'api-key' | 'select-data' | 'timeline';
 function App() {
   const [currentStep, setCurrentStep] = useState<Step>('api-key');
   const [apiKey, setApiKey] = useState('');
+  const [apiAddress, setApiAddress] = useState('');
   const [selectedRepo, setSelectedRepo] = useState('');
   const [selectedPR, setSelectedPR] = useState('');
 
   useEffect(() => {
     const storedApiKey = localStorage.getItem('apiKey');
-    if (storedApiKey) {
+    const storedApiAddress = localStorage.getItem('apiAddress');
+    if (storedApiKey && storedApiAddress) {
       setApiKey(storedApiKey);
+      setApiAddress(storedApiAddress);
 
       // Check if we're explicitly on the API key screen
       if (window.location.hash === '#/api-key') {
@@ -75,9 +78,11 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const handleApiKeySubmit = (key: string) => {
+  const handleApiKeySubmit = (key: string, address: string) => {
     localStorage.setItem('apiKey', key);
+    localStorage.setItem('apiAddress', address);
     setApiKey(key);
+    setApiAddress(address);
     setCurrentStep('select-data');
     window.location.hash = '';
   };
@@ -115,6 +120,7 @@ function App() {
         {currentStep === 'select-data' && (
           <SelectDataStep
             apiKey={apiKey}
+            apiAddress={apiAddress}
             onSelect={handleDataSelection}
             preselectedRepo={selectedRepo}
           />
@@ -122,6 +128,7 @@ function App() {
         {currentStep === 'timeline' && (
           <TimelineViewStep
             apiKey={apiKey}
+            apiAddress={apiAddress}
             repo={selectedRepo}
             pr={selectedPR}
             onBack={handleBackToSelect}

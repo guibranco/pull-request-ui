@@ -5,7 +5,7 @@ describe('ApiService', () => {
   let apiService: ApiService;
 
   beforeEach(() => {
-    apiService = new ApiService('test-key');
+    apiService = new ApiService('test-key', 'https://example.com/api/v1');
     // Reset fetch mock
     vi.restoreAllMocks();
   });
