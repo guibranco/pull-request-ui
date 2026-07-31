@@ -9,12 +9,15 @@ import {
 } from 'lucide-react';
 
 interface ApiKeyStepProps {
-  onSubmit: (apiKey: string) => void;
+  onSubmit: (apiKey: string, apiAddress: string) => void;
 }
 
 export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
   const [apiKey, setApiKey] = useState(
     () => localStorage.getItem('apiKey') || ''
+  );
+  const [apiAddress, setApiAddress] = useState(
+    () => localStorage.getItem('apiAddress') || ''
   );
   const [isEditing, setIsEditing] = useState(!apiKey);
   const [error, setError] = useState<string | null>(null);
@@ -31,16 +34,17 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(apiKey);
+    onSubmit(apiKey, apiAddress);
   };
 
   const handleClearApiKey = () => {
     setApiKey('');
+    setApiAddress('');
     setIsEditing(true);
   };
 
   const handleContinue = () => {
-    onSubmit(apiKey);
+    onSubmit(apiKey, apiAddress);
   };
 
   return (
@@ -61,6 +65,31 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="mb-6">
+            <label
+              htmlFor="apiAddress"
+              className="block text-lg font-medium text-gray-300 mb-2"
+            >
+              API Address
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="apiAddress"
+                value={apiAddress}
+                onChange={e => setApiAddress(e.target.value)}
+                disabled={!isEditing}
+                className="w-full px-4 py-3 bg-zinc-700 border border-gray-600 rounded-lg shadow-xs focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-100 text-lg disabled:opacity-75 disabled:cursor-not-allowed"
+                placeholder="https://example.com/api/v1"
+                required
+              />
+              {!isEditing && (
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <Lock className="w-5 h-5 text-gray-400" />
+                </div>
+              )}
+            </div>
+          </div>
           <div className="mb-6">
             <label
               htmlFor="apiKey"

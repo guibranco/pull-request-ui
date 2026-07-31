@@ -112,7 +112,7 @@ describe('TimelineViewStep', () => {
 
   it('shows a loading spinner before events arrive', () => {
     const { container } = render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     expect(container.querySelector('.animate-spin')).toBeInTheDocument();
@@ -120,7 +120,7 @@ describe('TimelineViewStep', () => {
 
   it('renders the PR header and event components once loaded', async () => {
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {
@@ -144,7 +144,7 @@ describe('TimelineViewStep', () => {
     };
 
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {
@@ -164,7 +164,7 @@ describe('TimelineViewStep', () => {
     const onBack = vi.fn();
 
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={onBack} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={onBack} />
     );
 
     await waitFor(() => {
@@ -188,7 +188,7 @@ describe('TimelineViewStep', () => {
     };
 
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {
@@ -206,7 +206,7 @@ describe('TimelineViewStep', () => {
     });
 
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {
@@ -217,7 +217,7 @@ describe('TimelineViewStep', () => {
 
   it('toggles the sequence and timeline sections and persists the choice', async () => {
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {
@@ -241,7 +241,7 @@ describe('TimelineViewStep', () => {
 
   it('shows and closes the payload modal', async () => {
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {
@@ -261,7 +261,7 @@ describe('TimelineViewStep', () => {
 
   it('re-fetches events and PR info when refreshed', async () => {
     render(
-      <TimelineViewStep apiKey="key" repo="owner/repo" pr="5" onBack={vi.fn()} />
+      <TimelineViewStep apiKey="key" apiAddress="https://example.com/api/v1" repo="owner/repo" pr="5" onBack={vi.fn()} />
     );
 
     await waitFor(() => {

@@ -17,6 +17,7 @@ import type { Event, PullRequest } from '../types';
 
 interface TimelineViewStepProps {
   apiKey: string;
+  apiAddress: string;
   repo: string;
   pr: string;
   onBack: () => void;
@@ -24,6 +25,7 @@ interface TimelineViewStepProps {
 
 export function TimelineViewStep({
   apiKey,
+  apiAddress,
   repo,
   pr,
   onBack,
@@ -54,7 +56,7 @@ export function TimelineViewStep({
   const fetchPullRequestInfo = useCallback(async () => {
     if (!repo || !pr) return;
 
-    const api = new ApiService(apiKey);
+    const api = new ApiService(apiKey, apiAddress);
     try {
       const [owner, repository] = repo.split('/');
       const data = await api.getPullRequests(owner, repository);
@@ -65,12 +67,12 @@ export function TimelineViewStep({
     } catch (err) {
       console.error('Error fetching PR info:', err);
     }
-  }, [apiKey, repo, pr]);
+  }, [apiKey, apiAddress, repo, pr]);
 
   const fetchEvents = useCallback(async () => {
     if (!repo || !pr) return;
 
-    const api = new ApiService(apiKey);
+    const api = new ApiService(apiKey, apiAddress);
     setLoading(true);
     setError(null);
     try {
@@ -94,7 +96,7 @@ export function TimelineViewStep({
     } finally {
       setLoading(false);
     }
-  }, [apiKey, repo, pr]);
+  }, [apiKey, apiAddress, repo, pr]);
 
   useEffect(() => {
     fetchEvents();

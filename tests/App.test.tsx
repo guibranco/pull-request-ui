@@ -2,10 +2,16 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('../src/steps/ApiKeyStep', () => ({
-  ApiKeyStep: ({ onSubmit }: { onSubmit: (key: string) => void }) => (
+  ApiKeyStep: ({
+    onSubmit,
+  }: {
+    onSubmit: (key: string, address: string) => void;
+  }) => (
     <div>
       <span>ApiKeyStepStub</span>
-      <button onClick={() => onSubmit('new-key')}>submit-api-key</button>
+      <button onClick={() => onSubmit('new-key', 'https://example.com/api')}>
+        submit-api-key
+      </button>
     </div>
   ),
 }));
@@ -73,6 +79,10 @@ describe('App', () => {
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
       'apiKey',
       'new-key'
+    );
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'apiAddress',
+      'https://example.com/api'
     );
     expect(screen.getByText(/SelectDataStepStub/)).toBeInTheDocument();
     expect(window.location.hash).toBe('');
