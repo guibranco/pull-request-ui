@@ -14,6 +14,7 @@ import { RefreshButton } from '../components/common/RefreshButton';
 import { MessageDisplay } from '../components/timeline/MessageDisplay';
 import { ApiService } from '../services/api';
 import type { Event, PullRequest } from '../types';
+import { stateColorClass } from '../utils/pullRequestState';
 
 interface TimelineViewStepProps {
   apiKey: string;
@@ -210,7 +211,7 @@ export function TimelineViewStep({
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
                     <GitPullRequest
-                      className={`w-5 h-5 ${pullRequestInfo.state === 'OPEN' ? 'text-green-400' : 'text-red-400'}`}
+                      className={`w-5 h-5 ${stateColorClass(pullRequestInfo.state)}`}
                     />
                     <span className="text-xl font-medium text-gray-100">
                       #{pr} {pullRequestInfo.title}
