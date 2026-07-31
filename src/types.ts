@@ -9,7 +9,7 @@ export interface PullRequest {
   date: string;
   number: number;
   title: string;
-  state: 'OPEN' | 'CLOSED';
+  state: 'OPEN' | 'CLOSED' | 'MERGED';
   sender: string;
   sender_avatar: string;
 }
@@ -22,7 +22,7 @@ export interface RecentPullRequest {
   title: string;
   sender: string;
   sender_avatar: string;
-  state: 'OPEN' | 'CLOSED';
+  state: 'OPEN' | 'CLOSED' | 'MERGED';
 }
 
 export interface AppData {

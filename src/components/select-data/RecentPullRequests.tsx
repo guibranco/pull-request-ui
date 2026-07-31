@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GitPullRequest, Clock, User } from 'lucide-react';
 import { RecentPullRequest } from '../../types';
+import { stateColorClass } from '../../utils/pullRequestState';
 
 interface RecentPullRequestsProps {
   pullRequests: RecentPullRequest[];
@@ -94,7 +95,7 @@ export function RecentPullRequests({
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
                   <GitPullRequest
-                    className={`w-4 h-4 ${pr.state === 'OPEN' ? 'text-green-400' : 'text-red-400'} shrink-0`}
+                    className={`w-4 h-4 ${stateColorClass(pr.state)} shrink-0`}
                   />
                   <span>#{pr.number}</span>
                 </div>

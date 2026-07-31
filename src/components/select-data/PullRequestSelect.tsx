@@ -1,5 +1,13 @@
 import React, { useMemo } from 'react';
-import { GitPullRequest, GitMerge, Search, User, ChevronDown, Check } from 'lucide-react';
+import {
+  GitPullRequest,
+  GitPullRequestClosed,
+  GitMerge,
+  Search,
+  User,
+  ChevronDown,
+  Check,
+} from 'lucide-react';
 import { PullRequest } from '../../types';
 import { highlightMatch } from '../../utils/highlightMatch';
 import { useSearchableDropdown } from '../../hooks/useSearchableDropdown';
@@ -21,7 +29,7 @@ function relativeTime(dateStr: string): string {
   return `${Math.floor(days / 365)}y ago`;
 }
 
-function StateBadge({ state }: { readonly state: 'OPEN' | 'CLOSED' }) {
+function StateBadge({ state }: { readonly state: 'OPEN' | 'CLOSED' | 'MERGED' }) {
   if (state === 'OPEN') {
     return (
       <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 shrink-0">
@@ -30,9 +38,17 @@ function StateBadge({ state }: { readonly state: 'OPEN' | 'CLOSED' }) {
       </span>
     );
   }
+  if (state === 'MERGED') {
+    return (
+      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 shrink-0">
+        <GitMerge className="w-3 h-3" />
+        Merged
+      </span>
+    );
+  }
   return (
     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-400 shrink-0">
-      <GitMerge className="w-3 h-3" />
+      <GitPullRequestClosed className="w-3 h-3" />
       Closed
     </span>
   );
