@@ -9,12 +9,14 @@ import type { Repository, PullRequest, RecentPullRequest } from '../types';
 
 interface SelectDataStepProps {
   apiKey: string;
+  apiAddress: string;
   onSelect: (repo: string, pr: string) => void;
   preselectedRepo?: string;
 }
 
 export function SelectDataStep({
   apiKey,
+  apiAddress,
   onSelect,
   preselectedRepo,
 }: SelectDataStepProps) {
@@ -32,6 +34,7 @@ export function SelectDataStep({
 
   const handleUnauthorized = (message: string) => {
     localStorage.removeItem('apiKey');
+    localStorage.removeItem('apiAddress');
     const errorParam = encodeURIComponent(message);
     window.location.href = `${window.location.pathname}?error=${errorParam}`;
   };
@@ -40,7 +43,7 @@ export function SelectDataStep({
     setLoadingRecent(true);
     setRecentError(null);
     try {
-      const api = new ApiService(apiKey);
+      const api = new ApiService(apiKey, apiAddress);
       const data = await api.getRecentPullRequests();
       setRecentPullRequests(data);
     } catch (err) {
@@ -59,13 +62,13 @@ export function SelectDataStep({
     } finally {
       setLoadingRecent(false);
     }
-  }, [apiKey]);
+  }, [apiKey, apiAddress]);
 
   const fetchRepositories = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const api = new ApiService(apiKey);
+      const api = new ApiService(apiKey, apiAddress);
       const data = await api.getRepositories();
       setRepositories(data);
     } catch (err) {
@@ -82,7 +85,7 @@ export function SelectDataStep({
     } finally {
       setLoading(false);
     }
-  }, [apiKey]);
+  }, [apiKey, apiAddress]);
 
   const fetchPullRequests = useCallback(async () => {
     if (!selectedRepo) return;
@@ -92,7 +95,7 @@ export function SelectDataStep({
     setPullRequests([]);
 
     try {
-      const api = new ApiService(apiKey);
+      const api = new ApiService(apiKey, apiAddress);
       const [owner, repo] = selectedRepo.split('/');
       const data = await api.getPullRequests(owner, repo);
       setPullRequests(data.pull_requests);
@@ -114,7 +117,7 @@ export function SelectDataStep({
     } finally {
       setLoading(false);
     }
-  }, [selectedRepo, apiKey]);
+  }, [selectedRepo, apiKey, apiAddress]);
 
   const handleRefresh = useCallback(async () => {
     await Promise.all([

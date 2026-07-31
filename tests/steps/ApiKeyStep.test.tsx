@@ -16,7 +16,11 @@ describe('ApiKeyStep', () => {
     render(<ApiKeyStep onSubmit={vi.fn()} />);
 
     const input = screen.getByLabelText('API Key') as HTMLInputElement;
+    const addressInput = screen.getByLabelText(
+      'API Address'
+    ) as HTMLInputElement;
     expect(input).not.toBeDisabled();
+    expect(addressInput).not.toBeDisabled();
     expect(screen.getByText('Continue')).toBeInTheDocument();
     expect(
       screen.queryByText('Continue to Select Data')
@@ -24,49 +28,75 @@ describe('ApiKeyStep', () => {
   });
 
   it('renders a locked input with continue/change buttons when a key is stored', () => {
-    localStorageMock.getItem.mockReturnValue('existing-key');
+    localStorageMock.getItem.mockImplementation((key: string) =>
+      key === 'apiKey' ? 'existing-key' : 'https://example.com/api/v1'
+    );
 
     render(<ApiKeyStep onSubmit={vi.fn()} />);
 
     const input = screen.getByLabelText('API Key') as HTMLInputElement;
+    const addressInput = screen.getByLabelText(
+      'API Address'
+    ) as HTMLInputElement;
     expect(input).toBeDisabled();
     expect(input.value).toBe('existing-key');
+    expect(addressInput).toBeDisabled();
+    expect(addressInput.value).toBe('https://example.com/api/v1');
     expect(screen.getByText('Continue to Select Data')).toBeInTheDocument();
     expect(screen.getByText('Change API Key')).toBeInTheDocument();
   });
 
-  it('submits the typed key when the form is submitted', () => {
+  it('submits the typed key and address when the form is submitted', () => {
     const onSubmit = vi.fn();
     render(<ApiKeyStep onSubmit={onSubmit} />);
 
     const input = screen.getByLabelText('API Key');
+    const addressInput = screen.getByLabelText('API Address');
     fireEvent.change(input, { target: { value: 'typed-key' } });
+    fireEvent.change(addressInput, {
+      target: { value: 'https://example.com/api/v1' },
+    });
     fireEvent.click(screen.getByText('Continue'));
 
-    expect(onSubmit).toHaveBeenCalledWith('typed-key');
+    expect(onSubmit).toHaveBeenCalledWith(
+      'typed-key',
+      'https://example.com/api/v1'
+    );
   });
 
-  it('submits the stored key when continuing without editing', () => {
-    localStorageMock.getItem.mockReturnValue('existing-key');
+  it('submits the stored key and address when continuing without editing', () => {
+    localStorageMock.getItem.mockImplementation((key: string) =>
+      key === 'apiKey' ? 'existing-key' : 'https://example.com/api/v1'
+    );
     const onSubmit = vi.fn();
 
     render(<ApiKeyStep onSubmit={onSubmit} />);
 
     fireEvent.click(screen.getByText('Continue to Select Data'));
 
-    expect(onSubmit).toHaveBeenCalledWith('existing-key');
+    expect(onSubmit).toHaveBeenCalledWith(
+      'existing-key',
+      'https://example.com/api/v1'
+    );
   });
 
-  it('clears the key and re-enables editing when changing the API key', () => {
-    localStorageMock.getItem.mockReturnValue('existing-key');
+  it('clears the key and address and re-enables editing when changing the API key', () => {
+    localStorageMock.getItem.mockImplementation((key: string) =>
+      key === 'apiKey' ? 'existing-key' : 'https://example.com/api/v1'
+    );
 
     render(<ApiKeyStep onSubmit={vi.fn()} />);
 
     fireEvent.click(screen.getByText('Change API Key'));
 
     const input = screen.getByLabelText('API Key') as HTMLInputElement;
+    const addressInput = screen.getByLabelText(
+      'API Address'
+    ) as HTMLInputElement;
     expect(input).not.toBeDisabled();
     expect(input.value).toBe('');
+    expect(addressInput).not.toBeDisabled();
+    expect(addressInput.value).toBe('');
     expect(screen.getByText('Continue')).toBeInTheDocument();
   });
 

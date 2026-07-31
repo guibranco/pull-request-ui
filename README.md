@@ -38,7 +38,7 @@ npm run dev
 
 ## 🛠️ Configuration
 
-Before using the app, ensure you have the **GitHub API URL** set up. The API URL, repository, and pull request number are stored in `localStorage` for convenience. 🎯
+On first launch, the app prompts for the **API Address** (base URL of your webhooks API) and your **API Key** on the API Key screen. Both values, along with the selected repository and pull request number, are stored in `localStorage` for convenience. 🎯
 
 ## 🏗️ Project Structure
 
