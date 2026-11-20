@@ -1,25 +1,41 @@
 import React from 'react';
-import { XCircle } from 'lucide-react';
+import { XCircle, Settings } from 'lucide-react';
 
 interface ErrorMessageProps {
   message: string;
   onRetry: () => void;
+  onChangeSettings?: () => void;
 }
 
-export function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
+export function ErrorMessage({
+  message,
+  onRetry,
+  onChangeSettings,
+}: ErrorMessageProps) {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-zinc-800 shadow-lg rounded-lg p-6">
         <div className="flex items-center justify-center text-red-400 mb-4">
-          <XCircle className="w-8 h-8 mr-2" />
-          <p>{message}</p>
+          <XCircle className="w-8 h-8 mr-2 shrink-0" />
+          <p className="break-words min-w-0">{message}</p>
         </div>
-        <button
-          onClick={onRetry}
-          className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-        >
-          Retry
-        </button>
+        <div className="space-y-3">
+          <button
+            onClick={onRetry}
+            className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+          >
+            Retry
+          </button>
+          {onChangeSettings && (
+            <button
+              onClick={onChangeSettings}
+              className="w-full flex items-center justify-center space-x-2 text-gray-300 hover:text-gray-100 py-2 px-4 rounded-md border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Change API settings</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

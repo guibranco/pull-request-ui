@@ -142,10 +142,52 @@ describe('SelectDataStep', () => {
     await waitFor(() => {
       expect(window.localStorage.removeItem).toHaveBeenCalledWith('apiKey');
     });
-    expect(window.localStorage.removeItem).toHaveBeenCalledWith(
+    expect(window.localStorage.removeItem).not.toHaveBeenCalledWith(
       'apiAddress'
     );
     expect(window.location.href).toContain('error=');
+  });
+
+  it('logs out and redirects with an error when the API key is unauthorised (401)', async () => {
+    reposResponse = {
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      text: () => Promise.resolve(''),
+    };
+
+    render(<SelectDataStep apiKey="key" apiAddress="https://example.com/api/v1" onSelect={vi.fn()} />);
+
+    await waitFor(() => {
+      expect(window.localStorage.removeItem).toHaveBeenCalledWith('apiKey');
+    });
+    expect(window.location.href).toContain('error=');
+  });
+
+  it('offers a way to change the API settings when the route is wrong (404)', async () => {
+    reposResponse = {
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+      text: () => Promise.resolve('{"error":"Route not found."}'),
+    };
+    const onEditApiSettings = vi.fn();
+
+    render(
+      <SelectDataStep
+        apiKey="key"
+        apiAddress="https://example.com/wrong"
+        onSelect={vi.fn()}
+        onEditApiSettings={onEditApiSettings}
+      />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/API Error: 404/)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Change API settings'));
+    expect(onEditApiSettings).toHaveBeenCalledTimes(1);
   });
 
   it('shows an error when no pull requests are found for the repo', async () => {

@@ -11,6 +11,7 @@ interface SelectDataStepProps {
   apiKey: string;
   apiAddress: string;
   onSelect: (repo: string, pr: string) => void;
+  onEditApiSettings?: () => void;
   preselectedRepo?: string;
 }
 
@@ -18,6 +19,7 @@ export function SelectDataStep({
   apiKey,
   apiAddress,
   onSelect,
+  onEditApiSettings,
   preselectedRepo,
 }: SelectDataStepProps) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
@@ -32,9 +34,12 @@ export function SelectDataStep({
   const [error, setError] = useState<string | null>(null);
   const [recentError, setRecentError] = useState<string | null>(null);
 
+  const isAuthError = (message: string) =>
+    /API Error: (401|403)\b/.test(message);
+
   const handleUnauthorized = (message: string) => {
+    // Only the key is rejected; keep the address so it doesn't need retyping.
     localStorage.removeItem('apiKey');
-    localStorage.removeItem('apiAddress');
     const errorParam = encodeURIComponent(message);
     window.location.href = `${window.location.pathname}?error=${errorParam}`;
   };
@@ -74,7 +79,7 @@ export function SelectDataStep({
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch repositories';
-      if (errorMessage.includes('403')) {
+      if (isAuthError(errorMessage)) {
         handleUnauthorized(
           'Your API key is invalid or has expired. Please enter a valid API key.'
         );
@@ -106,7 +111,7 @@ export function SelectDataStep({
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch pull requests';
-      if (errorMessage.includes('403')) {
+      if (isAuthError(errorMessage)) {
         handleUnauthorized(
           'Your API key is invalid or has expired. Please enter a valid API key.'
         );
@@ -192,7 +197,13 @@ export function SelectDataStep({
   };
 
   if (error) {
-    return <ErrorMessage message={error} onRetry={handleRetry} />;
+    return (
+      <ErrorMessage
+        message={error}
+        onRetry={handleRetry}
+        onChangeSettings={onEditApiSettings}
+      />
+    );
   }
 
   return (

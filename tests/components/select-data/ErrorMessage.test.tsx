@@ -17,4 +17,25 @@ describe('ErrorMessage', () => {
 
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
+
+  it('does not render the change settings button without a handler', () => {
+    render(<ErrorMessage message="Oops" onRetry={vi.fn()} />);
+
+    expect(screen.queryByText('Change API settings')).not.toBeInTheDocument();
+  });
+
+  it('calls onChangeSettings when the change settings button is clicked', () => {
+    const onChangeSettings = vi.fn();
+    render(
+      <ErrorMessage
+        message="API Error: 404 Not Found"
+        onRetry={vi.fn()}
+        onChangeSettings={onChangeSettings}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Change API settings'));
+
+    expect(onChangeSettings).toHaveBeenCalledTimes(1);
+  });
 });

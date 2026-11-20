@@ -27,6 +27,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
     const errorMessage = searchParams.get('error');
     if (errorMessage) {
       setError(decodeURIComponent(errorMessage));
+      setIsEditing(true);
       // Clean up the URL
       window.history.replaceState({}, '', window.location.pathname);
     }
@@ -37,9 +38,9 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
     onSubmit(apiKey, apiAddress);
   };
 
-  const handleClearApiKey = () => {
-    setApiKey('');
-    setApiAddress('');
+  const handleEditApiKey = () => {
+    // Unlock the fields but keep the current values, so a wrong address
+    // or key can be corrected without retyping everything.
     setIsEditing(true);
   };
 
@@ -135,7 +136,7 @@ export function ApiKeyStep({ onSubmit }: ApiKeyStepProps) {
                 </button>
                 <button
                   type="button"
-                  onClick={handleClearApiKey}
+                  onClick={handleEditApiKey}
                   className="w-full flex items-center justify-center text-gray-300 hover:text-gray-100 py-3 px-6 rounded-lg text-lg border border-gray-600 hover:border-gray-500 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all space-x-2"
                 >
                   <Unlock className="w-5 h-5" />

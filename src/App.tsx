@@ -97,6 +97,11 @@ function App() {
     window.location.hash = `${owner}/${repoName}/${pr}`;
   };
 
+  const handleEditApiSettings = () => {
+    setCurrentStep('api-key');
+    window.location.hash = '/api-key';
+  };
+
   const handleBackToSelect = () => {
     setCurrentStep('select-data');
 
@@ -111,7 +116,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-zinc-900 text-gray-100 flex flex-col">
-      <Header currentStep={currentStep} />
+      <Header currentStep={currentStep} onApiKeyClick={handleEditApiSettings} />
 
       <div className="container mx-auto px-6 lg:px-8 py-8 flex-1 max-w-[90rem]">
         {currentStep === 'api-key' && (
@@ -122,6 +127,7 @@ function App() {
             apiKey={apiKey}
             apiAddress={apiAddress}
             onSelect={handleDataSelection}
+            onEditApiSettings={handleEditApiSettings}
             preselectedRepo={selectedRepo}
           />
         )}
@@ -132,6 +138,7 @@ function App() {
             repo={selectedRepo}
             pr={selectedPR}
             onBack={handleBackToSelect}
+            onEditApiSettings={handleEditApiSettings}
           />
         )}
       </div>
