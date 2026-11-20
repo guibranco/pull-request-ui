@@ -17,7 +17,7 @@ A sleek and interactive UI to visualize GitHub webhook events for pull requests!
 
 ## 📸 Preview
 
-![Demo of the GitHub webhook visualizer](demo.gif)
+![Demo: entering the API address and key, picking a repository and pull request, then exploring the timeline, a payload and the sequence diagram](demo.gif)
 
 > 🧪 The screenshots below use **fictional mock data**: the repositories, pull requests, users and bot apps are invented for illustration.
 
