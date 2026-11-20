@@ -80,7 +80,7 @@ describe('ApiKeyStep', () => {
     );
   });
 
-  it('clears the key and address and re-enables editing when changing the API key', () => {
+  it('keeps the key and address and re-enables editing when changing the API key', () => {
     localStorageMock.getItem.mockImplementation((key: string) =>
       key === 'apiKey' ? 'existing-key' : 'https://example.com/api/v1'
     );
@@ -94,9 +94,9 @@ describe('ApiKeyStep', () => {
       'API Address'
     ) as HTMLInputElement;
     expect(input).not.toBeDisabled();
-    expect(input.value).toBe('');
+    expect(input.value).toBe('existing-key');
     expect(addressInput).not.toBeDisabled();
-    expect(addressInput.value).toBe('');
+    expect(addressInput.value).toBe('https://example.com/api/v1');
     expect(screen.getByText('Continue')).toBeInTheDocument();
   });
 

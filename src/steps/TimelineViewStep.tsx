@@ -22,6 +22,7 @@ interface TimelineViewStepProps {
   repo: string;
   pr: string;
   onBack: () => void;
+  onEditApiSettings?: () => void;
 }
 
 export function TimelineViewStep({
@@ -30,6 +31,7 @@ export function TimelineViewStep({
   repo,
   pr,
   onBack,
+  onEditApiSettings,
 }: TimelineViewStepProps) {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -155,6 +157,7 @@ export function TimelineViewStep({
         message={error}
         onAction={onBack}
         actionLabel="Go Back"
+        onChangeSettings={onEditApiSettings}
       />
     );
   }

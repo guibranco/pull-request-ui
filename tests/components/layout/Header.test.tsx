@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import { Header } from '../../../src/components/layout/Header';
 
 describe('Header', () => {
@@ -26,5 +26,20 @@ describe('Header', () => {
     expect(screen.getByText('Timeline').closest('div')).toHaveClass(
       'text-green-400'
     );
+  });
+
+  it('lets the user jump back to the API key step from a later step', () => {
+    const onApiKeyClick = vi.fn();
+    render(<Header currentStep="select-data" onApiKeyClick={onApiKeyClick} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /API Key/ }));
+
+    expect(onApiKeyClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not render the API key step as a button when already on it', () => {
+    render(<Header currentStep="api-key" onApiKeyClick={vi.fn()} />);
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });
