@@ -12,7 +12,7 @@ A sleek and interactive UI to visualize GitHub webhook events for pull requests!
 ✅ Modular React components for better maintainability 🛠️  
 ✅ View JSON payloads with syntax highlighting ✨  
 ✅ Compare payload changes between webhook events 🔄  
-✅ Sequence diagram of who triggered each event 🧭  
+✅ Sequence diagram of the events triggered by the most active senders 🧭  
 ✅ Recover from a wrong API address or key straight from the error screen 🛠️  
 
 ## 📸 Preview
@@ -37,13 +37,13 @@ Repositories are grouped by owner and searchable:
 
 ![Searchable repository dropdown grouped by owner](docs/screenshots/03-repository-search.png)
 
-Pull requests show their state (open, merged, closed), number, title and author, and can be searched by any of them:
+Pull requests show their state (open, merged, closed), number, title and author, and can be searched by title, number or author:
 
 ![Searchable pull request dropdown with state badges](docs/screenshots/04-pull-request-search.png)
 
 ### 🕒 3. Explore the event timeline
 
-Events are grouped by type, and the **Event Sequence** diagram shows who triggered what, with check and review outcomes:
+Events are grouped by type, and the **Event Sequence** diagram shows the events triggered by the five most active senders (events from anyone else appear under GitHub), with check and review outcomes:
 
 ![Timeline view with grouped events and the event sequence diagram](docs/screenshots/05-timeline.png)
 
@@ -63,11 +63,11 @@ Select one event, open another, and compare the two payloads side by side with d
 
 ### 🛠️ Recovering from a wrong API address or key
 
-If the API returns an error (for example a wrong route), you can retry or go straight back to change the API settings:
+If loading the repositories fails (for example because of a wrong route), **Retry** reloads the page, and **Change API settings** takes you straight back to the API Key step:
 
 ![Error screen with Retry and Change API settings buttons](docs/screenshots/09-error-recovery.png)
 
-The saved address and key are kept, so you only need to fix the field that is wrong. You can also click **API Key** in the header at any time.
+For errors like this one, both the saved address and key are kept, so you only need to fix the field that is wrong. If the API rejects the key (401 or 403), the app returns to the API Key step on its own and shows the error; the address is kept but the key is cleared, so you need to enter it again. You can also click **API Key** in the header at any time.
 
 ![API Key step unlocked for editing with the saved values kept](docs/screenshots/10-edit-api-settings.png)
 
